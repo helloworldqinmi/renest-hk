@@ -1,5 +1,21 @@
 import type { FurnitureItem, LayoutPlan, MarketplaceProduct, ScannedRoom } from "@/types";
 
+export const demoScenario = {
+  resident: "Alex",
+  currentHome: { name: "Kowloon", areaSqFt: 380 },
+  newHome: { name: "Northern Metropolis", areaSqFt: 310 },
+  furnitureTotal: 7,
+  reused: 6,
+  replaced: 1,
+  newItems: 1,
+  spendingAvoided: 15500,
+  openSpaceIncrease: 19,
+  replacementRate: 14,
+  circularMoveScore: 92,
+  currentTable: { name: "Current Dining Table", widthCm: 140, depthCm: 80, clearanceCm: 43, resaleLow: 700, resaleHigh: 900 },
+  replacementTable: { name: "Compact Folding Table", widthCm: 90, depthCm: 60, clearanceCm: 82, spaceUnlockedSqM: 1.5 },
+} as const;
+
 export const furnitureInventory: FurnitureItem[] = [
   { id: "sofa", name: "2-seat Sofa", category: "sofa", dimensions: { width: 2.04, depth: 0.88, height: 0.82 }, estimatedValue: 4200, selected: true, source: "existing" },
   { id: "desk", name: "Study Desk", category: "desk", dimensions: { width: 1.2, depth: 0.6, height: 0.75 }, estimatedValue: 1600, selected: true, source: "existing" },
@@ -61,7 +77,7 @@ export const newRoom: ScannedRoom = {
 
 export const plans: LayoutPlan[] = [
   {
-    id: "reuse", name: "Plan A", shortName: "Reuse Max", reused: 6, purchases: 1, openArea: 7.8, cost: 1290, score: 94,
+    id: "reuse", name: "Plan A", shortName: "Reuse Max", reused: 6, purchases: 1, openArea: 7.8, cost: 1290, spendingAvoided: 15500, walkwayClearance: 82, score: 94,
     description: "Keeps almost everything you own while maintaining comfortable circulation.",
     placements: [
       { furnitureId: "sofa", roomId: "living", position: { x: 0.18, y: 0.18 }, rotation: 0, status: "keep" },
@@ -74,7 +90,7 @@ export const plans: LayoutPlan[] = [
     ],
   },
   {
-    id: "space", name: "Plan B", shortName: "Space Max", reused: 4, purchases: 2, openArea: 10.6, cost: 3480, score: 88,
+    id: "space", name: "Plan B", shortName: "Space Max", reused: 4, purchases: 2, openArea: 10.6, cost: 3480, spendingAvoided: 9000, walkwayClearance: 88, score: 88,
     description: "Prioritizes an open living area and comfortable circulation.",
     placements: [
       { furnitureId: "sofa", roomId: "living", position: { x: 0.18, y: 0.18 }, rotation: 0, status: "new", overrideName: "Compact Sofa", overrideDimensions: { width: 1.5, depth: 0.72, height: 0.78 } },
@@ -86,7 +102,7 @@ export const plans: LayoutPlan[] = [
     ],
   },
   {
-    id: "cost", name: "Plan C", shortName: "Lowest Cost", reused: 7, purchases: 0, openArea: 6.3, cost: 0, score: 76,
+    id: "cost", name: "Plan C", shortName: "Lowest Cost", reused: 7, purchases: 0, openArea: 6.3, cost: 0, spendingAvoided: 17700, walkwayClearance: 43, score: 76,
     description: "Costs nothing, but creates a tighter living environment.",
     compromises: ["Narrow living-room circulation", "Desk receives less natural light"],
     placements: [

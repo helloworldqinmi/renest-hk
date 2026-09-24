@@ -10,8 +10,7 @@ import { Button, Modal, cn } from "@/components/common/ui";
 const stepRoutes = [
   { label: "Scan", routes: ["/scan-old", "/inventory", "/scan-new"] },
   { label: "Plan", routes: ["/preferences"] },
-  { label: "Optimize", routes: ["/optimize"] },
-  { label: "Shop", routes: ["/shop"] },
+  { label: "Fit", routes: ["/optimize", "/shop"] },
   { label: "Move", routes: ["/move-plan", "/impact"] },
 ];
 
@@ -30,9 +29,9 @@ export function AppHeader() {
   return (
     <>
       <header className="app-header">
-        <Link href="/" className="brand" aria-label="ReSpace HK home">
+        <Link href="/" className="brand" aria-label="ReNest HK home">
           <span className="brand-mark"><span /></span>
-          <span>ReSpace <b>HK</b></span>
+          <span>ReNest <b>HK</b></span>
         </Link>
         {pathname !== "/" ? (
           <nav className="progress-steps" aria-label="Move progress">
@@ -49,11 +48,11 @@ export function AppHeader() {
 
       {pathname !== "/" ? (
         <button className="demo-reset" onClick={reset} title="Reset the deterministic Alex demo">
-          <RotateCcw size={15} /> Demo Mode
+          <RotateCcw size={15} /> Reset Demo
         </button>
       ) : null}
 
-      <Modal open={showHow} onClose={() => setShowHow(false)} title="How ReSpace works" wide>
+      <Modal open={showHow} onClose={() => setShowHow(false)} title="How ReNest works" wide>
         <div className="how-grid">
           {[
             ["01", "Spatial Capture", "iPhone RoomPlan produces room geometry and furniture dimensions."],

@@ -85,6 +85,8 @@ export interface LayoutPlan {
   purchases: number;
   openArea: number;
   cost: number;
+  spendingAvoided: number;
+  walkwayClearance: number;
   score: number;
   placements: Placement[];
   compromises?: string[];

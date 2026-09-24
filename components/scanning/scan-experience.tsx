@@ -3,11 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { CheckCircle2, FileJson, Radar, ScanLine, Smartphone } from "lucide-react";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
+import { useDemo } from "@/components/state-provider";
 import { Button, Eyebrow, LinkButton } from "@/components/common/ui";
-import { plans } from "@/lib/demo-data";
+import { demoScenario, plans } from "@/lib/demo-data";
 import { parseRoomPlanJSON } from "@/lib/roomplan";
 
 const oldEvents = [
+  ["SCANNING ROOM...", "Depth capture started"],
+  ["DETECTING WALLS...", "Room boundary verified"],
   ["SOFA DETECTED", "204 × 88 cm"],
   ["DESK DETECTED", "120 × 60 cm"],
   ["BED DETECTED", "190 × 135 cm"],
@@ -15,14 +18,17 @@ const oldEvents = [
 ];
 
 const newEvents = [
+  ["SCANNING ROOM...", "Depth capture started"],
   ["ROOM BOUNDARY", "29.1 m² mapped"],
   ["WINDOWS DETECTED", "2 natural light sources"],
   ["DOOR SWINGS", "Clearance zones mapped"],
   ["USABLE WALLS", "8.4 m available"],
+  ["GEOMETRY READY", "310 sq ft verified"],
 ];
 
 export function ScanExperience({ kind }: { kind: "old" | "new" }) {
-  const [phase, setPhase] = useState<"idle" | "scanning" | "complete">("idle");
+  const { scanStatus, setScanStatus } = useDemo();
+  const phase = scanStatus[kind];
   const [eventIndex, setEventIndex] = useState(0);
   const [uploadNote, setUploadNote] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
@@ -30,15 +36,15 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
 
   useEffect(() => {
     if (phase !== "scanning") return;
-    const timers = [850, 1750, 2750, 3700].map((delay, index) => window.setTimeout(() => setEventIndex(index), delay));
-    timers.push(window.setTimeout(() => setPhase("complete"), 4550));
+    const timers = events.map((_, index) => window.setTimeout(() => setEventIndex(index), index * 520));
+    timers.push(window.setTimeout(() => setScanStatus(kind, "complete"), events.length * 520 + 250));
     return () => timers.forEach(window.clearTimeout);
-  }, [phase]);
+  }, [events, kind, phase, setScanStatus]);
 
   function start() {
     setEventIndex(0);
     setUploadNote("");
-    setPhase("scanning");
+    setScanStatus(kind, "scanning");
   }
 
   function handleFile(file?: File) {
@@ -48,7 +54,7 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
       try {
         const room = parseRoomPlanJSON(String(reader.result));
         setUploadNote(`${room.furniture.length} objects normalized from ${file.name}`);
-        setPhase("complete");
+        setScanStatus(kind, "complete");
       } catch {
         setUploadNote("That file is not a supported RoomPlan JSON export.");
       }
@@ -58,7 +64,7 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
 
   const title = kind === "old" ? "First, let's understand what you already own." : "Now let's understand your new space.";
   const subtitle = kind === "old"
-    ? "Scan your room with your iPhone. ReSpace detects room geometry and furniture dimensions automatically."
+    ? "Scan your room with your iPhone. ReNest detects room geometry and furniture dimensions automatically."
     : "Map the rooms, doors, windows and usable wall areas before a single item is placed.";
 
   return (
@@ -74,8 +80,8 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
 
       {kind === "new" ? (
         <div className="new-home-strip">
-          <div><span>NEW HOME</span><strong>Northern Metropolis</strong></div>
-          <div><span>SIZE</span><strong>310 sq ft</strong></div>
+          <div><span>NEW HOME</span><strong>{demoScenario.newHome.name}</strong></div>
+          <div><span>SIZE</span><strong>{demoScenario.newHome.areaSqFt} sq ft</strong></div>
           <div><span>TYPE</span><strong>1-bedroom apartment</strong></div>
         </div>
       ) : null}
@@ -93,12 +99,12 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
             </div>
           ) : null}
           {phase === "complete" ? (
-            <div className="scan-complete-overlay"><CheckCircle2 size={33} /><span><b>{kind === "old" ? "Scan complete" : "New home mapped"}</b>{uploadNote || (kind === "old" ? "7 furniture items detected" : "29.1 m² available")}</span></div>
+            <div className="scan-complete-overlay"><CheckCircle2 size={33} /><span><b>{kind === "old" ? "Scan complete" : "New home mapped"}</b>{uploadNote || (kind === "old" ? `${demoScenario.furnitureTotal} furniture items detected` : "29.1 m² available")}</span></div>
           ) : null}
         </div>
         <div className="scan-control">
           <div>
-            <span className="scan-kicker">{phase === "idle" ? "WEB DEMO CAPTURE" : phase === "scanning" ? `ANALYZING · ${Math.round(((eventIndex + 1) / 4) * 100)}%` : "CAPTURE VERIFIED"}</span>
+            <span className="scan-kicker">{phase === "idle" ? "WEB DEMO CAPTURE" : phase === "scanning" ? `ANALYZING · ${Math.round(((eventIndex + 1) / events.length) * 100)}%` : "CAPTURE VERIFIED"}</span>
             <h2>{phase === "idle" ? (kind === "old" ? "Use Alex's demo scan" : "Scan the new apartment") : phase === "scanning" ? "Building a spatial model" : "Ready for the next step"}</h2>
             <p>{phase === "idle" ? "A deterministic RoomPlan-style capture keeps the live demo reliable." : phase === "scanning" ? "Depth points are being normalized into room geometry and measurable objects." : "The scan is now in the same normalized format used by the planning engine."}</p>
           </div>
@@ -110,7 +116,7 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
               {uploadNote ? <p className="upload-note">{uploadNote}</p> : null}
             </div>
           ) : phase === "scanning" ? (
-            <div className="scan-progress"><i><span style={{ width: `${(eventIndex + 1) * 25}%` }} /></i><small>Keep the device moving slowly</small></div>
+            <div className="scan-progress"><i><span style={{ width: `${((eventIndex + 1) / events.length) * 100}%` }} /></i><small>Deterministic demo capture · about 3 seconds</small></div>
           ) : (
             <LinkButton href={kind === "old" ? "/inventory" : "/preferences"}>{kind === "old" ? "Review my furniture" : "Plan my space"}</LinkButton>
           )}

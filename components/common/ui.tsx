@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 
 export function cn(...values: Array<string | false | null | undefined>) {
   return values.filter(Boolean).join(" ");
@@ -43,17 +43,17 @@ export function Metric({ value, label, note, accent }: { value: string; label: s
   );
 }
 
-export function Modal({ open, onClose, title, children, wide = false }: { open: boolean; onClose: () => void; title: string; children: React.ReactNode; wide?: boolean }) {
+export function Modal({ open, onClose, title, children, wide = false, fullScreen = false }: { open: boolean; onClose: () => void; title: string; children: React.ReactNode; wide?: boolean; fullScreen?: boolean }) {
   if (!open) return null;
   return (
     <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label={title} onMouseDown={onClose}>
-      <div className={cn("modal", wide && "modal-wide")} onMouseDown={(event) => event.stopPropagation()}>
+      <div className={cn("modal", wide && "modal-wide", fullScreen && "modal-fullscreen")} onMouseDown={(event) => event.stopPropagation()}>
         <div className="modal-head">
           <div>
-            <div className="eyebrow">ReSpace HK</div>
+            <div className="eyebrow">ReNest HK</div>
             <h2>{title}</h2>
           </div>
-          <button className="icon-button" onClick={onClose} aria-label="Close dialog">×</button>
+          <button className="icon-button" onClick={onClose} aria-label="Close dialog" title="Close"><X size={18} /></button>
         </div>
         {children}
       </div>

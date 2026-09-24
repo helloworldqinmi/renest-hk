@@ -10,8 +10,9 @@ interface DemoState {
   naturalLanguagePreference: string;
   constraints: string[];
   selectedLayout: "reuse" | "space" | "cost";
-  selectedProduct: string;
+  selectedProduct: string | null;
   listingReady: boolean;
+  scanStatus: { old: "idle" | "scanning" | "complete"; new: "idle" | "scanning" | "complete" };
 }
 
 interface DemoContextValue extends DemoState {
@@ -23,6 +24,7 @@ interface DemoContextValue extends DemoState {
   selectLayout: (id: DemoState["selectedLayout"]) => void;
   selectProduct: (id: string) => void;
   setListingReady: (value: boolean) => void;
+  setScanStatus: (kind: "old" | "new", status: DemoState["scanStatus"]["old"]) => void;
   resetDemo: () => void;
 }
 
@@ -33,8 +35,9 @@ const defaultState: DemoState = {
   naturalLanguagePreference: defaultPreference,
   constraints: [],
   selectedLayout: "reuse",
-  selectedProduct: "fold-table-1",
+  selectedProduct: null,
   listingReady: false,
+  scanStatus: { old: "idle", new: "idle" },
 };
 
 const DemoContext = createContext<DemoContextValue | null>(null);
@@ -44,19 +47,19 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("respace-demo");
+    const saved = window.localStorage.getItem("renest-demo");
     if (saved) {
       try {
         setState({ ...defaultState, ...(JSON.parse(saved) as Partial<DemoState>) });
       } catch {
-        window.localStorage.removeItem("respace-demo");
+        window.localStorage.removeItem("renest-demo");
       }
     }
     setHydrated(true);
   }, []);
 
   useEffect(() => {
-    if (hydrated) window.localStorage.setItem("respace-demo", JSON.stringify(state));
+    if (hydrated) window.localStorage.setItem("renest-demo", JSON.stringify(state));
   }, [hydrated, state]);
 
   const toggleInList = useCallback((key: "selectedFurniture" | "priorityFurniture" | "selectedPreferences", value: string) => {
@@ -76,9 +79,10 @@ export function DemoProvider({ children }: { children: React.ReactNode }) {
     selectLayout: (selectedLayout) => setState((current) => ({ ...current, selectedLayout })),
     selectProduct: (selectedProduct) => setState((current) => ({ ...current, selectedProduct })),
     setListingReady: (listingReady) => setState((current) => ({ ...current, listingReady })),
+    setScanStatus: (kind, status) => setState((current) => ({ ...current, scanStatus: { ...current.scanStatus, [kind]: status } })),
     resetDemo: () => {
       setState(defaultState);
-      window.localStorage.removeItem("respace-demo");
+      window.localStorage.removeItem("renest-demo");
     },
   }), [state, toggleInList]);
 

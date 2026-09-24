@@ -19,7 +19,7 @@ export default function PreferencesPage() {
 
   return (
     <main className="page-shell preferences-page">
-      <div className="page-head"><div className="page-head-copy"><Eyebrow>Step 3 · Lifestyle</Eyebrow><h1>How should your new home work for you?</h1><p>A few priorities are enough. ReSpace turns them into spatial rules the optimizer can measure.</p></div></div>
+      <div className="page-head"><div className="page-head-copy"><Eyebrow>Step 3 · Lifestyle</Eyebrow><h1>How should your new home work for you?</h1><p>A few priorities are enough. ReNest turns them into spatial rules the optimizer can measure.</p></div></div>
       <section className="preference-section">
         <div className="section-number">01</div>
         <div className="preference-content"><div className="question-head"><h2>What matters most?</h2><span>Select all that apply</span></div>
@@ -32,9 +32,9 @@ export default function PreferencesPage() {
       </section>
       <section className="preference-section language-section">
         <div className="section-number">02</div>
-        <div className="preference-content"><div className="question-head"><h2>Tell ReSpace anything else</h2><span>Natural language</span></div>
+        <div className="preference-content"><div className="question-head"><h2>Tell ReNest anything else</h2><span>Natural language</span></div>
           <div className="language-box">
-            <textarea value={naturalLanguagePreference} onChange={(event) => setNaturalLanguagePreference(event.target.value)} aria-label="Tell ReSpace anything else" />
+            <textarea value={naturalLanguagePreference} onChange={(event) => setNaturalLanguagePreference(event.target.value)} aria-label="Tell ReNest anything else" />
             <Button onClick={interpret} icon={Sparkles} disabled={interpreting || !naturalLanguagePreference.trim()}>{interpreting ? "Understanding your priorities..." : constraints.length ? "Re-interpret priorities" : "Understand my priorities"}</Button>
           </div>
           {(interpreting || constraints.length > 0) ? (

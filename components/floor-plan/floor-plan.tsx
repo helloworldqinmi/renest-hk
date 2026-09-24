@@ -50,6 +50,13 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
     ? { living: { x: 38, y: 48 }, bedroom: { x: 388, y: 48 } }
     : { living: { x: 38, y: 48 }, bedroom: { x: 420, y: 48 } };
   const placements: Placement[] = isOld ? oldPlacements : plan?.placements ?? [];
+  const walkwayClearance = plan?.walkwayClearance ?? 82;
+  const walkwayPasses = walkwayClearance >= 70;
+  const walkwayPath = plan?.id === "space"
+    ? "M 355 287 C 302 250, 265 208, 249 163 C 231 112, 306 91, 374 108"
+    : plan?.id === "cost"
+      ? "M 355 287 C 315 271, 300 247, 289 219 C 270 171, 312 139, 370 128"
+      : "M 355 287 C 287 264, 255 218, 239 171 C 219 113, 300 92, 370 112";
 
   return (
     <div className={`floor-plan-wrap ${compact ? "is-compact" : ""} ${scanning ? "is-scanning" : ""}`}>
@@ -89,10 +96,10 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
             <path d="M 371 298 L 314 298 A 57 57 0 0 0 371 241" className="door-swing" />
             <path d="M 420 255 L 471 255 A 51 51 0 0 1 420 204" className="door-swing" />
             {showWalkway ? (
-              <g className="walkway">
-                <motion.path initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.1 }} d="M 355 287 C 287 264, 255 218, 239 171 C 219 113, 300 92, 370 112" />
+              <g className={`walkway ${walkwayPasses ? "" : "is-blocked"}`}>
+                <motion.path key={plan?.id} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: .65 }} d={walkwayPath} />
                 <rect x="207" y="202" width="150" height="30" rx="15" />
-                <text x="282" y="221">Minimum clearance: 74 cm ✓</text>
+                <text x="282" y="221">{walkwayClearance} cm clearance {walkwayPasses ? "✓" : "×"}</text>
               </g>
             ) : null}
           </>
@@ -120,7 +127,13 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
               animate={{ opacity: 1, scale: 1, x, y }}
               transition={{ delay: scanning ? index * .34 : index * .035, duration: .42 }}
               onClick={() => onSelect?.(placement.furnitureId)}
+              onKeyDown={(event) => {
+                if (onSelect && (event.key === "Enter" || event.key === " ")) onSelect(placement.furnitureId);
+              }}
               className={onSelect ? "furniture-selectable" : ""}
+              role={onSelect ? "button" : undefined}
+              tabIndex={onSelect ? 0 : undefined}
+              aria-label={onSelect ? `Inspect ${label}` : undefined}
               filter={selected ? "url(#selected-shadow)" : undefined}
             >
               <rect

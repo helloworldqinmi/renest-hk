@@ -1,8 +1,8 @@
-# ReSpace HK
+# ReNest HK
 
 **Move what matters. Fit what works.**
 
-ReSpace HK is an interactive hackathon prototype for furniture migration and spatial planning in compact Hong Kong homes. The deterministic demo follows Alex from a 380 sq ft Kowloon apartment into a 310 sq ft Northern Metropolis home.
+ReNest HK is an interactive hackathon prototype for furniture migration and spatial planning in compact Hong Kong homes. The deterministic demo follows Alex from a 380 sq ft Kowloon apartment into a 310 sq ft Northern Metropolis home.
 
 ## Run locally
 
@@ -30,7 +30,7 @@ npm start
 6. Try dimension-matched tables in the room and prepare the old table for resale.
 7. Review the final move plan and circular-move impact.
 
-Use the fixed **Demo Mode** control on any workflow screen to reset the experience.
+Use the fixed **Reset Demo** control on any workflow screen to restore the deterministic starting state.
 
 ## Project structure
 

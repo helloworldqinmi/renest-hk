@@ -6,7 +6,7 @@ import { Modal, Button } from "@/components/common/ui";
 
 const items = [
   ["Double Bed", "KEEP"], ["Study Desk", "KEEP"], ["Wardrobe", "KEEP"],
-  ["2-seat Sofa", "KEEP"], ["Bookshelf", "KEEP"], ["Coffee Table", "KEEP"], ["Dining Table", "REPLACE"],
+  ["2-seat Sofa", "KEEP"], ["Bookshelf", "KEEP"], ["Coffee Table", "KEEP"], ["Dining Table", "SELL / REPLACE"],
 ];
 
 export function MigrationAnimation({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -15,12 +15,12 @@ export function MigrationAnimation({ open, onClose }: { open: boolean; onClose: 
   useEffect(() => {
     if (!open) return;
     setActive(0);
-    const interval = window.setInterval(() => setActive((current) => Math.min(items.length, current + 1)), 520);
-    return () => window.clearInterval(interval);
+    const timers = items.map((_, index) => window.setTimeout(() => setActive(index + 1), 360 + index * 430));
+    return () => timers.forEach(window.clearTimeout);
   }, [open]);
 
   return (
-    <Modal open={open} onClose={onClose} title="Your furniture has somewhere to go" wide>
+    <Modal open={open} onClose={onClose} title="See what moves" wide fullScreen>
       <div className="migration-scene">
         <div className="migration-home old"><span>OLD HOME</span><b>Kowloon</b><div className="mini-rooms"><i /><i /><i /></div></div>
         <div className="migration-lane">
@@ -32,10 +32,15 @@ export function MigrationAnimation({ open, onClose }: { open: boolean; onClose: 
         </div>
         <div className="migration-home new"><span>NEW HOME</span><b>Northern Metropolis</b><div className="mini-rooms"><i /><i /><i /></div></div>
       </div>
-      <div className="migration-summary">
-        <div><strong>{Math.min(active, 6)}</strong><span>items coming with you</span></div>
-        <div><strong>{active >= 7 ? 1 : 0}</strong><span>better-sized replacement</span></div>
-        {active >= 7 ? <Button onClick={onClose}>Continue with this plan</Button> : <span className="analyzing-dots">Planning the move<span>...</span></span>}
+      <div className="migration-summary" aria-live="polite">
+        {active >= items.length ? (
+          <>
+            <div><strong>6</strong><span>items move with you.</span></div>
+            <div><strong>1</strong><span>item finds a new owner.</span></div>
+            <div><strong>1</strong><span>better-sized replacement is needed.</span></div>
+            <Button onClick={onClose}>Continue with this plan</Button>
+          </>
+        ) : <span className="analyzing-dots">Mapping item {active + 1} of {items.length}<span>...</span></span>}
       </div>
     </Modal>
   );

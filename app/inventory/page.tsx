@@ -5,7 +5,7 @@ import { Armchair, BedDouble, Check, CircleDollarSign, Monitor, Star, Warehouse 
 import { useDemo } from "@/components/state-provider";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
 import { Eyebrow, LinkButton, cn } from "@/components/common/ui";
-import { furnitureInventory } from "@/lib/demo-data";
+import { demoScenario, furnitureInventory } from "@/lib/demo-data";
 
 const icons = { sofa: Armchair, desk: Monitor, bed: BedDouble, storage: Warehouse, table: CircleDollarSign };
 
@@ -17,17 +17,17 @@ export default function InventoryPage() {
   return (
     <main className="page-shell inventory-page">
       <div className="page-head">
-        <div className="page-head-copy"><Eyebrow>Scan complete · 7 items detected</Eyebrow><h1>Review what&apos;s coming with you.</h1><p>We found 7 items in your current home. Keep the scan accurate, then mark what matters most.</p></div>
+        <div className="page-head-copy"><Eyebrow>Scan complete · {demoScenario.furnitureTotal} items detected</Eyebrow><h1>Review what&apos;s coming with you.</h1><p>We found {demoScenario.furnitureTotal} items in your current home. Keep the scan accurate, then mark what matters most.</p></div>
         <LinkButton href="/scan-new">Scan my new home</LinkButton>
       </div>
       <div className="inventory-layout">
         <section className="inventory-plan card">
-          <div className="panel-title"><div><span>CURRENT HOME</span><h2>Kowloon · 380 sq ft</h2></div><span className="status-pill green"><Check size={12} /> Measured</span></div>
+          <div className="panel-title"><div><span>CURRENT HOME</span><h2>{demoScenario.currentHome.name} · {demoScenario.currentHome.areaSqFt} sq ft</h2></div><span className="status-pill green"><Check size={12} /> Measured</span></div>
           <FloorPlan mode="old" selectedId={selected} onSelect={setSelected} />
           <div className="inventory-value"><span>Estimated replacement value</span><strong>HK${selectedValue.toLocaleString()}</strong><p>Reusing what already works can significantly reduce move-in costs.</p></div>
         </section>
         <section className="inventory-side">
-          <div className="inventory-side-head"><div><span>FURNITURE INVENTORY</span><h2>What definitely needs to move?</h2></div><b>{selectedFurniture.length} / 7 kept</b></div>
+          <div className="inventory-side-head"><div><span>FURNITURE INVENTORY</span><h2>What definitely needs to move?</h2></div><b>{selectedFurniture.length} / {demoScenario.furnitureTotal} kept</b></div>
           <div className="inventory-list">
             {furnitureInventory.map((item) => {
               const Icon = icons[item.category];
