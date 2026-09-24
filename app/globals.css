@@ -358,3 +358,61 @@ button { cursor: pointer; }
   .plan-tab h3 { margin: 4px 0 7px; font-size: 17px; }
   .plan-mini-metrics { padding-top: 8px; }
 }
+
+/* Supplied ReNest photo library */
+.hero-photo { position:absolute; width:min(920px,72vw); aspect-ratio:1672/941; right:-4vw; top:50%; transform:translateY(-49%); overflow:hidden; opacity:.98; box-shadow:0 30px 70px rgba(19,35,29,.18); }
+.hero-photo img { object-fit:cover; }
+
+.furniture-thumb.has-photo { position:relative; overflow:hidden; background:#f2f2ee; }
+.furniture-thumb.has-photo img { object-fit:contain; }
+
+.scan-photo { position:relative; width:100%; aspect-ratio:4/3; overflow:hidden; background:#e7ebe7; box-shadow:0 12px 35px rgba(25,40,34,.12); }
+.scan-photo img { object-fit:cover; }
+.scan-photo:after { content:""; position:absolute; inset:0; border:1px solid rgba(255,255,255,.5); pointer-events:none; }
+.scan-photo.is-scanning:before { content:""; position:absolute; z-index:2; left:0; right:0; top:50%; height:2px; background:var(--coral); box-shadow:0 0 16px rgba(226,112,87,.85); animation:photo-scan 2.2s linear infinite; }
+.scan-corners { position:absolute; z-index:2; inset:18px; pointer-events:none; }
+.scan-corners i { position:absolute; width:28px; height:28px; border-color:rgba(255,255,255,.92); border-style:solid; }
+.scan-corners i:nth-child(1){left:0;top:0;border-width:2px 0 0 2px}.scan-corners i:nth-child(2){right:0;top:0;border-width:2px 2px 0 0}.scan-corners i:nth-child(3){left:0;bottom:0;border-width:0 0 2px 2px}.scan-corners i:nth-child(4){right:0;bottom:0;border-width:0 2px 2px 0}
+@keyframes photo-scan { from { transform:translateY(-190px); } to { transform:translateY(190px); } }
+
+.panel-title .panel-tools { flex-direction:row; align-items:center; gap:10px; }
+.view-switch { display:inline-grid; grid-template-columns:1fr 1fr; padding:3px; background:#edf0ed; border:1px solid var(--line); }
+.view-switch button { min-height:28px; padding:0 9px; border:0; background:transparent; color:var(--muted); display:flex; align-items:center; justify-content:center; gap:5px; font-size:9px; font-weight:750; white-space:nowrap; }
+.view-switch button.is-active { background:white; color:var(--ink); box-shadow:0 2px 8px rgba(28,45,39,.1); }
+.plan-photo { position:relative; aspect-ratio:750/370; overflow:hidden; background:white; }
+.plan-photo img { object-fit:contain; }
+.plan-photo > span { position:absolute; left:15px; bottom:13px; padding:7px 9px; background:rgba(22,32,29,.82); color:white; font-size:8px; font-weight:800; }
+
+.product-visual.product-photo { background:#f1f1ed; }
+.product-visual.product-photo:before, .product-visual.product-photo > i, .product-visual.product-photo .table-top { display:none; }
+.product-visual.product-photo img { object-fit:contain; padding:20px; }
+.product-visual.product-photo > span { z-index:2; padding:5px 8px; background:rgba(255,255,255,.88); border:1px solid var(--line); white-space:nowrap; }
+.try-plan { position:relative; }
+.try-photo-inset { position:absolute; z-index:4; right:12px; bottom:54px; width:34%; aspect-ratio:3/2; overflow:hidden; border:3px solid white; box-shadow:0 10px 28px rgba(20,32,28,.22); }
+.try-photo-inset img { object-fit:cover; }
+.try-photo-inset span { position:absolute; left:6px; bottom:6px; padding:4px 6px; background:rgba(22,32,29,.8); color:white; font-size:7px; font-weight:850; }
+
+.impact-hero { min-height:620px; padding:72px 7vw 62px; }
+.impact-intro { display:grid; grid-template-columns:1.05fr .95fr; gap:5vw; align-items:stretch; }
+.impact-story h1 { font-size:clamp(42px,4.5vw,66px); line-height:1; font-weight:590; margin-bottom:23px; }
+.impact-story > p { font-size:16px; }
+.impact-final-photo { position:relative; min-height:330px; overflow:hidden; box-shadow:0 22px 55px rgba(28,45,39,.14); }
+.impact-final-photo img { object-fit:cover; }
+.impact-final-photo span { position:absolute; left:14px; bottom:14px; padding:7px 9px; background:rgba(22,32,29,.82); color:white; font-size:8px; font-weight:850; }
+.impact-metrics { margin-top:36px; }
+
+@media (max-width: 900px) {
+  .hero-photo { width:920px; opacity:.33; right:-470px; top:62%; }
+  .panel-title .panel-tools { align-items:flex-end; flex-direction:column; }
+  .impact-intro { grid-template-columns:1fr; }
+  .impact-final-photo { min-height:360px; }
+}
+
+@media (max-width: 520px) {
+  .hero-photo { right:-590px; opacity:.28; }
+  .panel-title { align-items:flex-start; }
+  .panel-title .panel-tools { gap:6px; }
+  .view-switch button { font-size:0; width:34px; padding:0; }
+  .try-photo-inset { width:42%; bottom:50px; }
+  .impact-final-photo { min-height:230px; }
+}

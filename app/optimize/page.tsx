@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { BrainCircuit, Check, CircleCheck, Maximize2, MoveUpRight, Ruler, Sparkles, Sun, X } from "lucide-react";
+import Image from "next/image";
+import { BrainCircuit, Check, CircleCheck, ImageIcon, Map, Maximize2, MoveUpRight, Ruler, Sparkles, Sun, X } from "lucide-react";
 import { useDemo } from "@/components/state-provider";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
 import { MigrationAnimation } from "@/components/planning/migration-animation";
@@ -17,6 +18,7 @@ export default function OptimizePage() {
   const [step, setStep] = useState(0);
   const [selectedFurniture, setSelectedFurniture] = useState<string | null>("desk");
   const [migrationOpen, setMigrationOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"plan" | "preview">("plan");
   const currentPlan = plans.find((plan) => plan.id === selectedLayout) ?? plans[0];
   const currentFurniture = furnitureInventory.find((item) => item.id === selectedFurniture);
   const validation = useMemo(() => validateLayout(currentPlan), [currentPlan]);
@@ -54,9 +56,25 @@ export default function OptimizePage() {
       </div>
       <div className="optimization-workspace">
         <section className="plan-canvas card">
-          <div className="panel-title"><div><span>{currentPlan.name.toUpperCase()} · {currentPlan.shortName.toUpperCase()}</span><h2>Northern Metropolis · 310 sq ft</h2></div><span className={cn("status-pill", validation.feasible ? "green" : "coral")}>{validation.feasible ? <CircleCheck size={12} /> : <X size={12} />}{validation.feasible ? "Geometry verified" : "Review layout"}</span></div>
-          <FloorPlan mode="new" plan={currentPlan} selectedId={selectedFurniture} onSelect={setSelectedFurniture} showWalkway />
-          <div className="canvas-tip"><Maximize2 size={14} /> Select furniture to inspect its placement</div>
+          <div className="panel-title">
+            <div><span>{currentPlan.name.toUpperCase()} · {currentPlan.shortName.toUpperCase()}</span><h2>Northern Metropolis · 310 sq ft</h2></div>
+            <div className="panel-tools">
+              <div className="view-switch" role="group" aria-label="Plan view">
+                <button className={cn(viewMode === "plan" && "is-active")} onClick={() => setViewMode("plan")} title="Verified floor plan"><Map size={13} /> Floor plan</button>
+                <button className={cn(viewMode === "preview" && "is-active")} onClick={() => setViewMode("preview")} title="Illustrative 3D preview"><ImageIcon size={13} /> 3D preview</button>
+              </div>
+              <span className={cn("status-pill", validation.feasible ? "green" : "coral")}>{validation.feasible ? <CircleCheck size={12} /> : <X size={12} />}{validation.feasible ? "Geometry verified" : "Review layout"}</span>
+            </div>
+          </div>
+          {viewMode === "plan" ? (
+            <FloorPlan mode="new" plan={currentPlan} selectedId={selectedFurniture} onSelect={setSelectedFurniture} showWalkway />
+          ) : (
+            <div className="plan-photo">
+              <Image src="/photos/layout-planning.webp" alt="Three-dimensional top-down preview of the compact apartment with a verified walking route" fill sizes="(max-width: 900px) 92vw, 64vw" />
+              <span>Illustrative 3D preview · geometry verified in Floor plan</span>
+            </div>
+          )}
+          <div className="canvas-tip"><Maximize2 size={14} /> {viewMode === "plan" ? "Select furniture to inspect its placement" : "Switch to Floor plan to inspect dimensions and furniture"}</div>
         </section>
         <aside className="decision-panel card">
           <div className="decision-top"><div><Eyebrow>Selected plan</Eyebrow><h2>{currentPlan.shortName}</h2></div>{selectedLayout === "reuse" ? <span className="status-pill green"><Check size={12} /> Recommended</span> : null}</div>

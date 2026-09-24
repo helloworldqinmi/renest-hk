@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Armchair, BedDouble, Check, CircleDollarSign, Monitor, Star, Warehouse } from "lucide-react";
 import { useDemo } from "@/components/state-provider";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
@@ -8,6 +9,13 @@ import { Eyebrow, LinkButton, cn } from "@/components/common/ui";
 import { demoScenario, furnitureInventory } from "@/lib/demo-data";
 
 const icons = { sofa: Armchair, desk: Monitor, bed: BedDouble, storage: Warehouse, table: CircleDollarSign };
+const itemPhotos: Partial<Record<string, string>> = {
+  sofa: "/photos/furniture-sofa.webp",
+  wardrobe: "/photos/furniture-cabinet.webp",
+  "coffee-table": "/photos/furniture-coffee-table.webp",
+  bookshelf: "/photos/furniture-bookshelf.webp",
+  "dining-table": "/photos/furniture-dining-table.webp",
+};
 
 export default function InventoryPage() {
   const { selectedFurniture, priorityFurniture, toggleFurniture, togglePriority } = useDemo();
@@ -31,11 +39,12 @@ export default function InventoryPage() {
           <div className="inventory-list">
             {furnitureInventory.map((item) => {
               const Icon = icons[item.category];
+              const photo = itemPhotos[item.id];
               const kept = selectedFurniture.includes(item.id);
               const priority = priorityFurniture.includes(item.id);
               return (
                 <article key={item.id} onClick={() => setSelected(item.id)} className={cn("inventory-item", selected === item.id && "is-selected", !kept && "is-off")}>
-                  <div className={`furniture-thumb ${item.category}`}><Icon size={23} strokeWidth={1.7} /></div>
+                  <div className={cn("furniture-thumb", item.category, photo && "has-photo")}>{photo ? <Image src={photo} alt="" fill sizes="48px" /> : <Icon size={23} strokeWidth={1.7} />}</div>
                   <div className="inventory-item-copy"><h3>{item.name}</h3><span>{Math.round(item.dimensions.width * 100)} × {Math.round(item.dimensions.depth * 100)} × {Math.round(item.dimensions.height * 100)} cm</span><b>HK${item.estimatedValue?.toLocaleString()} replacement</b></div>
                   <button aria-label={`${priority ? "Remove" : "Mark"} ${item.name} priority`} className={cn("priority-button", priority && "is-priority")} onClick={(event) => { event.stopPropagation(); togglePriority(item.id); }}><Star size={15} fill={priority ? "currentColor" : "none"} />{priority ? "Priority" : "Priority"}</button>
                   <label className="keep-toggle" onClick={(event) => event.stopPropagation()}><input type="checkbox" checked={kept} onChange={() => toggleFurniture(item.id)} /><span>{kept ? "Keep" : "Leave"}</span></label>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { ArrowUpRight, Check, CircleCheck, Ruler, Tag } from "lucide-react";
 import { useDemo } from "@/components/state-provider";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
@@ -9,6 +10,12 @@ import { demoScenario, marketplaceProducts, plans } from "@/lib/demo-data";
 import type { MarketplaceProduct } from "@/types";
 
 function ProductVisual({ product }: { product: MarketplaceProduct }) {
+  const image = product.id === "fold-table-1"
+    ? "/photos/recommend-folding-table.webp"
+    : product.id === "secondhand-table"
+      ? "/photos/furniture-dining-table.webp"
+      : null;
+  if (image) return <div className={`product-visual product-photo ${product.tone}`}><Image src={image} alt={product.name} fill sizes="(max-width: 520px) 92vw, 31vw" /><span>{Math.round(product.width * 100)} × {Math.round(product.depth * 100)} cm</span></div>;
   return <div className={`product-visual ${product.tone}`}><div className="table-top" /><i /><i /><i /><i /><span>{Math.round(product.width * 100)} cm</span></div>;
 }
 
@@ -42,7 +49,7 @@ export default function ShopPage() {
       <div className="shop-footer"><div><CircleCheck size={18} /><span>{chosen ? <><b>{chosen.name}</b> selected · HK${chosen.price.toLocaleString()}</> : "Try a verified-fit product, then add it to your plan."}</span></div><LinkButton href="/move-plan" className={!chosen ? "disabled-link" : ""}>Build my move plan</LinkButton></div>
 
       <Modal open={!!trial} onClose={() => setTrial(null)} title="Try it in your room" wide>
-        {trial ? <div className="try-room"><div className="try-plan"><FloorPlan mode="new" plan={plans[0]} trialProduct={trial} compact /><div className="try-swap"><span>140 × 80 cm · out</span><ArrowUpRight size={15} /><b>{Math.round(trial.width * 100)} × {Math.round(trial.depth * 100)} cm · in</b></div></div><aside><span className="status-pill green"><Check size={12} /> Fits perfectly ✓</span><h3>{trial.name}</h3><div className="try-metric"><span>Walking clearance</span><strong>{trial.clearance} cm</strong></div><div className="try-metric"><span>Usable circulation</span><strong>+{demoScenario.replacementTable.spaceUnlockedSqM} m²</strong></div><div className="try-metric"><span>Fit score</span><strong>{trial.fitScore}%</strong></div><div className="try-price">HK${trial.price.toLocaleString()}</div><Button onClick={() => { selectProduct(trial.id); setTrial(null); }}>Use this in my plan</Button></aside></div> : null}
+        {trial ? <div className="try-room"><div className="try-plan"><FloorPlan mode="new" plan={plans[0]} trialProduct={trial} compact /><div className="try-photo-inset"><Image src="/photos/fit-result.webp" alt="Photorealistic preview of Alex's existing furniture fitted into the new apartment" fill sizes="280px" /><span>ROOM PREVIEW</span></div><div className="try-swap"><span>140 × 80 cm · out</span><ArrowUpRight size={15} /><b>{Math.round(trial.width * 100)} × {Math.round(trial.depth * 100)} cm · in</b></div></div><aside><span className="status-pill green"><Check size={12} /> Fits perfectly ✓</span><h3>{trial.name}</h3><div className="try-metric"><span>Walking clearance</span><strong>{trial.clearance} cm</strong></div><div className="try-metric"><span>Usable circulation</span><strong>+{demoScenario.replacementTable.spaceUnlockedSqM} m²</strong></div><div className="try-metric"><span>Fit score</span><strong>{trial.fitScore}%</strong></div><div className="try-price">HK${trial.price.toLocaleString()}</div><Button onClick={() => { selectProduct(trial.id); setTrial(null); }}>Use this in my plan</Button></aside></div> : null}
       </Modal>
       <Modal open={!!details} onClose={() => setDetails(null)} title="Product details">
         {details ? <div className="product-detail"><ProductVisual product={details} /><h3>{details.name}</h3><p>A compact, dimension-checked table matched to the door clearance and circulation path in your selected layout.</p><div className="product-spec"><span>{Math.round(details.width * 100)} × {Math.round(details.depth * 100)} × {Math.round(details.height * 100)} cm</span><strong>HK${details.price.toLocaleString()}</strong></div><Button onClick={() => { setDetails(null); setTrial(details); }}>Try in my room</Button></div> : null}

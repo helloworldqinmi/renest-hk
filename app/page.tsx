@@ -1,13 +1,21 @@
+import Image from "next/image";
 import { ArrowDown, MoveRight, Ruler, ScanLine, ShoppingBag } from "lucide-react";
 import { LinkButton, Eyebrow } from "@/components/common/ui";
-import { FloorPlan } from "@/components/floor-plan/floor-plan";
-import { demoScenario, plans } from "@/lib/demo-data";
+import { demoScenario } from "@/lib/demo-data";
 
 export default function HomePage() {
   return (
     <main className="landing">
       <section className="hero">
-        <div className="hero-plan" aria-hidden="true"><FloorPlan mode="new" plan={plans[0]} showWalkway compact /></div>
+        <div className="hero-photo">
+          <Image
+            src="/photos/hero-migration.webp"
+            alt="Alex's furniture moving from a lived-in Kowloon apartment into a compact empty new home"
+            fill
+            sizes="(max-width: 900px) 920px, 72vw"
+            preload
+          />
+        </div>
         <div className="hero-wash" />
         <div className="hero-content">
           <Eyebrow>Furniture migration for compact homes</Eyebrow>

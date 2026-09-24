@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { CheckCircle2, FileJson, Radar, ScanLine, Smartphone } from "lucide-react";
-import { FloorPlan } from "@/components/floor-plan/floor-plan";
 import { useDemo } from "@/components/state-provider";
 import { Button, Eyebrow, LinkButton } from "@/components/common/ui";
-import { demoScenario, plans } from "@/lib/demo-data";
+import { demoScenario } from "@/lib/demo-data";
 import { parseRoomPlanJSON } from "@/lib/roomplan";
 
 const oldEvents = [
@@ -88,7 +88,15 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
 
       <section className="scan-stage card">
         <div className="scan-visual">
-          <FloorPlan mode={kind === "old" ? "old" : "new"} plan={plans[0]} scanning={phase === "scanning"} compact />
+          <div className={`scan-photo ${phase === "scanning" ? "is-scanning" : ""}`}>
+            <Image
+              src={kind === "old" ? "/photos/old-home.webp" : "/photos/empty-new-home.webp"}
+              alt={kind === "old" ? "Alex's lived-in Kowloon apartment with existing furniture" : "An empty compact apartment in the Northern Metropolis"}
+              fill
+              sizes="(max-width: 900px) 92vw, 64vw"
+            />
+            <div className="scan-corners" aria-hidden="true"><i /><i /><i /><i /></div>
+          </div>
           {phase === "idle" ? (
             <div className="scan-idle-overlay"><Radar size={34} /><span>Ready to capture</span></div>
           ) : null}
