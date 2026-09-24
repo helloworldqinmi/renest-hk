@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { BrainCircuit, Check, CircleCheck, ImageIcon, Map, Maximize2, MoveUpRight, Ruler, Sparkles, Sun, X } from "lucide-react";
+import { Check, CircleCheck, ImageIcon, Map, Maximize2, MoveUpRight, Ruler, SlidersHorizontal, Sun, X } from "lucide-react";
 import { useDemo } from "@/components/state-provider";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
 import { MigrationAnimation } from "@/components/planning/migration-animation";
@@ -10,7 +10,7 @@ import { Button, Eyebrow, LinkButton, cn } from "@/components/common/ui";
 import { demoScenario, furnitureInventory, plans } from "@/lib/demo-data";
 import { validateLayout } from "@/lib/geometry";
 
-const optimizationSteps = ["Understanding room geometry...", "Testing 1,248 possible placements...", "Checking door clearance...", "Matching your lifestyle preferences...", "Evaluating furniture reuse...", "3 optimal plans found"];
+const optimizationSteps = ["Testing orientations", "Checking clearances", "Preserving existing furniture", "Layout ready"];
 
 export default function OptimizePage() {
   const { selectedLayout, selectLayout } = useDemo();
@@ -24,25 +24,30 @@ export default function OptimizePage() {
   const validation = useMemo(() => validateLayout(currentPlan), [currentPlan]);
 
   useEffect(() => {
-    const timers = optimizationSteps.map((_, index) => window.setTimeout(() => setStep(index), index * 580));
+    const timers = optimizationSteps.map((_, index) => window.setTimeout(() => setStep(index), index * 850));
     timers.push(window.setTimeout(() => setOptimizing(false), 3500));
     return () => timers.forEach(window.clearTimeout);
   }, []);
 
   if (optimizing) return (
     <main className="optimizer-loading">
-      <div className="optimizer-radar"><div /><div /><span><Sparkles size={27} /></span></div>
-      <Eyebrow>ReNest spatial optimizer</Eyebrow><h1>{optimizationSteps[step]}</h1>
-      <div className="optimizer-progress"><span style={{ width: `${((step + 1) / optimizationSteps.length) * 100}%` }} /></div>
-      <p>AI understands how you want to live.<br />Geometry ensures the plan actually fits.</p>
+      <Eyebrow>Spatial planning</Eyebrow><h1>{optimizationSteps[step]}</h1>
+      <div className="optimizer-stages">
+        {optimizationSteps.slice(0, 3).map((label, index) => (
+          <span className={index < step ? "is-complete" : index === step ? "is-active" : ""} key={label}>
+            <i>{index < step ? <Check size={12} /> : index + 1}</i>{label}
+          </span>
+        ))}
+      </div>
+      <p>Testing your measured furniture against the new home.</p>
     </main>
   );
 
   return (
     <main className="page-shell optimize-page">
-      <div className="page-head optimize-head"><div className="page-head-copy"><Eyebrow>3 feasible plans found</Eyebrow><h1>Make every centimetre count.</h1><p>Compare three strategies for Alex&apos;s 310 sq ft home. Every placement is dimensionally checked.</p></div><Button icon={MoveUpRight} variant="secondary" onClick={() => setMigrationOpen(true)}>See what moves</Button></div>
+      <div className="page-head optimize-head"><div className="page-head-copy"><Eyebrow>3 feasible plans found</Eyebrow><h1>Make every centimetre count.</h1><p>Compare three strategies for your 310 sq ft home. Every placement is dimensionally checked.</p></div><Button icon={MoveUpRight} variant="secondary" onClick={() => setMigrationOpen(true)}>See what moves</Button></div>
       <section className="technical-principle" aria-label="How ReNest plans">
-        <div><BrainCircuit size={24} /><span><b>AI</b> understands how you want to live.</span></div>
+        <div><SlidersHorizontal size={24} /><span><b>Your priorities</b> define how the room should work.</span></div>
         <div className="principle-divider" />
         <div><Ruler size={24} /><span><b>Geometry</b> ensures it actually fits.</span></div>
       </section>

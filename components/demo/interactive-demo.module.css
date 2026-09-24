@@ -46,9 +46,18 @@
 
 .stageRail {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  border-bottom: 1px solid var(--line);
+  grid-template-columns: repeat(4, 1fr);
+  position: relative;
   margin-bottom: 28px;
+}
+
+.stageRail:before {
+  content: "";
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  top: 30px;
+  border-top: 1px solid var(--line);
 }
 
 .stageStep {
@@ -57,8 +66,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
+  z-index: 1;
   border: 0;
-  border-bottom: 3px solid transparent;
   background: transparent;
   color: #929b97;
   padding: 0 12px;
@@ -75,6 +85,8 @@
   place-items: center;
   border: 1px solid #cbd2cd;
   border-radius: 50%;
+  background: var(--paper);
+  box-shadow: 0 0 0 7px var(--paper);
   font-size: 10px;
   font-weight: 800;
 }
@@ -87,11 +99,12 @@
   font-style: normal;
   font-size: 11px;
   font-weight: 750;
+  background: var(--paper);
+  padding-right: 8px;
 }
 
 .stageActive {
   color: var(--ink);
-  border-bottom-color: var(--ink);
 }
 
 .stageActive > span {
@@ -189,18 +202,6 @@
 .scanFrame > i:nth-child(2) { top: 0; right: 0; border-width: 2px 2px 0 0; }
 .scanFrame > i:nth-child(3) { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
 .scanFrame > i:nth-child(4) { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
-
-.scanFrame.scanning:after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 2px;
-  background: rgba(255,255,255,.92);
-  box-shadow: 0 3px 14px rgba(22,32,29,.22);
-  animation: scanLine 1.4s ease-in-out infinite alternate;
-}
 
 .scanFrame > span {
   position: absolute;
@@ -914,9 +915,7 @@
 .liveStatus { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
 
 @keyframes stageIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
-@keyframes scanLine { from { transform: translateY(10px); } to { transform: translateY(425px); } }
 @keyframes objectFound { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
-@keyframes loadScan { from { transform: translateX(-105%); } to { transform: translateX(150%); } }
 @keyframes boxFound { from { opacity: 0; transform: scale(.95); } to { opacity: 1; transform: scale(1); } }
 @keyframes measureIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
 @keyframes statusPulse { from { opacity: .55; } to { opacity: 1; } }
@@ -942,7 +941,7 @@
 
 @media (max-width: 900px) {
   .demo { width: min(94vw, 760px); padding-top: 10px; }
-  .stageRail { overflow-x: auto; grid-template-columns: repeat(5, minmax(125px, 1fr)); margin-bottom: 28px; }
+  .stageRail { overflow-x: auto; grid-template-columns: repeat(4, minmax(110px, 1fr)); margin-bottom: 28px; }
   .storyHeader h1 { font-size: 40px; }
   .scanWorkspace,
   .fitWorkspace,
@@ -970,8 +969,11 @@
   .demo { width: 100%; padding: 0 14px 54px; }
   .demoTopbar { align-items: flex-start; padding: 11px 0; }
   .demoTopbar > div { flex-direction: column; align-items: flex-start; gap: 3px; }
-  .stageRail { margin-left: -14px; margin-right: -14px; padding: 0 8px; }
-  .stageStep { padding: 0 8px; }
+  .stageRail { grid-template-columns: repeat(4, minmax(0, 1fr)); overflow: visible; margin-left: -6px; margin-right: -6px; padding: 0; }
+  .stageRail:before { left: 16px; right: 16px; }
+  .stageStep { gap: 6px; min-height: 54px; padding: 0 4px; }
+  .stageStep > span { width: 21px; height: 21px; box-shadow: 0 0 0 4px var(--paper); }
+  .stageStep em { padding-right: 3px; font-size: 9px; }
   .storyHeader h1 { font-size: 34px; }
   .storyHeader p { font-size: 13px; }
   .photoPanel { min-height: 420px; }
@@ -1024,7 +1026,6 @@
 @media (prefers-reduced-motion: reduce) {
   .stage,
   .detectedTag,
-  .scanFrame.scanning:after,
   .scanProgress > div span,
   .objectBoxes > i,
   .measurementLines span,

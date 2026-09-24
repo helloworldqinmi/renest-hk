@@ -34,11 +34,11 @@ export default function Image() {
       <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#edf2ee", color: "#16201d", padding: "64px 72px" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 26, fontWeight: 800 }}><span style={{ width: 38, height: 38, display: "flex", border: "4px solid #315d4c" }} />ReNest <span style={{ color: "#e27057", marginLeft: -8 }}>HK</span></div>
-          <span style={{ fontSize: 16, fontWeight: 700, color: "#65706b" }}>AI furniture migration for compact homes</span>
+          <span style={{ fontSize: 16, fontWeight: 700, color: "#65706b" }}>Furniture migration for compact homes</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <HomePlan label="OLD HOME" result="7 items" accent="#315d4c" />
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, color: "#65706b" }}><span style={{ fontSize: 18, fontWeight: 800 }}>AI PLANNING</span><span style={{ fontSize: 48, color: "#e27057" }}>→</span><span style={{ fontSize: 16, fontWeight: 700 }}>Geometry checked</span></div>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, color: "#65706b" }}><span style={{ fontSize: 18, fontWeight: 800 }}>SPATIAL PLANNING</span><span style={{ fontSize: 48, color: "#e27057" }}>→</span><span style={{ fontSize: 16, fontWeight: 700 }}>Geometry checked</span></div>
           <HomePlan label="NEW HOME" result="6 reused · 1 replaced" accent="#315d4c" />
         </div>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>

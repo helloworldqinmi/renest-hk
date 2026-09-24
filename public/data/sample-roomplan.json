@@ -1,6 +1,6 @@
 {
-  "identifier": "alex-kowloon-roomplan",
-  "label": "Alex's Kowloon Home",
+  "identifier": "sample-kowloon-roomplan",
+  "label": "Your Kowloon Home",
   "dimensions": { "width": 8.5, "depth": 4.4 },
   "surfaces": {
     "windows": [{ "id": "window-1", "wall": "north", "offset": 1.2, "width": 2.4 }],

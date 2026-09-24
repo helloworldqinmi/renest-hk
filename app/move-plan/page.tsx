@@ -13,7 +13,7 @@ export default function MovePlanPage() {
   const product = marketplaceProducts.find((item) => item.id === selectedProduct) ?? marketplaceProducts[0];
   return (
     <main className="page-shell move-page">
-      <div className="page-head"><div className="page-head-copy"><Eyebrow>{demoScenario.resident}&apos;s move plan · Ready</Eyebrow><h1>Your new home is ready.</h1><p>One coordinated plan for what comes with you, what moves on, and what needs to arrive.</p></div><div className="readiness-ring"><strong>100%</strong><span>Move readiness</span></div></div>
+      <div className="page-head"><div className="page-head-copy"><Eyebrow>Your move plan · Ready</Eyebrow><h1>Your new home is ready.</h1><p>One coordinated plan for what comes with you, what moves on, and what needs to arrive.</p></div><div className="readiness-ring"><strong>100%</strong><span>Move readiness</span></div></div>
       <div className="move-layout">
         <section className="final-plan card"><div className="panel-title"><div><span>FINAL LAYOUT · REUSE MAX</span><h2>{demoScenario.newHome.name} · {demoScenario.newHome.areaSqFt} sq ft</h2></div><span className="status-pill green"><CircleCheck size={12} /> Ready</span></div><FloorPlan mode="new" plan={plans[0]} showWalkway /><div className="final-plan-note"><span><b>{demoScenario.reused}</b> existing items</span><span><b>{demoScenario.newItems}</b> compact replacement</span><span><b>{demoScenario.replacementTable.clearanceCm} cm</b> walkway clearance</span></div></section>
         <aside className="move-checklist">

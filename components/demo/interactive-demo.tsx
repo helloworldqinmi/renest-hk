@@ -36,7 +36,12 @@ type OptimizationState = "idle" | "exploring" | "clearance" | "ranking" | "compl
 type VisualizationState = "idle" | "composition" | "materials" | "lighting" | "complete";
 type MarketplaceState = "idle" | "searching" | "complete";
 
-const stages = ["Scan", "Map", "Plan", "Fit", "Move"];
+const workflowSteps = [
+  { label: "Scan", stage: 0 },
+  { label: "Plan", stage: 2 },
+  { label: "Fit", stage: 3 },
+  { label: "Move", stage: 4 },
+];
 const featuredInventory = ["sofa", "desk", "bed", "wardrobe", "coffee-table", "bookshelf", "dining-table"]
   .map((id) => furnitureInventory.find((item) => item.id === id))
   .filter((item): item is (typeof furnitureInventory)[number] => Boolean(item));
@@ -76,6 +81,7 @@ export function InteractiveDemo() {
     [selectedInventory],
   );
   const displayedObjective = pendingObjective ?? objective;
+  const activeWorkflowStep = stage < 2 ? 0 : stage - 1;
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -170,7 +176,7 @@ export function InteractiveDemo() {
     <main className={styles.demo}>
       <div className={styles.demoTopbar}>
         <div>
-          <span>Alex&apos;s move</span>
+          <span>Your move</span>
           <strong>Kowloon <MoveRight size={14} /> Northern Metropolis</strong>
         </div>
         <button type="button" onClick={resetDemo} className={styles.resetButton}>
@@ -178,17 +184,17 @@ export function InteractiveDemo() {
         </button>
       </div>
 
-      <nav className={styles.stageRail} aria-label="Demo progress">
-        {stages.map((label, index) => (
+      <nav className={styles.stageRail} aria-label="Move progress">
+        {workflowSteps.map((step, index) => (
           <button
             type="button"
-            key={label}
-            disabled={index > furthestStage}
-            className={join(styles.stageStep, index === stage && styles.stageActive, index < stage && styles.stageDone)}
-            onClick={() => setStage(index)}
+            key={step.label}
+            disabled={step.stage > furthestStage}
+            className={join(styles.stageStep, index === activeWorkflowStep && styles.stageActive, index < activeWorkflowStep && styles.stageDone)}
+            onClick={() => setStage(step.stage)}
           >
-            <span>{index < stage ? <Check size={13} /> : index + 1}</span>
-            <em>{label}</em>
+            <span>{index < activeWorkflowStep ? <Check size={13} /> : index + 1}</span>
+            <em>{step.label}</em>
           </button>
         ))}
       </nav>
@@ -308,13 +314,13 @@ function CurrentHomeStage({
     <section className={styles.stage}>
       <StoryHeader
         step="01 · Current home"
-        title="Start with what Alex already owns."
+        title="Start with what you already own."
         copy="A room scan turns a lived-in Kowloon apartment into a measured furniture inventory, including the value already sitting in the room."
       />
       <div className={styles.scanWorkspace}>
         <div className={styles.photoPanel}>
-          <Image src="/photos/old-home.webp" alt="Alex's lived-in Kowloon apartment" fill sizes="(max-width: 900px) 94vw, 62vw" priority />
-          <div className={join(styles.scanFrame, scanStep > 0 && scanStep < 4 && styles.scanning)}>
+          <Image src="/photos/old-home.webp" alt="Your lived-in Kowloon apartment" fill sizes="(max-width: 900px) 94vw, 62vw" priority />
+          <div className={styles.scanFrame}>
             <i /><i /><i /><i />
             {scanStep > 0 && scanStep < 4 ? <span className={styles.scanPhaseBadge}><ScanLine size={18} /> {scanCopy[0]}</span> : null}
             {scanStep >= 2 ? (
@@ -364,7 +370,7 @@ function CurrentHomeStage({
           ) : (
             <>
               <div className={styles.panelHeading}>
-                <div><span>Detected inventory</span><h2>These are the things Alex owns.</h2></div>
+                <div><span>Detected inventory</span><h2>These are the things you own.</h2></div>
                 <b>7 / 7 kept</b>
               </div>
               <div className={styles.inventoryList}>
@@ -424,12 +430,12 @@ function HomeComparisonStage({
       />
       <div className={styles.comparisonWorkspace}>
         <article className={styles.homeImage}>
-          <Image src="/photos/old-home.webp" alt="Alex's current larger apartment" fill sizes="(max-width: 900px) 94vw, 45vw" />
+          <Image src="/photos/old-home.webp" alt="Your current larger apartment" fill sizes="(max-width: 900px) 94vw, 45vw" />
           <div className={styles.homeLabel}><span>Current home</span><strong>380 sq ft</strong><small>Kowloon</small></div>
         </article>
         <div className={styles.sizeDelta}><MoveRight size={22} /><strong>−18%</strong><span>less floor area</span></div>
         <article className={styles.homeImage}>
-          <Image src="/photos/empty-new-home.webp" alt="Alex's smaller empty new apartment" fill sizes="(max-width: 900px) 94vw, 45vw" />
+          <Image src="/photos/empty-new-home.webp" alt="Your smaller empty new apartment" fill sizes="(max-width: 900px) 94vw, 45vw" />
           <div className={styles.homeLabel}><span>New home</span><strong>310 sq ft</strong><small>Northern Metropolis</small></div>
           {mapStep > 0 ? (
             <div className={join(styles.geometryOverlay, mapState === "complete" && styles.geometryComplete)} aria-hidden="true">
@@ -502,7 +508,7 @@ function PriorityStage({
             <MoveRight size={18} />
             <div><b>Geometry target</b><span>{selected.plan.walkwayClearance} cm route · {selected.plan.openArea} m² open</span></div>
           </div>
-          <small>AI interprets the goal. Geometry decides whether the result is feasible.</small>
+          <small>Your goal becomes a measurable layout rule.</small>
         </aside>
       </div>
       <StageActions onBack={onBack}>
@@ -535,8 +541,8 @@ function FitStage({
     <section className={styles.stage}>
       <StoryHeader
         step="04 · Geometry before imagery"
-        title={replacementTested ? "One smaller item unlocks the plan." : "The old table fits. The route does not."}
-        copy={replacementTested ? "The compact alternative restores circulation. Now the optimizer can arrange the rest of the home around the selected priority." : "Physical fit is not enough. ReNest checks the space people need to walk, open doors and use storage every day."}
+        title={replacementTested ? "Clear walkway restored." : "It fits the room. Not the way you live in it."}
+        copy={replacementTested ? "A compact table recovers 1.5 m² of usable circulation." : "The dining table leaves only 43 cm beside the entrance."}
       />
       <div className={styles.fitWorkspace}>
         <section className={styles.blueprintPanel}>
@@ -564,8 +570,8 @@ function FitStage({
           {!selectedItem ? (
             <div className={styles.inspectPrompt}>
               <span><AlertTriangle size={24} /></span>
-              <h2>1 conflict found</h2>
-              <p>Six items pass. One item creates a daily-use failure even though it stays inside the room boundary.</p>
+              <h2>It fits.</h2>
+              <p>But not comfortably. The dining table reduces the entrance route to 43 cm.</p>
               <button type="button" onClick={() => onSelectItem("dining-table")} className={styles.conflictButton}>
                 <span><b>Dining Table</b><small>140 × 80 cm</small></span><em>Inspect conflict <ArrowRight size={14} /></em>
               </button>
@@ -573,8 +579,8 @@ function FitStage({
           ) : isConflict ? (
             <div className={styles.conflictDetail}>
               <span className={replacementTested ? styles.successIcon : styles.warningIcon}>{replacementTested ? <Check size={22} /> : <AlertTriangle size={22} />}</span>
-              <small>{replacementTested ? "Verified alternative" : "Circulation conflict"}</small>
-              <h2>{replacementTested ? "Compact Folding Table" : "Existing Dining Table"}</h2>
+              <small>{replacementTested ? "Clear walkway restored" : "43 cm clearance"}</small>
+              <h2>{replacementTested ? "Compact Folding Table" : "Dining Table"}</h2>
               <strong>{replacementTested ? "89 × 60 cm" : "140 × 80 cm"}</strong>
               <dl>
                 <div><dt>Walking clearance</dt><dd className={replacementTested ? styles.goodText : styles.badText}>{replacementTested ? "82 cm ✓" : "43 cm ×"}</dd></div>
@@ -595,7 +601,7 @@ function FitStage({
         </aside>
       </div>
       <StageActions onBack={onBack}>
-        {replacementTested ? <Button type="button" icon={Sparkles} onClick={onContinue}>Optimize for {objectiveConfigs[objective].shortLabel}</Button> : null}
+        {replacementTested ? <Button type="button" icon={Sparkles} onClick={onContinue}>Optimize layout</Button> : null}
       </StageActions>
     </section>
   );
@@ -607,9 +613,9 @@ function OptimizationExperience({ objective, phase }: { objective: DemoObjective
   const currentPlan = phase === "exploring" ? plans[1] : phase === "clearance" ? plans[2] : target.plan;
   const phaseCopy = {
     idle: ["Preparing the room model", "Loading verified furniture and room geometry."],
-    exploring: ["Testing furniture arrangements", "Rotating and relocating existing pieces across usable room zones."],
-    clearance: ["Checking everyday movement", "Rejecting collisions, blocked doors and routes below 70 cm."],
-    ranking: ["Selecting the strongest plan", `Ranking feasible layouts against the ${target.shortLabel} goal.`],
+    exploring: ["Testing orientations", "Rotating and relocating existing pieces across usable room zones."],
+    clearance: ["Checking clearances", "Rejecting collisions, blocked doors and routes below 70 cm."],
+    ranking: ["Preserving existing furniture", `Selecting the strongest feasible match for ${target.shortLabel}.`],
     complete: ["Layout verified", "The strongest feasible arrangement is ready."],
   }[phase];
 
@@ -617,8 +623,8 @@ function OptimizationExperience({ objective, phase }: { objective: DemoObjective
     <section className={join(styles.stage, styles.optimizationStage)}>
       <StoryHeader
         step="05 · Spatial optimization"
-        title="Finding the strongest arrangement."
-        copy="ReNest is moving real furniture through the measured home, rejecting layouts that fail clearance before ranking the feasible options."
+        title="Finding your best arrangement."
+        copy="Furniture moves through the measured home. Layouts that block doors or circulation are rejected."
       />
       <div className={styles.optimizationExperience}>
         <section className={styles.optimizationCanvas}>
@@ -645,13 +651,13 @@ function OptimizationExperience({ objective, phase }: { objective: DemoObjective
           <p>{phaseCopy[1]}</p>
           <ol className={styles.computeSteps}>
             <li className={phaseIndex > 1 ? styles.stepComplete : phaseIndex === 1 ? styles.stepActive : undefined}>
-              <span>{phaseIndex > 1 ? <Check size={14} /> : "1"}</span><div><b>Explore placements</b><small>Position and rotation candidates</small></div>
+              <span>{phaseIndex > 1 ? <Check size={14} /> : "1"}</span><div><b>Test orientations</b><small>Position and rotation candidates</small></div>
             </li>
             <li className={phaseIndex > 2 ? styles.stepComplete : phaseIndex === 2 ? styles.stepActive : undefined}>
-              <span>{phaseIndex > 2 ? <Check size={14} /> : "2"}</span><div><b>Validate circulation</b><small>Collisions, doors and daily routes</small></div>
+              <span>{phaseIndex > 2 ? <Check size={14} /> : "2"}</span><div><b>Check clearances</b><small>Collisions, doors and daily routes</small></div>
             </li>
             <li className={phaseIndex > 3 ? styles.stepComplete : phaseIndex === 3 ? styles.stepActive : undefined}>
-              <span>{phaseIndex > 3 ? <Check size={14} /> : "3"}</span><div><b>Rank feasible plans</b><small>Reuse, openness and purchase cost</small></div>
+              <span>{phaseIndex > 3 ? <Check size={14} /> : "3"}</span><div><b>Preserve furniture</b><small>Reuse, openness and purchase cost</small></div>
             </li>
           </ol>
           <div className={styles.optimizationRule}>
@@ -686,16 +692,16 @@ function ResultStage({
   const result = objectiveConfigs[objective];
   const renderCopy = {
     idle: ["Ready to visualize", "Start from the verified floor plan."],
-    composition: ["Building scene composition", "Translating verified placements into a camera-ready room."],
-    materials: ["Resolving materials and objects", "Applying furniture form, finishes and surface detail."],
-    lighting: ["Balancing light and depth", "Finishing daylight, shadows and spatial continuity."],
-    complete: ["Realistic view ready", "Generated from the verified arrangement."],
+    composition: ["Building the arrangement", "Translating verified placements into the room."],
+    materials: ["Preserving your furniture", "Matching existing pieces to their measured positions."],
+    lighting: ["Rendering the new home", "Finishing daylight, shadows and spatial continuity."],
+    complete: ["Your new space", "Rendered from the verified arrangement."],
   }[visualizationState];
   return (
     <section className={join(styles.stage, styles.resultStage)}>
       <StoryHeader
         step="05 · Move plan"
-        title="A move plan built around what Alex owns."
+        title="Your new space, built around what you own."
         copy="Compare priorities without losing sight of the measured room. Every option remains traceable to a verified arrangement."
       />
       <div className={styles.resultObjectives} role="tablist" aria-label="Compare optimized objectives">
@@ -716,7 +722,7 @@ function ResultStage({
             <div><span>{result.label}</span><strong>Geometry verified · 310 sq ft</strong></div>
             <div className={styles.viewSwitch} role="group" aria-label="Result view">
               <button type="button" className={view === "plan" ? styles.viewActive : undefined} onClick={() => onSetView("plan")}><Map size={14} /> Plan</button>
-              <button type="button" className={view === "preview" ? styles.viewActive : undefined} onClick={() => onSetView("preview")}><ImageIcon size={14} /> Realistic view</button>
+              <button type="button" className={view === "preview" ? styles.viewActive : undefined} onClick={() => onSetView("preview")}><ImageIcon size={14} /> New space</button>
             </div>
           </div>
           <div className={styles.resultSurface} key={`${objective}-${view}`}>
@@ -729,10 +735,10 @@ function ResultStage({
               <div className={join(styles.finalPreview, styles[`renderPhase${visualizationState}`])}>
                 <Image src={result.preview} alt={result.previewAlt} fill sizes="(max-width: 900px) 94vw, 62vw" style={{ objectPosition: result.previewPosition ?? "50% 50%" }} />
                 {visualizationState === "complete" ? (
-                  <span><Sparkles size={14} /> AI visualization · based on verified geometry</span>
+                  <span><ShieldCheck size={14} /> Your new space · geometry verified</span>
                 ) : (
                   <div className={styles.renderStatus}>
-                    <span><Sparkles size={16} /> Generative visualization</span>
+                    <span><ImageIcon size={16} /> New space preview</span>
                     <b>{renderCopy[0]}</b>
                     <small>{renderCopy[1]}</small>
                     <div className={styles.renderStates}>
@@ -774,7 +780,7 @@ function ResultStage({
             <div className={styles.recommendation}>
               <div className={styles.recommendationImage}><Image src={result.recommendation.image} alt={result.recommendation.name} fill sizes="150px" /></div>
               <div>
-                <small>Marketplace match · verified fit</small>
+                <small>Complete the space · verified fit</small>
                 <h3>{result.recommendation.name}</h3>
                 <strong>{result.recommendation.dimensions} · {result.recommendation.price}</strong>
                 <p>{result.recommendation.reason}</p>

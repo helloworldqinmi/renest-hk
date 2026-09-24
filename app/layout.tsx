@@ -5,11 +5,11 @@ import { AppHeader } from "@/components/common/app-header";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.cyberironman.com"),
-  title: "ReNest HK — AI Furniture Migration & Space Planning",
+  title: "ReNest HK — Furniture Migration & Space Planning",
   description: "Scan your old home and new home. ReNest helps you reuse existing furniture, optimize compact spaces, and buy only what actually fits.",
   alternates: { canonical: "/" },
   openGraph: {
-    title: "ReNest HK — AI Furniture Migration & Space Planning",
+    title: "ReNest HK — Furniture Migration & Space Planning",
     description: "Scan your old home and new home. ReNest helps you reuse existing furniture, optimize compact spaces, and buy only what actually fits.",
     url: "/",
     siteName: "ReNest HK",

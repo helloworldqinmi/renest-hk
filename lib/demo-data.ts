@@ -1,7 +1,6 @@
 import type { FurnitureItem, LayoutPlan, MarketplaceProduct, ScannedRoom } from "@/types";
 
 export const demoScenario = {
-  resident: "Alex",
   currentHome: { name: "Kowloon", areaSqFt: 380 },
   newHome: { name: "Northern Metropolis", areaSqFt: 310 },
   furnitureTotal: 7,

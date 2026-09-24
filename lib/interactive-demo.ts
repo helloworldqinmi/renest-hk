@@ -77,7 +77,7 @@ export const objectiveConfigs: Record<DemoObjective, ObjectiveConfig> = {
     rule: "Reuse at least 6 of 7 items while protecting an 82 cm circulation route.",
     plan: plans[0],
     preview: "/photos/final-reuse-relax.png",
-    previewAlt: "Alex's compact new home balanced for relaxing, light work and casual meals",
+    previewAlt: "Your compact new home balanced for relaxing, light work and casual meals",
     outcome: "Six familiar pieces stay, with room to relax, work lightly and share a casual meal.",
     decision: "The sofa, coffee table, desk and storage stay. A compact folding table restores the main route.",
     recommendation: {
@@ -97,7 +97,7 @@ export const objectiveConfigs: Record<DemoObjective, ObjectiveConfig> = {
     rule: "Fit four dining seats while maintaining at least 70 cm of daily circulation.",
     plan: hostAndDinePlan,
     preview: "/photos/final-host-and-dine.png",
-    previewAlt: "Alex's compact new home organized around a four-seat dining table",
+    previewAlt: "Your compact new home organized around a four-seat dining table",
     outcome: "A proper four-seat dining zone becomes the centre of the home.",
     decision: "The coffee table and main-room desk leave the plan so dining can take priority without blocking the entrance.",
     recommendation: {
@@ -117,7 +117,7 @@ export const objectiveConfigs: Record<DemoObjective, ObjectiveConfig> = {
     rule: "Desk within 0.6 m of a window, with a 76 cm route behind the chair.",
     plan: workFromHomePlan,
     preview: "/photos/final-work-from-home.png",
-    previewAlt: "Alex's compact new home with a dedicated naturally lit work-from-home zone",
+    previewAlt: "Your compact new home with a dedicated naturally lit work-from-home zone",
     previewPosition: "56% 50%",
     outcome: "The desk takes the brightest wall while dining folds away after use.",
     decision: "Five existing pieces stay. A full desk gets daylight and the compact drop-leaf table keeps meals flexible.",

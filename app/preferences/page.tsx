@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, CircleDollarSign, LayoutGrid, PartyPopper, Recycle, Sparkles, Warehouse, Laptop } from "lucide-react";
+import { Check, CircleDollarSign, LayoutGrid, PartyPopper, Recycle, SlidersHorizontal, Warehouse, Laptop } from "lucide-react";
 import { useDemo } from "@/components/state-provider";
 import { Button, Eyebrow, LinkButton, cn } from "@/components/common/ui";
 import { preferenceOptions } from "@/lib/demo-data";
@@ -35,16 +35,16 @@ export default function PreferencesPage() {
         <div className="preference-content"><div className="question-head"><h2>Tell ReNest anything else</h2><span>Natural language</span></div>
           <div className="language-box">
             <textarea value={naturalLanguagePreference} onChange={(event) => setNaturalLanguagePreference(event.target.value)} aria-label="Tell ReNest anything else" />
-            <Button onClick={interpret} icon={Sparkles} disabled={interpreting || !naturalLanguagePreference.trim()}>{interpreting ? "Understanding your priorities..." : constraints.length ? "Re-interpret priorities" : "Understand my priorities"}</Button>
+            <Button onClick={interpret} icon={SlidersHorizontal} disabled={interpreting || !naturalLanguagePreference.trim()}>{interpreting ? "Understanding your priorities..." : constraints.length ? "Re-interpret priorities" : "Understand my priorities"}</Button>
           </div>
           {(interpreting || constraints.length > 0) ? (
-            <div className="constraint-panel"><div className="constraint-panel-head"><span><Sparkles size={14} /> AI CONSTRAINT PARSER</span><b>{interpreting ? "Interpreting..." : `${constraints.length} constraints created`}</b></div>
+            <div className="constraint-panel"><div className="constraint-panel-head"><span><SlidersHorizontal size={14} /> LAYOUT CONSTRAINTS</span><b>{interpreting ? "Interpreting..." : `${constraints.length} constraints created`}</b></div>
               <div className="constraint-chips">{interpreting ? [1,2,3,4,5].map((value) => <i key={value} style={{ width: `${100 + value * 17}px` }} />) : constraints.map((constraint) => <span key={constraint}><Check size={12} />{constraint.replace("->", "→")}</span>)}</div>
             </div>
           ) : null}
         </div>
       </section>
-      <div className="preference-footer"><p><b>AI</b> understands how you want to live. <b>Geometry</b> ensures the plan actually fits.</p><LinkButton href="/optimize" className={!constraints.length ? "disabled-link" : ""}>Generate my layouts</LinkButton></div>
+      <div className="preference-footer"><p>Your priorities shape the plan. <b>Geometry</b> verifies it fits.</p><LinkButton href="/optimize" className={!constraints.length ? "disabled-link" : ""}>Generate my layouts</LinkButton></div>
     </main>
   );
 }

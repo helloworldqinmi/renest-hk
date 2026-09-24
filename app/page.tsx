@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowDown, MoveRight, Ruler, ScanLine, ShoppingBag } from "lucide-react";
+import { ArrowDown, MoveRight } from "lucide-react";
 import { LinkButton, Eyebrow } from "@/components/common/ui";
 import { demoScenario } from "@/lib/demo-data";
 
@@ -10,7 +10,7 @@ export default function HomePage() {
         <div className="hero-photo">
           <Image
             src="/photos/hero-migration.webp"
-            alt="Alex's furniture moving from a lived-in Kowloon apartment into a compact empty new home"
+            alt="Furniture moving from your lived-in Kowloon apartment into a compact empty new home"
             fill
             sizes="(max-width: 900px) 920px, 72vw"
             preload
@@ -32,13 +32,14 @@ export default function HomePage() {
 
       <section className="difference-band" id="difference">
         <div className="difference-head">
-          <Eyebrow>Furniture migration, not image generation</Eyebrow>
-          <h2>Not another AI interior designer.</h2>
+          <h2>Furniture migration, not image generation.</h2>
         </div>
         <div className="difference-steps">
-          <div><span>01</span><ScanLine size={23} /><h3>Scan what you own</h3><p>Capture existing furniture and its real dimensions.</p></div>
-          <div><span>02</span><Ruler size={23} /><h3>Fit it into your new home</h3><p>Geometry optimization verifies whether furniture physically fits.</p></div>
-          <div><span>03</span><ShoppingBag size={23} /><h3>Buy only what&apos;s missing</h3><p>Only see products already checked against your room dimensions.</p></div>
+          <div><span>01</span><h3>Scan what you own</h3><p>Room and furniture dimensions, captured together.</p></div>
+          <MoveRight className="difference-arrow" size={20} />
+          <div><span>02</span><h3>Fit it into your new home</h3><p>Every item tested against real clearance.</p></div>
+          <MoveRight className="difference-arrow" size={20} />
+          <div><span>03</span><h3>Buy only what&apos;s missing</h3><p>Only remaining gaps become recommendations.</p></div>
         </div>
       </section>
     </main>
