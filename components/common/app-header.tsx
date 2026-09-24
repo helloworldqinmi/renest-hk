@@ -20,6 +20,7 @@ export function AppHeader() {
   const { resetDemo } = useDemo();
   const [showHow, setShowHow] = useState(false);
   const active = stepRoutes.findIndex((step) => step.routes.includes(pathname));
+  const isInteractiveDemo = pathname === "/demo";
 
   function reset() {
     resetDemo();
@@ -33,7 +34,7 @@ export function AppHeader() {
           <span className="brand-mark"><span /></span>
           <span>ReNest <b>HK</b></span>
         </Link>
-        {pathname !== "/" ? (
+        {pathname !== "/" && !isInteractiveDemo ? (
           <nav className="progress-steps" aria-label="Move progress">
             {stepRoutes.map((step, index) => (
               <div key={step.label} className={cn("progress-step", index === active && "is-active", index < active && "is-done")}>
@@ -42,11 +43,11 @@ export function AppHeader() {
               </div>
             ))}
           </nav>
-        ) : <div className="tagline-nav">Move what matters. Fit what works.</div>}
+        ) : <div className="tagline-nav">{isInteractiveDemo ? "Interactive move lab · 90-second demo" : "Move what matters. Fit what works."}</div>}
         <button className="header-action" onClick={() => setShowHow(true)}><HelpCircle size={17} /> How it works</button>
       </header>
 
-      {pathname !== "/" ? (
+      {pathname !== "/" && !isInteractiveDemo ? (
         <button className="demo-reset" onClick={reset} title="Reset the deterministic Alex demo">
           <RotateCcw size={15} /> Reset Demo
         </button>

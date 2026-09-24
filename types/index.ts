@@ -77,7 +77,7 @@ export interface Placement {
 }
 
 export interface LayoutPlan {
-  id: "reuse" | "space" | "cost";
+  id: "reuse" | "space" | "cost" | "wfh";
   name: string;
   shortName: string;
   description: string;

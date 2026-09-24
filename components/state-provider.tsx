@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { defaultPreference, furnitureInventory, interpretedConstraints } from "@/lib/demo-data";
+import type { LayoutPlan } from "@/types";
 
 interface DemoState {
   selectedFurniture: string[];
@@ -9,7 +10,7 @@ interface DemoState {
   selectedPreferences: string[];
   naturalLanguagePreference: string;
   constraints: string[];
-  selectedLayout: "reuse" | "space" | "cost";
+  selectedLayout: LayoutPlan["id"];
   selectedProduct: string | null;
   listingReady: boolean;
   scanStatus: { old: "idle" | "scanning" | "complete"; new: "idle" | "scanning" | "complete" };

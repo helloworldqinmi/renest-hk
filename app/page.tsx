@@ -22,7 +22,7 @@ export default function HomePage() {
           <h1>Your furniture already has a home.<br />Let&apos;s find its next one.</h1>
           <p>Scan your old home and new home. ReNest tells you what to keep, where it fits, and what you actually need to buy.</p>
           <div className="hero-actions">
-            <LinkButton href="/scan-old">Start Demo</LinkButton>
+            <LinkButton href="/demo">Run 90-sec Demo</LinkButton>
             <LinkButton href="#difference" variant="secondary">How it works</LinkButton>
           </div>
           <div className="hero-proof"><span><b>{demoScenario.currentHome.areaSqFt}</b> sq ft today</span><MoveRight size={16} /><span><b>{demoScenario.newHome.areaSqFt}</b> sq ft next</span><i /><span className="verified">{demoScenario.reused} of {demoScenario.furnitureTotal} items reused</span></div>
