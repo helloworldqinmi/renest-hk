@@ -695,8 +695,8 @@ function ResultStage({
     <section className={join(styles.stage, styles.resultStage)}>
       <StoryHeader
         step="05 · Move plan"
-        title="Change the goal. Watch the home change."
-        copy="The geometry result stays separate from the realistic AI view, so every recommendation remains traceable to a verified arrangement."
+        title="A move plan built around what Alex owns."
+        copy="Compare priorities without losing sight of the measured room. Every option remains traceable to a verified arrangement."
       />
       <div className={styles.resultObjectives} role="tablist" aria-label="Compare optimized objectives">
         {objectiveOrder.map((id) => {
