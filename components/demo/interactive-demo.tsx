@@ -65,22 +65,28 @@ function join(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-export function InteractiveDemo() {
-  const [stage, setStage] = useState(0);
+export function InteractiveDemo({
+  debugPlanning = false,
+  initialObjective = "keep",
+}: {
+  debugPlanning?: boolean;
+  initialObjective?: DemoObjective;
+}) {
+  const [stage, setStage] = useState(debugPlanning ? 4 : 0);
   const [savedPlan, setSavedPlan] = useState<DemoObjective | null>(null);
-  const [furthestStage, setFurthestStage] = useState(0);
+  const [furthestStage, setFurthestStage] = useState(debugPlanning ? 4 : 0);
   const [scanState, setScanState] = useState<ScanState>("idle");
   const [scanAutoPlay, setScanAutoPlay] = useState(true);
   const [selectedInventory, setSelectedInventory] = useState("sofa");
   const [mapState, setMapState] = useState<MapState>("idle");
-  const [objective, setObjective] = useState<DemoObjective>("keep");
-  const [selectedFitItem, setSelectedFitItem] = useState<string | null>(null);
-  const [replacementTested, setReplacementTested] = useState(false);
-  const [optimizationState, setOptimizationState] = useState<OptimizationState>("idle");
-  const [visualizationState, setVisualizationState] = useState<VisualizationState>("idle");
-  const [marketplaceState, setMarketplaceState] = useState<MarketplaceState>("idle");
+  const [objective, setObjective] = useState<DemoObjective>(initialObjective);
+  const [selectedFitItem, setSelectedFitItem] = useState<string | null>(debugPlanning ? "dining-table" : null);
+  const [replacementTested, setReplacementTested] = useState(debugPlanning);
+  const [optimizationState, setOptimizationState] = useState<OptimizationState>(debugPlanning ? "complete" : "idle");
+  const [visualizationState, setVisualizationState] = useState<VisualizationState>(debugPlanning ? "complete" : "idle");
+  const [marketplaceState, setMarketplaceState] = useState<MarketplaceState>(debugPlanning ? "complete" : "idle");
   const [pendingObjective, setPendingObjective] = useState<DemoObjective | null>(null);
-  const [resultView, setResultView] = useState<"room" | "plan" | "three" | "preview">("room");
+  const [resultView, setResultView] = useState<"room" | "plan" | "three" | "preview">(debugPlanning ? "three" : "room");
   const timers = useRef<number[]>([]);
 
   const selectedItem = demoFurnitureInventory.find((item) => item.id === selectedInventory) ?? demoFurnitureInventory[0];

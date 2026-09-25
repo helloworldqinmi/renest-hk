@@ -27,7 +27,17 @@ function alignWithPhoto(plan: LayoutPlan): LayoutPlan["placements"] {
   });
 }
 export const demoPlans: LayoutPlan[] = [
-  { ...plans[0], reused: 5, spendingAvoided: 8500, placements: [...alignWithPhoto(plans[0]), deskInMainSpace] },
+  {
+    ...plans[0],
+    reused: 5,
+    spendingAvoided: 8500,
+    placements: [
+      ...alignWithPhoto(plans[0]).map((item) => item.furnitureId === "dining-table"
+        ? { ...item, position: { x: 0.92, y: item.position.y } }
+        : item),
+      deskInMainSpace,
+    ],
+  },
   { ...plans[1], reused: 3, spendingAvoided: 3400, placements: [...alignWithPhoto(plans[1]), deskInMainSpace] },
   { ...plans[2], reused: 6, spendingAvoided: 10700, placements: [...alignWithPhoto(plans[2]), deskInMainSpace] },
 ];
@@ -71,8 +81,8 @@ const workFromHomePlan: LayoutPlan = {
   placements: [
     { furnitureId: "sofa", roomId: "living", position: { x: 0.15, y: 0.85 }, rotation: 270, status: "keep" },
     { furnitureId: "bookshelf", roomId: "living", position: { x: 3.45, y: 0.25 }, rotation: 90, status: "keep" },
-    { ...deskInMainSpace },
-    { furnitureId: "dining-table", roomId: "living", position: { x: 1.42, y: 0.38 }, rotation: 0, status: "new", overrideName: "Drop-leaf Table", overrideDimensions: { width: 0.89, depth: 0.6, height: 0.75 } },
+    { furnitureId: "desk", roomId: "living", position: { x: 0.92, y: 0.38 }, rotation: 180, status: "keep" },
+    { furnitureId: "dining-table", roomId: "living", position: { x: 2.3, y: 2 }, rotation: 90, status: "new", overrideName: "Drop-leaf Table", overrideDimensions: { width: 0.89, depth: 0.6, height: 0.75 } },
   ],
 };
 
@@ -89,9 +99,9 @@ const hostAndDinePlan: LayoutPlan = {
   walkwayClearance: 72,
   score: 87,
   placements: [
-    { furnitureId: "sofa", roomId: "living", position: { x: 0.15, y: 0.85 }, rotation: 270, status: "keep" },
+    { furnitureId: "sofa", roomId: "living", position: { x: 0.15, y: 0.2 }, rotation: 270, status: "keep" },
     { furnitureId: "bookshelf", roomId: "living", position: { x: 3.45, y: 0.25 }, rotation: 90, status: "keep" },
-    { furnitureId: "dining-table", roomId: "living", position: { x: 1.42, y: 0.38 }, rotation: 0, status: "new", overrideName: "Extendable Table", overrideDimensions: { width: 1.2, depth: 0.75, height: 0.75 } },
+    { furnitureId: "dining-table", roomId: "living", position: { x: 2.15, y: 1.7 }, rotation: 90, status: "new", overrideName: "Extendable Table", overrideDimensions: { width: 1.2, depth: 0.75, height: 0.75 } },
   ],
 };
 
