@@ -65,32 +65,24 @@ function join(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-export function InteractiveDemo({
-  debugPlanning = false,
-  initialObjective = "keep",
-}: {
-  debugPlanning?: boolean;
-  initialObjective?: DemoObjective;
-}) {
-  const [stage, setStage] = useState(debugPlanning ? 4 : 0);
+export function InteractiveDemo() {
+  const [stage, setStage] = useState(0);
   const [savedPlan, setSavedPlan] = useState<DemoObjective | null>(null);
-  const [furthestStage, setFurthestStage] = useState(debugPlanning ? 4 : 0);
+  const [furthestStage, setFurthestStage] = useState(0);
   const [scanState, setScanState] = useState<ScanState>("idle");
   const [scanAutoPlay, setScanAutoPlay] = useState(true);
   const [selectedInventory, setSelectedInventory] = useState("sofa");
   const [mapState, setMapState] = useState<MapState>("idle");
-  const [objective, setObjective] = useState<DemoObjective>(initialObjective);
-  const [selectedFitItem, setSelectedFitItem] = useState<string | null>(debugPlanning ? "dining-table" : null);
-  const [replacementTested, setReplacementTested] = useState(debugPlanning);
-  const [optimizationState, setOptimizationState] = useState<OptimizationState>(debugPlanning ? "complete" : "idle");
-  const [visualizationState, setVisualizationState] = useState<VisualizationState>(debugPlanning ? "complete" : "idle");
-  const [marketplaceState, setMarketplaceState] = useState<MarketplaceState>(debugPlanning ? "complete" : "idle");
-  const [pendingObjective, setPendingObjective] = useState<DemoObjective | null>(null);
-  const [resultView, setResultView] = useState<"room" | "plan" | "three" | "preview">(debugPlanning ? "three" : "room");
+  const [objective, setObjective] = useState<DemoObjective>("keep");
+  const [selectedFitItem, setSelectedFitItem] = useState<string | null>(null);
+  const [replacementTested, setReplacementTested] = useState(false);
+  const [optimizationState, setOptimizationState] = useState<OptimizationState>("idle");
+  const [visualizationState, setVisualizationState] = useState<VisualizationState>("idle");
+  const [marketplaceState, setMarketplaceState] = useState<MarketplaceState>("idle");
+  const [resultView, setResultView] = useState<"room" | "plan" | "three" | "preview">("room");
   const timers = useRef<number[]>([]);
 
   const selectedItem = demoFurnitureInventory.find((item) => item.id === selectedInventory) ?? demoFurnitureInventory[0];
-  const displayedObjective = pendingObjective ?? objective;
   const activeWorkflowStep = stage;
 
   useEffect(() => {
@@ -156,7 +148,6 @@ export function InteractiveDemo({
     setOptimizationState("exploring");
     setVisualizationState("idle");
     setMarketplaceState("idle");
-    setPendingObjective(null);
     setResultView("three");
     advance(4);
     later(() => setOptimizationState("clearance"), 650);
@@ -179,12 +170,8 @@ export function InteractiveDemo({
   }
 
   function switchObjective(nextObjective: DemoObjective) {
-    if (nextObjective === displayedObjective || pendingObjective) return;
-    setPendingObjective(nextObjective);
-    later(() => {
-      setObjective(nextObjective);
-      setPendingObjective(null);
-    }, 350);
+    if (nextObjective === objective) return;
+    setObjective(nextObjective);
   }
 
   function resetDemo() {
@@ -201,7 +188,6 @@ export function InteractiveDemo({
     setOptimizationState("idle");
     setVisualizationState("idle");
     setMarketplaceState("idle");
-    setPendingObjective(null);
     setResultView("three");
   }
 
@@ -214,7 +200,7 @@ export function InteractiveDemo({
         </div>
         <div className={styles.topbarActions}>
         {savedPlan ? <button type="button" className={styles.resetButton} onClick={() => {
-          clearTimers(); setSelectedFitItem("dining-table"); setObjective(savedPlan); setPendingObjective(null); setScanState("complete"); setMapState("complete");
+          clearTimers(); setSelectedFitItem("dining-table"); setObjective(savedPlan); setScanState("complete"); setMapState("complete");
           setReplacementTested(true); setOptimizationState("complete"); setMarketplaceState("complete"); setResultView("three"); advance(4);
         }}><BookmarkCheck size={14} /> Saved plan</button> : null}
         <button type="button" onClick={resetDemo} className={styles.resetButton}>
@@ -286,11 +272,10 @@ export function InteractiveDemo({
 
       {stage === 4 && optimizationState === "complete" ? (
         <ResultStage
-          objective={displayedObjective}
+          objective={objective}
           view={resultView}
           visualizationState={visualizationState}
           marketplaceState={marketplaceState}
-          scenarioSwitching={pendingObjective !== null}
           onSelectObjective={switchObjective}
           onSetView={changeResultView}
           onSaved={setSavedPlan}
@@ -735,7 +720,6 @@ function ResultStage({
   view,
   visualizationState,
   marketplaceState,
-  scenarioSwitching,
   onSelectObjective,
   onSetView,
   onSaved,
@@ -745,7 +729,6 @@ function ResultStage({
   view: "room" | "plan" | "three" | "preview";
   visualizationState: VisualizationState;
   marketplaceState: MarketplaceState;
-  scenarioSwitching: boolean;
   onSelectObjective: (objective: DemoObjective) => void;
   onSetView: (view: "room" | "plan" | "three" | "preview") => void;
   onSaved: (objective: DemoObjective) => void;
@@ -772,8 +755,8 @@ function ResultStage({
         {objectiveOrder.map((id) => {
           const option = objectiveConfigs[id];
           return (
-            <button type="button" aria-pressed={objective === id} disabled={scenarioSwitching} key={id} onClick={() => onSelectObjective(id)} className={join(styles.resultObjective, objective === id && styles.resultObjectiveActive)}>
-              <span>{option.label}{scenarioSwitching && objective === id ? <em>Rebalancing</em> : null}</span>
+            <button type="button" aria-pressed={objective === id} key={id} onClick={() => onSelectObjective(id)} className={join(styles.resultObjective, objective === id && styles.resultObjectiveActive)}>
+              <span>{option.label}</span>
               <div><b>{option.plan.reused}/{demoFurnitureTotal}</b><small>reused</small><b>{option.plan.openArea} m²</b><small>open</small><b>{option.plan.walkwayClearance} cm</b><small>route</small></div>
             </button>
           );
@@ -791,7 +774,7 @@ function ResultStage({
               <button type="button" aria-pressed={view === "preview"} className={view === "preview" ? styles.viewActive : undefined} onClick={() => onSetView("preview")}><ImageIcon size={14} /> Final visualization</button>
             </div>
           </div>
-          <div className={styles.resultSurface} key={`${objective}-${view}`}>
+          <div className={styles.resultSurface} key={view}>
             {view === "three" ? (
               <div className={styles.planningPreview}>
                 <FurniturePreview plan={result.plan} />
@@ -822,12 +805,6 @@ function ResultStage({
               </div>
             )}
           </div>
-          {scenarioSwitching ? (
-            <div className={styles.scenarioOverlay} role="status">
-              <LayoutGrid size={19} />
-              <span><b>Rebalancing for {result.label}</b><small>Retesting placements and clear routes</small></span>
-            </div>
-          ) : null}
           <div className={styles.resultMetricStrip}>
             <div><strong>{result.plan.reused}/{demoFurnitureTotal}</strong><span>items reused</span></div>
             <div><strong>HK${result.plan.spendingAvoided.toLocaleString()}</strong><span>replacement cost avoided</span></div>
