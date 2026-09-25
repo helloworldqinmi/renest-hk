@@ -200,8 +200,6 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
           );
         })}
 
-        {focusMainSpace && !isOld ? <g aria-label="Floor lamp styling accent"><circle cx={38 + 2.55 * scale} cy={48 + .46 * scale} r="10" fill="#e9dbb2" stroke="#8a7655" strokeWidth="1.4" /><circle cx={38 + 2.55 * scale} cy={48 + .46 * scale} r="3" fill="#8a7655" /><title>Floor lamp · styling accent</title></g> : null}
-
         {trialProduct && !isOld ? (
           <motion.g className="trial-furniture" initial={{ opacity: 0, scale: .55 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", delay: .2 }} filter={`url(#furniture-shadow-${id})`}>
             <rect x={origins.living.x + 2.73 * scale} y={origins.living.y + 2.17 * scale} width={trialProduct.width * scale} height={trialProduct.depth * scale} rx="7" fill="#dceaf2" stroke="#315d4c" strokeWidth="3" />

@@ -37,15 +37,13 @@ function previewFurniture(plan: LayoutPlan): FurnitureSpec[] {
     specs.push({ id: "sofa", label: "Sofa", asset: "sofa.glb", size: [dimensions.width, dimensions.height, dimensions.depth], center: fromPlan(sofa, dimensions.width, dimensions.depth), rotation: sofa.rotation });
   }
   if (coffee) specs.push({ id: "coffee", label: "Coffee table", asset: "coffee-table.glb", size: [0.86, 0.6, 0.75], center: fromPlan(coffee, 1, 0.55), rotation: coffee.rotation });
-  // Styling accent next to the measured sofa position. The 2D result marks the same spot.
-  specs.push({ id: "lamp", label: "Floor lamp", asset: "floor-lamp.glb", size: [0.55, 1.7, 0.42], center: [2.55, 0.46], rotation: 0 });
   if (bookshelf) specs.push({ id: "bookshelf", label: "Bookshelf", asset: "bookshelf.glb", size: [0.8, 1.8, 0.32], center: fromPlan(bookshelf, 0.8, 0.32), rotation: bookshelf.rotation });
   if (desk) specs.push({ id: "desk", label: "Study desk", asset: "chair.glb", size: [0.55, 0.9, 0.55], center: fromPlan(desk, 1.2, 0.6), rotation: desk.rotation });
   if (dining) {
     const dimensions = dining.overrideDimensions ?? { width: 1.4, depth: 0.8, height: 0.75 };
     // The GLB includes chairs. Size the whole setting, while anchoring its tabletop
     // to the exact table center in the verified 2D plan.
-    specs.push({ id: "dining", label: "Dining setting", asset: "dining-set.glb", size: [1.35, 0.78, 1.35], center: fromPlan(dining, dimensions.width, dimensions.depth), rotation: dining.rotation });
+    specs.push({ id: "dining", label: "Dining setting", asset: "dining-set.glb", size: [1.2, 0.78, 1.2], center: fromPlan(dining, dimensions.width, dimensions.depth), rotation: dining.rotation });
   }
   return specs;
 }
@@ -177,7 +175,7 @@ export function FurniturePreview({ plan }: { plan: LayoutPlan }) {
       model.scale.setScalar(scale);
       bounds.setFromObject(model);
       const center = bounds.getCenter(new THREE.Vector3());
-      model.position.set(-center.x, -bounds.min.y, -center.z + (spec.id === "desk" ? 0.47 : 0));
+      model.position.set(-center.x, -bounds.min.y, -center.z + (spec.id === "desk" ? -0.47 : 0));
       model.traverse((child) => {
         if (child instanceof THREE.Mesh) { child.castShadow = true; child.receiveShadow = true; }
       });

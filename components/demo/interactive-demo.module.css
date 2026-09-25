@@ -310,5 +310,26 @@
 .tagChair { right: 15%; top: 73%; }
 @media (max-width: 760px) { .tagChair { right: 12%; top: 74%; } }
 
+/* Keep the photo and every scan marker in the source image's 3:2 coordinate space. */
+.photoPanel { aspect-ratio: 3 / 2; min-height: 0; align-self: start; }
+.photoPanel > img { object-fit: fill; }
+.scanFrame { inset: 0; }
+.scanFrame > i:first-child { left: 20px; top: 20px; }
+.scanFrame > i:nth-child(2) { right: 20px; top: 20px; }
+.scanFrame > i:nth-child(3) { left: 20px; bottom: 56px; }
+.scanFrame > i:nth-child(4) { right: 20px; bottom: 56px; }
+@media (max-width: 760px) { .photoPanel { min-height: 0; } .scanFrame { inset: 0; } }
+.tagDesk { right: 20%; top: 46%; }
+.tagCoffee { left: 42%; bottom: 13%; }
+.tagChair { right: 15%; top: 68%; }
+@media (max-width: 760px) {
+  .detectedTag { padding: 4px 5px; }
+  .detectedTag span { font-size: 8px; }
+  .detectedTag b { display: none; }
+  .tagDesk { right: 17%; top: 45%; }
+  .tagCoffee { left: 39%; }
+  .tagChair { right: 14%; top: 68%; }
+}
+
 .completeActions { display: flex; align-items: start; gap: 10px; }
 @media(max-width:760px) { .completeActions { width: 100%; flex-direction: column; align-items: stretch; } .saveAction { justify-items: stretch; } .completeActions :global(.button) { width: 100%; justify-content: center; } }

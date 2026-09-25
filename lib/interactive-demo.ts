@@ -13,11 +13,23 @@ export const demoFurnitureInventory = [
   demoWorkChair,
 ];
 
-const deskInMainSpace = { furnitureId: "desk", roomId: "living", position: { x: 2.4, y: 1.12 }, rotation: 0, status: "keep" } as const;
+const deskInMainSpace = { furnitureId: "desk", roomId: "living", position: { x: 3.05, y: 1.42 }, rotation: 90, status: "keep" } as const;
+const photoPlacement = {
+  sofa: { x: 0.15, y: 0.85, rotation: 270 },
+  "coffee-table": { x: 1.35, y: 1.95, rotation: 0 },
+  bookshelf: { x: 3.45, y: 0.25, rotation: 90 },
+  "dining-table": { x: 1.42, y: 0.38, rotation: 0 },
+} as const;
+function alignWithPhoto(plan: LayoutPlan): LayoutPlan["placements"] {
+  return plan.placements.filter((item) => item.roomId === "living").map((item) => {
+    const target = photoPlacement[item.furnitureId as keyof typeof photoPlacement];
+    return target ? { ...item, position: { x: target.x, y: target.y }, rotation: target.rotation } : item;
+  });
+}
 export const demoPlans: LayoutPlan[] = [
-  { ...plans[0], reused: 5, spendingAvoided: 8500, placements: [...plans[0].placements.filter((item) => item.roomId === "living"), deskInMainSpace] },
-  { ...plans[1], reused: 3, spendingAvoided: 3400, placements: [...plans[1].placements.filter((item) => item.roomId === "living"), deskInMainSpace] },
-  { ...plans[2], reused: 6, spendingAvoided: 10700, placements: [...plans[2].placements.filter((item) => item.roomId === "living"), { ...deskInMainSpace, position: { x: 2.4, y: 1.15 } }] },
+  { ...plans[0], reused: 5, spendingAvoided: 8500, placements: [...alignWithPhoto(plans[0]), deskInMainSpace] },
+  { ...plans[1], reused: 3, spendingAvoided: 3400, placements: [...alignWithPhoto(plans[1]), deskInMainSpace] },
+  { ...plans[2], reused: 6, spendingAvoided: 10700, placements: [...alignWithPhoto(plans[2]), deskInMainSpace] },
 ];
 
 export type DemoObjective = "keep" | "host" | "work";
@@ -57,10 +69,10 @@ const workFromHomePlan: LayoutPlan = {
   walkwayClearance: 76,
   score: 91,
   placements: [
-    { furnitureId: "sofa", roomId: "living", position: { x: 0.12, y: 0.16 }, rotation: 0, status: "keep" },
-    { furnitureId: "bookshelf", roomId: "living", position: { x: 3.25, y: 0.2 }, rotation: 90, status: "keep" },
-    { furnitureId: "desk", roomId: "living", position: { x: 2.48, y: 0.12 }, rotation: 90, status: "keep" },
-    { furnitureId: "dining-table", roomId: "living", position: { x: 2.82, y: 2.2 }, rotation: 0, status: "new", overrideName: "Drop-leaf Table", overrideDimensions: { width: 0.89, depth: 0.6, height: 0.75 } },
+    { furnitureId: "sofa", roomId: "living", position: { x: 0.15, y: 0.85 }, rotation: 270, status: "keep" },
+    { furnitureId: "bookshelf", roomId: "living", position: { x: 3.45, y: 0.25 }, rotation: 90, status: "keep" },
+    { ...deskInMainSpace },
+    { furnitureId: "dining-table", roomId: "living", position: { x: 1.42, y: 0.38 }, rotation: 0, status: "new", overrideName: "Drop-leaf Table", overrideDimensions: { width: 0.89, depth: 0.6, height: 0.75 } },
   ],
 };
 
@@ -77,9 +89,9 @@ const hostAndDinePlan: LayoutPlan = {
   walkwayClearance: 72,
   score: 87,
   placements: [
-    { furnitureId: "sofa", roomId: "living", position: { x: 0.12, y: 0.16 }, rotation: 0, status: "keep" },
-    { furnitureId: "bookshelf", roomId: "living", position: { x: 3.25, y: 0.2 }, rotation: 90, status: "keep" },
-    { furnitureId: "dining-table", roomId: "living", position: { x: 2.32, y: 1.88 }, rotation: 0, status: "new", overrideName: "Extendable Table", overrideDimensions: { width: 1.2, depth: 0.75, height: 0.75 } },
+    { furnitureId: "sofa", roomId: "living", position: { x: 0.15, y: 0.85 }, rotation: 270, status: "keep" },
+    { furnitureId: "bookshelf", roomId: "living", position: { x: 3.45, y: 0.25 }, rotation: 90, status: "keep" },
+    { furnitureId: "dining-table", roomId: "living", position: { x: 1.42, y: 0.38 }, rotation: 0, status: "new", overrideName: "Extendable Table", overrideDimensions: { width: 1.2, depth: 0.75, height: 0.75 } },
   ],
 };
 
