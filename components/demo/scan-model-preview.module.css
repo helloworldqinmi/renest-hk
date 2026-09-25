@@ -1,0 +1,11 @@
+.card { position: relative; height: 190px; min-height: 190px; overflow: hidden; background: linear-gradient(140deg, #e5eae5, #f3f1ea); border: 1px solid rgba(49,93,76,.16); }
+.header { position: absolute; z-index: 2; left: 14px; top: 12px; display: grid; gap: 5px; pointer-events: none; }
+.header span, .footer { font: 9px var(--font-geist-mono), monospace; letter-spacing: .08em; color: #597165; text-transform: uppercase; }
+.header strong { font: 400 18px var(--font-editorial), Georgia, serif; color: #26382f; }
+.model { position: absolute; inset: 0; }
+.model canvas { display: block; width: 100%; height: 100%; }
+.scanning { position: absolute; left: 14px; bottom: 27px; color: #597165; font-size: 10px; }
+.scanline { position: absolute; z-index: 1; left: 4%; right: 4%; top: 0; height: 2px; background: #477660; box-shadow: 0 0 13px 3px rgba(91,161,126,.35); opacity: .78; animation: modelScan 2.4s ease-in-out 1 both; pointer-events: none; }
+.footer { position: absolute; z-index: 2; left: 14px; right: 14px; bottom: 11px; display: flex; justify-content: space-between; pointer-events: none; }
+@keyframes modelScan { from { top: 8%; opacity: 0; } 12% { opacity: .8; } 85% { opacity: .8; } to { top: 89%; opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .scanline { animation: none; display: none; } }

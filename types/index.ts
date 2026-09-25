@@ -1,4 +1,4 @@
-export type FurnitureCategory = "sofa" | "desk" | "bed" | "storage" | "table";
+export type FurnitureCategory = "sofa" | "desk" | "chair" | "bed" | "storage" | "table";
 export type FurnitureStatus = "keep" | "move" | "replace" | "sell" | "new";
 export type Rotation = 0 | 90 | 180 | 270;
 

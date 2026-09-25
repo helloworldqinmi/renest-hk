@@ -16,12 +16,13 @@ const hotspots = [
 ];
 
 /** A photographic room study complements the interactive, dimensioned plan. */
-export function SpatialCanvas({ plan, selectedId, onSelect, initialView = "room", showToolbar = true }: {
+export function SpatialCanvas({ plan, selectedId, onSelect, initialView = "room", showToolbar = true, focusMainSpace = false }: {
   plan: LayoutPlan;
   selectedId?: string | null;
   onSelect?: (id: string) => void;
   initialView?: "room" | "measured";
   showToolbar?: boolean;
+  focusMainSpace?: boolean;
 }) {
   const [view, setView] = useState(initialView);
   return (
@@ -40,7 +41,7 @@ export function SpatialCanvas({ plan, selectedId, onSelect, initialView = "room"
         </div>
         <span className={styles.north}>N<ArrowUp size={24} strokeWidth={1} /></span>
         <p className={styles.note}>Room study · see measured plan for exact placement</p>
-      </div> : <div className={styles.measured} tabIndex={0} role="region" aria-label="Measured floor plan. Scroll horizontally on a small screen to inspect all rooms."><FloorPlan mode="new" plan={plan} selectedId={selectedId} onSelect={onSelect} showWalkway /></div>}
+      </div> : <div className={styles.measured} tabIndex={0} role="region" aria-label="Measured floor plan. Scroll horizontally on a small screen to inspect all rooms."><FloorPlan mode="new" plan={plan} selectedId={selectedId} onSelect={onSelect} showWalkway focusMainSpace={focusMainSpace} /></div>}
     </div>
   );
 }

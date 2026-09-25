@@ -16,6 +16,7 @@ interface FloorPlanProps {
   scanning?: boolean;
   compact?: boolean;
   trialProduct?: MarketplaceProduct | null;
+  focusMainSpace?: boolean;
 }
 
 const statusStyle: Record<FurnitureStatus, { fill: string; stroke: string; icon: typeof Check }> = {
@@ -68,7 +69,7 @@ function FurnitureGlyph({ category, x, y, width, depth }: { category: string; x:
   </>;
 }
 
-export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = false, scanning = false, compact = false, trialProduct }: FloorPlanProps) {
+export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = false, scanning = false, compact = false, trialProduct, focusMainSpace = false }: FloorPlanProps) {
   const id = useId().replace(/:/g, "");
   const reducedMotion = useReducedMotion();
   const isOld = mode === "old";
@@ -87,7 +88,7 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
 
   return (
     <div className={`floor-plan-wrap ${compact ? "is-compact" : ""} ${scanning ? "is-scanning" : ""}`}>
-      <svg viewBox="0 0 750 370" role={onSelect ? "group" : "img"} aria-label={`${isOld ? "Old" : "New"} home floor plan`}>
+      <svg viewBox={focusMainSpace && !isOld ? "0 0 408 335" : "0 0 750 370"} role={onSelect ? "group" : "img"} aria-label={`${isOld ? "Old" : "New"} home floor plan`}>
         <defs>
           <pattern id={`grid-${id}`} width="17" height="17" patternUnits="userSpaceOnUse"><path d="M 17 0 L 0 0 0 17" fill="none" stroke="#dfe4df" strokeWidth=".65" /></pattern>
           <pattern id={`living-floor-${id}`} width="96" height="48" patternUnits="userSpaceOnUse"><image href="/photos/oak-floor.webp" width="96" height="48" preserveAspectRatio="none" /><path d="M 0 12 H 96 M 0 24 H 96 M 0 36 H 96 M 0 48 H 96 M 48 0 V 12 M 24 12 V 24 M 72 24 V 36 M 36 36 V 48" stroke="var(--stone)" opacity=".35" strokeWidth=".4" /></pattern>
@@ -99,7 +100,7 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
         <rect className="plan-grid" x="16" y="18" width="718" height="334" fill={`url(#grid-${id})`} />
         <g className="floor-title">
           <text x="22" y="33">{isOld ? "EXISTING HOME · AS-BUILT INVENTORY" : "NEW HOME · VERIFIED PLACEMENT PLAN"}</text>
-          <text x="728" y="33" textAnchor="end">{isOld ? "KOWLOON · 380 SQ FT" : "NORTHERN METROPOLIS · 310 SQ FT"}</text>
+          {!focusMainSpace ? <text x="728" y="33" textAnchor="end">{isOld ? "KOWLOON · 380 SQ FT" : "NORTHERN METROPOLIS · 310 SQ FT"}</text> : null}
         </g>
 
         {isOld ? (
@@ -118,24 +119,30 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
           <>
             <g className="room-outline">
               <rect className="living-room" x="38" y="48" width={3.9 * scale} height={3.1 * scale} fill={`url(#living-floor-${id})`} />
-              <rect className="bedroom-room" x="420" y="48" width={3.35 * scale} height={2.85 * scale} fill={`url(#bedroom-floor-${id})`} />
-              <rect x="420" y="302" width="122" height="50" className="utility-room" />
-              <rect x="542" y="302" width="106" height="50" className="utility-room" />
+              {!focusMainSpace ? <>
+                <rect className="bedroom-room" x="420" y="48" width={3.35 * scale} height={2.85 * scale} fill={`url(#bedroom-floor-${id})`} />
+                <rect x="420" y="302" width="122" height="50" className="utility-room" />
+                <rect x="542" y="302" width="106" height="50" className="utility-room" />
+              </> : null}
             </g>
-            <g className="room-label-block"><rect x="49" y="57" width="139" height="22" rx="3" /><text x="59" y="72" className="room-label">LIVING ROOM · 3.9 × 3.1 M</text></g>
-            <g className="room-label-block"><rect x="431" y="57" width="146" height="22" rx="3" /><text x="441" y="72" className="room-label">BEDROOM · 3.35 × 2.85 M</text></g>
-            <text x="459" y="332" className="utility-label">KITCHEN</text>
-            <text x="578" y="332" className="utility-label">BATH</text>
-            <g className="utility-fixtures">
-              <rect x="428" y="310" width="43" height="11" rx="2" /><rect x="479" y="310" width="53" height="11" rx="2" />
-              <circle cx="449" cy="315.5" r="3.5" /><rect x="555" y="311" width="29" height="16" rx="7" /><rect x="600" y="310" width="38" height="30" rx="3" />
-            </g>
+            <g className="room-label-block"><rect x="49" y="57" width="139" height="22" rx="3" /><text x="59" y="72" className="room-label">{focusMainSpace ? "PLANNED SPACE" : "LIVING ROOM"} · 3.9 × 3.1 M</text></g>
+            {!focusMainSpace ? <>
+              <g className="room-label-block"><rect x="431" y="57" width="146" height="22" rx="3" /><text x="441" y="72" className="room-label">BEDROOM · 3.35 × 2.85 M</text></g>
+              <text x="459" y="332" className="utility-label">KITCHEN</text>
+              <text x="578" y="332" className="utility-label">BATH</text>
+              <g className="utility-fixtures">
+                <rect x="428" y="310" width="43" height="11" rx="2" /><rect x="479" y="310" width="53" height="11" rx="2" />
+                <circle cx="449" cy="315.5" r="3.5" /><rect x="555" y="311" width="29" height="16" rx="7" /><rect x="600" y="310" width="38" height="30" rx="3" />
+              </g>
+            </> : null}
             <line x1="94" y1="48" x2="282" y2="48" className="window-line" />
             <line x1="94" y1="48" x2="282" y2="48" className="window-line-inner" />
-            <line x1="705" y1="96" x2="705" y2="205" className="window-line" />
-            <line x1="705" y1="96" x2="705" y2="205" className="window-line-inner" />
+            {!focusMainSpace ? <>
+              <line x1="705" y1="96" x2="705" y2="205" className="window-line" />
+              <line x1="705" y1="96" x2="705" y2="205" className="window-line-inner" />
+            </> : null}
             <path d="M 371 298 L 314 298 A 57 57 0 0 0 371 241" className="door-swing" />
-            <path d="M 420 255 L 471 255 A 51 51 0 0 1 420 204" className="door-swing" />
+            {!focusMainSpace ? <path d="M 420 255 L 471 255 A 51 51 0 0 1 420 204" className="door-swing" /> : null}
             {showWalkway ? (
               <g className={`walkway ${walkwayPasses ? "" : "is-blocked"}`}>
                 <motion.path key={plan?.id} initial={false} animate={{ pathLength: 1 }} transition={{ duration: reducedMotion ? 0 : .28 }} d={walkwayPath} />
@@ -146,7 +153,7 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
           </>
         )}
 
-        {placements.map((placement, index) => {
+        {placements.filter((placement) => !focusMainSpace || placement.roomId === "living").map((placement, index) => {
           if (trialProduct && placement.furnitureId === "dining-table") return null;
           const item = furnitureInventory.find((candidate) => candidate.id === placement.furnitureId);
           if (!item) return null;
@@ -192,6 +199,8 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
             </motion.g>
           );
         })}
+
+        {focusMainSpace && !isOld ? <g aria-label="Floor lamp styling accent"><circle cx={38 + 2.55 * scale} cy={48 + .46 * scale} r="10" fill="#e9dbb2" stroke="#8a7655" strokeWidth="1.4" /><circle cx={38 + 2.55 * scale} cy={48 + .46 * scale} r="3" fill="#8a7655" /><title>Floor lamp · styling accent</title></g> : null}
 
         {trialProduct && !isOld ? (
           <motion.g className="trial-furniture" initial={{ opacity: 0, scale: .55 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", delay: .2 }} filter={`url(#furniture-shadow-${id})`}>

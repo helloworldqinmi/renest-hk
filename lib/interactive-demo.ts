@@ -1,5 +1,24 @@
-import type { LayoutPlan } from "@/types";
-import { plans } from "@/lib/demo-data";
+import type { FurnitureItem, LayoutPlan } from "@/types";
+import { furnitureInventory, plans } from "@/lib/demo-data";
+
+export const demoInventoryIds = ["sofa", "dining-table", "desk", "work-chair", "coffee-table", "bookshelf"] as const;
+export const demoFurnitureTotal = demoInventoryIds.length;
+export const demoWorkChair: FurnitureItem = {
+  id: "work-chair", name: "Work Chair", category: "chair",
+  dimensions: { width: 0.58, depth: 0.58, height: 0.9 },
+  estimatedValue: 700, source: "existing",
+};
+export const demoFurnitureInventory = [
+  ...furnitureInventory.filter((item) => demoInventoryIds.some((id) => id === item.id)),
+  demoWorkChair,
+];
+
+const deskInMainSpace = { furnitureId: "desk", roomId: "living", position: { x: 2.4, y: 1.12 }, rotation: 0, status: "keep" } as const;
+export const demoPlans: LayoutPlan[] = [
+  { ...plans[0], reused: 5, spendingAvoided: 8500, placements: [...plans[0].placements.filter((item) => item.roomId === "living"), deskInMainSpace] },
+  { ...plans[1], reused: 3, spendingAvoided: 3400, placements: [...plans[1].placements.filter((item) => item.roomId === "living"), deskInMainSpace] },
+  { ...plans[2], reused: 6, spendingAvoided: 10700, placements: [...plans[2].placements.filter((item) => item.roomId === "living"), { ...deskInMainSpace, position: { x: 2.4, y: 1.15 } }] },
+];
 
 export type DemoObjective = "keep" | "host" | "work";
 
@@ -30,11 +49,11 @@ const workFromHomePlan: LayoutPlan = {
   name: "Plan C",
   shortName: "Work From Home",
   description: "Protects a bright, dedicated work zone without sacrificing the main walking route.",
-  reused: 5,
+  reused: 4,
   purchases: 1,
   openArea: 8.6,
   cost: 1290,
-  spendingAvoided: 13200,
+  spendingAvoided: 7600,
   walkwayClearance: 76,
   score: 91,
   placements: [
@@ -42,8 +61,6 @@ const workFromHomePlan: LayoutPlan = {
     { furnitureId: "bookshelf", roomId: "living", position: { x: 3.25, y: 0.2 }, rotation: 90, status: "keep" },
     { furnitureId: "desk", roomId: "living", position: { x: 2.48, y: 0.12 }, rotation: 90, status: "keep" },
     { furnitureId: "dining-table", roomId: "living", position: { x: 2.82, y: 2.2 }, rotation: 0, status: "new", overrideName: "Drop-leaf Table", overrideDimensions: { width: 0.89, depth: 0.6, height: 0.75 } },
-    { furnitureId: "bed", roomId: "bedroom", position: { x: 0.16, y: 1.3 }, rotation: 0, status: "keep" },
-    { furnitureId: "wardrobe", roomId: "bedroom", position: { x: 0.16, y: 0.12 }, rotation: 0, status: "keep" },
   ],
 };
 
@@ -52,19 +69,17 @@ const hostAndDinePlan: LayoutPlan = {
   name: "Plan C",
   shortName: "Host & Dine",
   description: "Protects a real four-seat dining zone while preserving minimum daily circulation.",
-  reused: 4,
+  reused: 2,
   purchases: 1,
   openArea: 6.9,
   cost: 1880,
-  spendingAvoided: 11800,
+  spendingAvoided: 5300,
   walkwayClearance: 72,
   score: 87,
   placements: [
     { furnitureId: "sofa", roomId: "living", position: { x: 0.12, y: 0.16 }, rotation: 0, status: "keep" },
     { furnitureId: "bookshelf", roomId: "living", position: { x: 3.25, y: 0.2 }, rotation: 90, status: "keep" },
     { furnitureId: "dining-table", roomId: "living", position: { x: 2.32, y: 1.88 }, rotation: 0, status: "new", overrideName: "Extendable Table", overrideDimensions: { width: 1.2, depth: 0.75, height: 0.75 } },
-    { furnitureId: "bed", roomId: "bedroom", position: { x: 0.16, y: 1.3 }, rotation: 0, status: "keep" },
-    { furnitureId: "wardrobe", roomId: "bedroom", position: { x: 0.16, y: 0.12 }, rotation: 0, status: "keep" },
   ],
 };
 
@@ -74,11 +89,11 @@ export const objectiveConfigs: Record<DemoObjective, ObjectiveConfig> = {
     label: "Reuse & Relax",
     shortLabel: "Reuse & Relax",
     description: "Keep familiar lounge pieces while balancing light work and casual meals.",
-    rule: "Reuse at least 6 of 7 items while protecting an 82 cm circulation route.",
-    plan: plans[0],
+    rule: "Reuse at least 5 of 6 items while protecting an 82 cm circulation route.",
+    plan: demoPlans[0],
     preview: "/photos/final-reuse-relax.png",
     previewAlt: "Your compact new home balanced for relaxing, light work and casual meals",
-    outcome: "Six familiar pieces stay, with room to relax, work lightly and share a casual meal.",
+    outcome: "Five familiar pieces stay, with room to relax, work lightly and share a casual meal.",
     decision: "The sofa, coffee table, desk and storage stay. A compact folding table restores the main route.",
     recommendation: {
       name: "Compact Folding Table",
@@ -120,7 +135,7 @@ export const objectiveConfigs: Record<DemoObjective, ObjectiveConfig> = {
     previewAlt: "Your compact new home with a dedicated naturally lit work-from-home zone",
     previewPosition: "56% 50%",
     outcome: "The desk takes the brightest wall while dining folds away after use.",
-    decision: "Five existing pieces stay. A full desk gets daylight and the compact drop-leaf table keeps meals flexible.",
+    decision: "Four existing pieces stay. A full desk gets daylight and the compact drop-leaf table keeps meals flexible.",
     recommendation: {
       name: "Compact Drop-leaf Table",
       dimensions: "89 × 60 cm",

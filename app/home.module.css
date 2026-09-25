@@ -1,4 +1,18 @@
 .home { overflow: clip; }
+.shopFeature { display: grid; grid-template-columns: 1.1fr 1fr 1fr; gap: 26px; padding: 64px max(32px, calc((100vw - 1312px) / 2)); border-bottom: 1px solid var(--border); background: #e9ede5; }
+.shopFeatureCopy { display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding-right: 22px; }
+.shopFeatureCopy h2 { font: 42px/1.06 var(--font-editorial), Georgia, serif; margin: 16px 0; }
+.shopFeatureCopy h2 em { color: var(--accent); }
+.shopFeatureCopy p { font-size: 13px; line-height: 1.8; max-width: 320px; }
+.shopFeatureCopy small { color: var(--foreground-muted); margin-top: 12px; font-size: 11px; }
+.shopFeatureCard { background: var(--background); border: 1px solid var(--border); }
+.shopFeatureCard > div { position: relative; aspect-ratio: 1; overflow: hidden; }
+.shopFeatureCard img { object-fit: cover; transition: transform .3s ease; }
+.shopFeatureCard:hover img { transform: scale(1.03); }
+.shopFeatureCard > span { display: flex; justify-content: space-between; gap: 12px; padding: 18px 14px; font-size: 12px; }
+.shopFeatureCard b { white-space: nowrap; font-weight: 500; }
+@media(max-width: 900px) { .shopFeature { grid-template-columns: 1fr 1fr; } .shopFeatureCopy { grid-column: 1 / -1; padding-bottom: 12px; } }
+@media(max-width: 600px) { .shopFeature { grid-template-columns: 1fr; padding: 44px 24px; } .shopFeatureCopy h2 { font-size: 36px; } }
 .hero { display: grid; grid-template-columns: 40% 60%; min-height: 650px; }
 .heroCopy { padding: 110px 38px 62px max(48px, calc((100vw - 1312px) / 2)); display: flex; flex-direction: column; justify-content: center; }
 .heroCopy h1 { font-family: var(--font-editorial), Georgia, serif; font-size: clamp(54px, 5.05vw, 76px); font-weight: 400; letter-spacing: -.045em; line-height: 1.05; margin-bottom: 28px; white-space: nowrap; }
@@ -64,3 +78,7 @@
 @media (max-width: 1050px) { .hero { grid-template-columns: 44% 56%; } .heroCopy { padding: 70px 25px 50px 32px; } .heroCopy h1 { font-size: 54px; } .heroImage { min-height: 585px; } .heroNote { margin-top: 48px; } .moveStrip { padding-inline: 32px; gap: 18px; } .stripLabel { display: none; } .story, .impact, .footer { margin-inline: 32px; } .storyHeading { gap: 0 40px; } .journey { gap: 22px; } .journeyImage, .furnitureSet, .planImage { height: 235px; } .newChapter { grid-template-columns: 55% 45%; } .chapterCopy { padding: 45px 32px; } .lifestyleImage { min-height: 530px; } .impact { gap: 42px; } .impact h2 { font-size: 34px; } .impactNumbers { gap: 20px; } .impactNumbers strong { font-size: 43px; } }
 @media (max-width: 760px) { .hero { display: flex; flex-direction: column; } .heroCopy { padding: 60px 24px 35px; } .heroCopy h1 { font-size: clamp(44px, 7.5vw, 58px); white-space: normal; margin-bottom: 20px; } .heroCopy > p { max-width: 420px; font-size: 14px; } .heroNote { margin-top: 35px; } .heroImage { min-height: 380px; } .heroImage figcaption { padding: 13px 20px; font-size: 8px; } .moveStrip { flex-wrap: wrap; padding: 22px 24px; gap: 17px; font-size: 10px; } .moveStrip > div { gap: 15px; } .story, .impact, .footer { margin-inline: 24px; } .story { padding: 65px 0; } .storyHeading { display: block; margin-bottom: 32px; } .storyHeading h2 { font-size: 35px; } .storyHeading p { margin-top: 22px; } .journey { grid-template-columns: 1fr; gap: 25px; } .journeyImage, .furnitureSet, .planImage { height: 290px; margin-bottom: 19px; } .furnitureSet img { width: 65%; max-height: 250px; } .furnitureSet img + img { width: 30%; max-width: 145px; } .journey article > p { max-width: none; } .newChapter { display: flex; flex-direction: column; } .lifestyleImage { min-height: 400px; } .chapterCopy { padding: 50px 24px; } .chapterCopy h2 { font-size: 42px; } .lifestyleImage figcaption { left: 20px; font-size: 8px; } .impact { grid-template-columns: 1fr; padding: 65px 0; gap: 35px; } .impactNumbers { gap: 30px; } .impactNumbers strong { font-size: 52px; } .finalCta h2 { font-size: 47px; } .footer { flex-wrap: wrap; gap: 20px; } .footer > span { width: 100%; } }
 @media (min-width: 761px) and (max-width: 950px) { .heroCopy h1 { font-size: 42px; } .heroCopy { padding-right: 18px; } .heroImage { min-height: 610px; } }
+
+.shopLink { display: inline-flex; align-items: center; gap: 7px; color: var(--accent); font-size: 12px; }
+.finalActions { display: flex; justify-content: center; gap: 10px; }
+@media(max-width:760px) { .finalActions { flex-direction: column; align-items: stretch; } }

@@ -14,6 +14,7 @@ export default function HomePage() {
           <p>Bring the pieces you love into your next home. See what fits, find a better layout, and buy only what’s missing.</p>
           <div className={styles.actions}>
             <LinkButton href="/demo">Try the demo</LinkButton>
+            <LinkButton href="/recommendations" variant="secondary">Shop space-saving furniture</LinkButton>
             <a href="#how-it-works" className={styles.textLink}>See how it works <ArrowDown size={15} /></a>
           </div>
           <div className={styles.heroNote}><span className={styles.smallRule} /> A little less space. Just as much home.</div>
@@ -60,11 +61,16 @@ export default function HomePage() {
         <figure className={styles.lifestyleImage}><Image src="/photos/final-home.webp" alt="Familiar furniture thoughtfully arranged in a bright, compact new Hong Kong home" fill sizes="(max-width: 760px) 100vw, 62vw" /><figcaption>310 SQ FT · A NEW WAY TO FEEL AT HOME</figcaption></figure>
         <div className={styles.chapterCopy}><span className="eyebrow">02 / ROOM FOR YOUR LIFE</span><h2>A smaller space.<br /><em>A fuller life.</em></h2><p>A clear path to the window. A proper place to work. Room for dinner with someone you love.</p><p>Explore layouts around the way you live, with the furniture that already feels like you.</p><Link href="/demo" className={styles.textLink}>Find your arrangement <ArrowRight size={17} /></Link></div>
       </section>
+      <section className={styles.shopFeature}>
+        <div className={styles.shopFeatureCopy}><span className="eyebrow">THE SPACE-SAVING STORE</span><h2>Small footprint.<br /><em>More possibilities.</em></h2><p>Fold-away desks, clever coffee tables and dining sets that make room for everyday life.</p><LinkButton href="/recommendations">Explore the furniture store</LinkButton><small>Flexible furniture from HK$390</small></div>
+        <Link href="/store/lift-top-coffee-table" className={styles.shopFeatureCard}><div><Image src="/products/lift-table-product.png" alt="Oak lift-top coffee table with two nesting stools" fill sizes="(max-width: 760px) 90vw, 28vw" /></div><span>Lift-top Coffee Table <b>HK$990</b></span></Link>
+        <Link href="/store/nesting-drop-leaf-table" className={styles.shopFeatureCard}><div><Image src="/products/drop-leaf-table-lifestyle.png" alt="Compact oak folding dining table with stools" fill sizes="(max-width: 760px) 90vw, 28vw" /></div><span>Drop-leaf Dining Set <b>HK$1,290</b></span></Link>
+      </section>
       <section className={styles.impact} id="less-waste">
         <div><span className="eyebrow">03 / KEEP MORE. NEED LESS.</span><h2>Good for your next home.<br />Better for the one we share.</h2><p>The most thoughtful purchase is sometimes the one you don’t need to make.</p></div>
         <div className={styles.impactNumbers}><div><strong>6<span>/ 7</span></strong><p>familiar pieces reused</p></div><div><strong><small>HK$</small>15,500</strong><p>estimated replacement spending avoided</p></div><span className={styles.demoNote}>FROM OUR 380 → 310 SQ FT DEMO MOVE</span></div>
       </section>
-      <section className={styles.finalCta}><span className="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span><h2>Make yourself at home.<br /><em>Again.</em></h2><LinkButton href="/demo">Try the demo</LinkButton><p>No sign-up. Just a little room to imagine.</p></section>
+      <section className={styles.finalCta}><span className="eyebrow">YOUR NEXT CHAPTER STARTS HERE</span><h2>Make yourself at home.<br /><em>Again.</em></h2><div className={styles.finalActions}><LinkButton href="/demo">Try the demo</LinkButton><LinkButton href="/recommendations" variant="secondary">Shop flexible furniture</LinkButton></div><p>No sign-up. Just a little room to imagine.</p></section>
       <footer className={styles.footer}><Link href="/" className={styles.footerBrand}>ReNest<span>HK</span></Link><p>Move what matters. Fit what works.</p><span>MADE FOR HONG KONG HOMES</span></footer>
     </main>
   );

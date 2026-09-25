@@ -8,7 +8,7 @@ import { FloorPlan } from "@/components/floor-plan/floor-plan";
 import { Eyebrow, LinkButton, cn } from "@/components/common/ui";
 import { demoScenario, furnitureInventory } from "@/lib/demo-data";
 
-const icons = { sofa: Armchair, desk: Monitor, bed: BedDouble, storage: Warehouse, table: CircleDollarSign };
+const icons = { sofa: Armchair, chair: Armchair, desk: Monitor, bed: BedDouble, storage: Warehouse, table: CircleDollarSign };
 const itemPhotos: Partial<Record<string, string>> = {
   sofa: "/photos/furniture-sofa.webp",
   wardrobe: "/photos/furniture-cabinet.webp",

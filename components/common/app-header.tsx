@@ -9,14 +9,14 @@ import { Modal, cn } from "@/components/common/ui";
 const stepRoutes = [
   { label: "Scan", routes: ["/scan-old", "/inventory", "/scan-new"] },
   { label: "Plan", routes: ["/preferences"] },
-  { label: "Fit", routes: ["/optimize", "/shop"] },
+  { label: "Fit", routes: ["/optimize", "/shop", "/recommendations"] },
   { label: "Move", routes: ["/move-plan", "/impact"] },
 ];
 
 export function AppHeader() {
   const pathname = usePathname();
   const [showHow, setShowHow] = useState(false);
-  const active = stepRoutes.findIndex((step) => step.routes.includes(pathname));
+  const active = stepRoutes.findIndex((step) => step.routes.includes(pathname) || (pathname.startsWith("/store/") && step.label === "Fit"));
   const isInteractiveDemo = pathname === "/demo";
 
   return (
@@ -35,7 +35,7 @@ export function AppHeader() {
               </div>
             ))}
           </nav>
-        ) : pathname === "/" ? <nav className="header-nav" aria-label="Main navigation"><Link href="/#how-it-works">How it works</Link><Link href="/#less-waste">A more thoughtful move</Link></nav> : <span className="workspace-label">YOUR MOVING WORKSPACE</span>}
+        ) : pathname === "/" ? <nav className="header-nav" aria-label="Main navigation"><Link href="/recommendations">Furniture shop</Link><Link href="/#how-it-works">How it works</Link></nav> : <span className="workspace-label">YOUR MOVING WORKSPACE</span>}
         <div className="header-end">{pathname === "/" ? <Link href="/demo" className="button button-primary">Try the demo <ArrowRight size={14} /></Link> : <button className="header-action" onClick={() => setShowHow(true)}>How it works</button>}</div>
       </header>
 

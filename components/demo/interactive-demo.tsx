@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { useEffect, useRef, useState } from "react";
 import {
   AlertTriangle,
@@ -27,8 +28,8 @@ import {
 import { SpatialCanvas } from "@/components/floor-plan/spatial-canvas";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
 import { Button, LinkButton } from "@/components/common/ui";
-import { furnitureInventory, plans } from "@/lib/demo-data";
-import { objectiveConfigs, objectiveOrder, type DemoObjective } from "@/lib/interactive-demo";
+import { furnitureInventory } from "@/lib/demo-data";
+import { demoFurnitureInventory, demoFurnitureTotal, demoInventoryIds, demoPlans, objectiveConfigs, objectiveOrder, type DemoObjective } from "@/lib/interactive-demo";
 import styles from "./interactive-demo.module.css";
 
 type ScanState = "idle" | "room" | "furniture" | "measuring" | "complete";
@@ -44,18 +45,21 @@ const workflowSteps = [
   { label: "Fit", stage: 3 },
   { label: "Move", stage: 4 },
 ];
-const featuredInventory = ["sofa", "desk", "bed", "wardrobe", "coffee-table", "bookshelf", "dining-table"]
-  .map((id) => furnitureInventory.find((item) => item.id === id))
+const featuredInventory = demoInventoryIds
+  .map((id) => demoFurnitureInventory.find((item) => item.id === id))
   .filter((item): item is (typeof furnitureInventory)[number] => Boolean(item));
-const totalInventoryValue = furnitureInventory.reduce((total, item) => total + (item.estimatedValue ?? 0), 0);
+const totalInventoryValue = featuredInventory.reduce((total, item) => total + (item.estimatedValue ?? 0), 0);
 const furnitureAssetById: Partial<Record<string, string>> = {
   sofa: "/photos/furniture-sofa.webp",
-  wardrobe: "/photos/furniture-cabinet.webp",
+  desk: "/photos/furniture-study-desk.png",
+  "work-chair": "/photos/furniture-chair.webp",
   "coffee-table": "/photos/furniture-coffee-table.webp",
   bookshelf: "/photos/furniture-bookshelf.webp",
   "dining-table": "/photos/furniture-dining-table.webp",
 };
-const fitTestItems = ["sofa", "coffee-table", "bookshelf", "wardrobe", "dining-table"];
+const fitTestItems = ["sofa", "coffee-table", "bookshelf", "desk", "work-chair", "dining-table"];
+const FurniturePreview = dynamic(() => import("./furniture-preview").then((module) => module.FurniturePreview), { ssr: false });
+const ScanModelPreview = dynamic(() => import("./scan-model-preview").then((module) => module.ScanModelPreview), { ssr: false });
 
 function join(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -66,6 +70,7 @@ export function InteractiveDemo() {
   const [savedPlan, setSavedPlan] = useState<DemoObjective | null>(null);
   const [furthestStage, setFurthestStage] = useState(0);
   const [scanState, setScanState] = useState<ScanState>("idle");
+  const [scanAutoPlay, setScanAutoPlay] = useState(true);
   const [selectedInventory, setSelectedInventory] = useState("sofa");
   const [mapState, setMapState] = useState<MapState>("idle");
   const [objective, setObjective] = useState<DemoObjective>("keep");
@@ -75,10 +80,10 @@ export function InteractiveDemo() {
   const [visualizationState, setVisualizationState] = useState<VisualizationState>("idle");
   const [marketplaceState, setMarketplaceState] = useState<MarketplaceState>("idle");
   const [pendingObjective, setPendingObjective] = useState<DemoObjective | null>(null);
-  const [resultView, setResultView] = useState<"room" | "plan" | "preview">("room");
+  const [resultView, setResultView] = useState<"room" | "plan" | "three" | "preview">("room");
   const timers = useRef<number[]>([]);
 
-  const selectedItem = furnitureInventory.find((item) => item.id === selectedInventory) ?? furnitureInventory[0];
+  const selectedItem = demoFurnitureInventory.find((item) => item.id === selectedInventory) ?? demoFurnitureInventory[0];
   const displayedObjective = pendingObjective ?? objective;
   const activeWorkflowStep = stage;
 
@@ -97,6 +102,15 @@ export function InteractiveDemo() {
     timers.current.forEach((timer) => window.clearTimeout(timer));
   }, []);
 
+  useEffect(() => {
+    if (stage !== 0 || scanState !== "complete" || !scanAutoPlay) return;
+    const timer = window.setInterval(() => setSelectedInventory((current) => {
+      const index = demoInventoryIds.indexOf(current as (typeof demoInventoryIds)[number]);
+      return demoInventoryIds[(index + 1) % demoFurnitureTotal];
+    }), 3000);
+    return () => window.clearInterval(timer);
+  }, [stage, scanState, scanAutoPlay]);
+
   function later(callback: () => void, delay: number) {
     const timer = window.setTimeout(callback, delay);
     timers.current.push(timer);
@@ -113,10 +127,16 @@ export function InteractiveDemo() {
   }
 
   function startScan() {
+    clearTimers();
+    setScanAutoPlay(true);
+    setSelectedInventory(demoInventoryIds[0]);
     setScanState("room");
-    later(() => setScanState("furniture"), 760);
-    later(() => setScanState("measuring"), 1650);
-    later(() => setScanState("complete"), 2700);
+    later(() => setScanState("furniture"), 650);
+    demoInventoryIds.slice(1).forEach((id, index) => later(() => {
+      setSelectedInventory(id);
+      if (index === 2) setScanState("measuring");
+    }, 1450 + index * 800));
+    later(() => setScanState("complete"), 5550);
   }
 
   function mapNewHome() {
@@ -131,7 +151,7 @@ export function InteractiveDemo() {
     setVisualizationState("idle");
     setMarketplaceState("idle");
     setPendingObjective(null);
-    setResultView("room");
+    setResultView("three");
     advance(4);
     later(() => setOptimizationState("clearance"), 650);
     later(() => setOptimizationState("ranking"), 1250);
@@ -142,7 +162,7 @@ export function InteractiveDemo() {
     }, 1900);
   }
 
-  function changeResultView(view: "room" | "plan" | "preview") {
+  function changeResultView(view: "room" | "plan" | "three" | "preview") {
     setResultView(view);
     if (view === "preview" && visualizationState === "idle") {
       setVisualizationState("composition");
@@ -166,6 +186,7 @@ export function InteractiveDemo() {
     setStage(0);
     setFurthestStage(0);
     setScanState("idle");
+    setScanAutoPlay(true);
     setSelectedInventory("sofa");
     setMapState("idle");
     setObjective("keep");
@@ -175,7 +196,7 @@ export function InteractiveDemo() {
     setVisualizationState("idle");
     setMarketplaceState("idle");
     setPendingObjective(null);
-    setResultView("room");
+    setResultView("three");
   }
 
   return (
@@ -188,7 +209,7 @@ export function InteractiveDemo() {
         <div className={styles.topbarActions}>
         {savedPlan ? <button type="button" className={styles.resetButton} onClick={() => {
           clearTimers(); setSelectedFitItem("dining-table"); setObjective(savedPlan); setPendingObjective(null); setScanState("complete"); setMapState("complete");
-          setReplacementTested(true); setOptimizationState("complete"); setMarketplaceState("complete"); setResultView("room"); advance(4);
+          setReplacementTested(true); setOptimizationState("complete"); setMarketplaceState("complete"); setResultView("three"); advance(4);
         }}><BookmarkCheck size={14} /> Saved plan</button> : null}
         <button type="button" onClick={resetDemo} className={styles.resetButton}>
           <RotateCcw size={15} /> Restart
@@ -217,7 +238,7 @@ export function InteractiveDemo() {
           scanState={scanState}
           selectedItem={selectedItem}
           selectedInventory={selectedInventory}
-          onSelect={setSelectedInventory}
+          onSelect={(id) => { setScanAutoPlay(false); setSelectedInventory(id); }}
           onScan={startScan}
           onContinue={() => advance(1)}
         />
@@ -272,7 +293,7 @@ export function InteractiveDemo() {
       ) : null}
 
       <div className={styles.liveStatus} aria-live="polite">
-        {stage === 0 && scanState === "complete" ? "7 furniture items detected" : null}
+        {stage === 0 && scanState === "complete" ? "6 furniture items detected" : null}
         {stage === 1 && mapState === "complete" ? "New home mapped: 18% smaller" : null}
         {stage === 3 && replacementTested ? `Alternative verified: ${objectiveConfigs[objective].plan.walkwayClearance} cm clearance` : null}
         {stage === 4 && optimizationState === "complete" ? "Optimal layout verified" : null}
@@ -318,10 +339,10 @@ function CurrentHomeStage({
   const scanStep = { idle: 0, room: 1, furniture: 2, measuring: 3, complete: 4 }[scanState];
   const scanCopy = {
     idle: ["Ready to scan", "Capture the room once. ReNest will separate the space from the furniture inside it."],
-    room: ["Reading the room", "Locking floor, wall and ceiling planes into one spatial model."],
-    furniture: ["Detecting furniture", "Separating reusable objects from the room envelope."],
-    measuring: ["Measuring every item", "Resolving width, depth and height for the move inventory."],
-    complete: ["Spatial inventory ready", "Seven reusable objects now have verified dimensions."],
+    room: ["Mapping room depth", "A phone depth sensor traces surfaces and builds a spatial mesh."],
+    furniture: ["Separating object volumes", "Furniture is detected as 3D volume, then matched to a model."],
+    measuring: ["Resolving dimensions", "Each object's width, depth and height is locked to the scan."],
+    complete: ["Spatial inventory ready", "Six familiar objects now have measured dimensions."],
   }[scanState];
 
   return (
@@ -329,7 +350,7 @@ function CurrentHomeStage({
       <StoryHeader
         step="01 · Current home"
         title="Start with what you already own."
-        copy="A familiar room. Seven pieces of furniture. Let’s see what comes with you."
+        copy="A familiar room. Six pieces of furniture. Let’s see what comes with you."
       />
       <div className={styles.scanWorkspace}>
         <div className={styles.photoPanel}>
@@ -337,25 +358,28 @@ function CurrentHomeStage({
           <div className={styles.scanFrame}>
             <i /><i /><i /><i />
             {scanStep > 0 && scanStep < 4 ? <span className={styles.scanPhaseBadge}><ScanLine size={18} /> {scanCopy[0]}</span> : null}
-            {scanStep >= 2 ? (
+            {scanStep > 0 && scanStep < 4 ? <><div className={styles.depthField} aria-hidden="true" /><div className={styles.depthBeam} aria-hidden="true" /><span className={styles.depthMode}>DEPTH CAPTURE · 3D MESH</span></> : null}
+            {scanStep >= 2 && scanStep < 4 ? (
               <div className={styles.objectBoxes} aria-hidden="true">
-                <i className={styles.boxSofa}><span>Sofa</span></i>
-                <i className={styles.boxTable}><span>Dining table</span></i>
-                <i className={styles.boxDesk}><span>Work zone</span></i>
+                {[
+                  ["sofa", "Sofa", styles.boxSofa],
+                  ["dining-table", "Dining table", styles.boxTable],
+                  ["desk", "Study desk", styles.boxDesk],
+                  ["work-chair", "Work chair", styles.boxChair],
+                  ["coffee-table", "Coffee table", styles.boxCoffee],
+                  ["bookshelf", "Storage", styles.boxShelf],
+                ].map(([id, label, position]) => <div key={id} className={join(styles.depthBox, position, selectedInventory === id && styles.depthActive)}><span>{label}</span></div>)}
               </div>
             ) : null}
-            {scanStep >= 3 ? (
-              <div className={styles.measurementLines} aria-hidden="true">
-                <span className={styles.measureSofa}>2.04 m</span>
-                <span className={styles.measureTable}>1.40 m</span>
-                <span className={styles.measureDesk}>1.20 m</span>
-              </div>
-            ) : null}
+            {scanStep >= 2 && scanStep < 4 ? <span className={styles.depthReadout}>VOLUME LOCKED · {selectedItem.name.toUpperCase()} · {Math.round(selectedItem.dimensions.width * 100)} × {Math.round(selectedItem.dimensions.depth * 100)} × {Math.round(selectedItem.dimensions.height * 100)} CM</span> : null}
             {scanState === "complete" ? (
               <>
                 <button type="button" className={join(styles.detectedTag, styles.tagSofa)} onClick={() => onSelect("sofa")}><span>Sofa</span><b>204 × 88 cm</b></button>
                 <button type="button" className={join(styles.detectedTag, styles.tagTable)} onClick={() => onSelect("dining-table")}><span>Dining table</span><b>140 × 80 cm</b></button>
-                <button type="button" className={join(styles.detectedTag, styles.tagDesk)} onClick={() => onSelect("desk")}><span>Work zone</span><b>120 × 60 cm</b></button>
+                <button type="button" className={join(styles.detectedTag, styles.tagDesk)} onClick={() => onSelect("desk")}><span>Study desk</span><b>120 × 60 cm</b></button>
+                <button type="button" className={join(styles.detectedTag, styles.tagChair)} onClick={() => onSelect("work-chair")}><span>Work chair</span><b>58 × 58 cm</b></button>
+                <button type="button" className={join(styles.detectedTag, styles.tagCoffee)} onClick={() => onSelect("coffee-table")}><span>Coffee table</span><b>100 × 55 cm</b></button>
+                <button type="button" className={join(styles.detectedTag, styles.tagShelf)} onClick={() => onSelect("bookshelf")}><span>Bookshelf</span><b>80 × 32 cm</b></button>
               </>
             ) : null}
           </div>
@@ -376,17 +400,19 @@ function CurrentHomeStage({
               <strong>{scanCopy[0]}</strong>
               <p>{scanCopy[1]}</p>
               <ul>
-                <li className={scanStep > 1 ? styles.completeLine : styles.activeLine}>Room volume detected</li>
-                <li className={scanStep > 2 ? styles.completeLine : scanStep === 2 ? styles.activeLine : undefined}>Furniture objects separated</li>
-                <li className={scanStep > 3 ? styles.completeLine : scanStep === 3 ? styles.activeLine : undefined}>Dimensions resolved</li>
+                <li className={scanStep > 1 ? styles.completeLine : styles.activeLine}>Depth mesh captured</li>
+                <li className={scanStep > 2 ? styles.completeLine : scanStep === 2 ? styles.activeLine : undefined}>Furniture volumes separated</li>
+                <li className={scanStep > 3 ? styles.completeLine : scanStep === 3 ? styles.activeLine : undefined}>3D models matched</li>
               </ul>
+              {scanStep >= 2 ? <div className={styles.scanModelProgress}><ScanModelPreview key={selectedInventory} itemId={selectedInventory} label={selectedItem.name} /><span className={styles.scanItemProgress}>{demoInventoryIds.indexOf(selectedInventory as (typeof demoInventoryIds)[number]) + 1} / {demoFurnitureTotal} objects resolved</span></div> : null}
             </div>
           ) : (
             <>
               <div className={styles.panelHeading}>
                 <div><span>Detected inventory</span><h2>These are the things you own.</h2></div>
-                <b>7 / 7 kept</b>
+                <b>6 / 6 captured</b>
               </div>
+              <div className={styles.scanModelComplete}><ScanModelPreview key={selectedInventory} itemId={selectedInventory} label={selectedItem.name} /><span className={styles.scanItemProgress}>Playing captured objects · {demoInventoryIds.indexOf(selectedInventory as (typeof demoInventoryIds)[number]) + 1} / {demoFurnitureTotal}</span></div>
               <div className={styles.inventoryList}>
                 {featuredInventory.map((item) => (
                   <button type="button" key={item.id} onClick={() => onSelect(item.id)} className={join(styles.inventoryRow, selectedInventory === item.id && styles.inventorySelected)}>
@@ -558,39 +584,39 @@ function FitStage({
 }) {
   const inspectedItem = selectedItem ?? (replacementTested ? "dining-table" : null);
   const isConflict = inspectedItem === "dining-table";
-  const activePlan = replacementTested ? objectiveConfigs[objective].plan : plans[2];
+  const activePlan = replacementTested ? objectiveConfigs[objective].plan : demoPlans[2];
   const replacementClearance = objectiveConfigs[objective].plan.walkwayClearance;
   const replacement = objectiveConfigs[objective].recommendation;
-  const selectedFurniture = furnitureInventory.find((item) => item.id === inspectedItem);
-  const selectedPlacement = activePlan.placements.find((placement) => placement.furnitureId === inspectedItem);
+  const selectedFurniture = demoFurnitureInventory.find((item) => item.id === inspectedItem);
+  const selectedPlacement = activePlan.placements.find((placement) => placement.furnitureId === (inspectedItem === "work-chair" ? "desk" : inspectedItem));
   return (
     <section className={styles.stage}>
       <StoryHeader
         step="04 · See what fits"
-        title={replacementTested ? "A little change. Room to move." : "Six pieces fit. One needs a rethink."}
+        title={replacementTested ? "A little change. Room to move." : "Five pieces fit. One needs a rethink."}
         copy={replacementTested ? `The smaller table leaves ${replacementClearance} cm of clear route through your new home.` : "Your dining table leaves a tight 43 cm route. Let’s give you more breathing room."}
       />
       <div className={styles.fitWorkspace}>
         <aside className={styles.furnitureSidebar}><span className={styles.sidebarLabel}>YOUR FURNITURE</span>
           <div className={styles.objectTestRail} aria-label="Detected furniture fit checks">
             {fitTestItems.map((id) => {
-              const item = furnitureInventory.find((candidate) => candidate.id === id)!;
+              const item = demoFurnitureInventory.find((candidate) => candidate.id === id)!;
               const conflict = id === "dining-table" && !replacementTested;
-              const included = activePlan.placements.some((placement) => placement.furnitureId === id);
+              const included = activePlan.placements.some((placement) => placement.furnitureId === (id === "work-chair" ? "desk" : id));
               return <button type="button" key={id} aria-pressed={selectedItem === id} className={join(styles.objectTest, selectedItem === id && styles.objectTestSelected)} onClick={() => onSelectItem(id)}>
                 <span><Image src={id === "dining-table" && replacementTested ? replacement.image : furnitureAssetById[id]!} alt="" fill sizes="50px" /></span>
                 <b>{id === "dining-table" && replacementTested ? "Smaller table" : item.name}</b>
                 <em className={conflict ? styles.objectFail : styles.objectPass}>{conflict ? "Tight clearance" : included ? "Fits comfortably" : "Not in this layout"}</em>
               </button>;
             })}
-          </div><p className={styles.inventoryFootnote}>Plus your bed and study desk.<br />7 pieces, measured in centimetres.</p>
+          </div><p className={styles.inventoryFootnote}>Six pieces, measured in centimetres.</p>
         </aside>
         <section className={styles.blueprintPanel}>
           <div className={styles.blueprintHead}>
             <div><span>{replacementTested ? "Alternative fit test" : "Existing furniture fit test"}</span><strong>Northern Metropolis · 310 sq ft</strong></div>
             <b className={replacementTested ? styles.passLabel : styles.failLabel}>{replacementTested ? <CircleCheck size={13} /> : <AlertTriangle size={13} />}{replacementTested ? `${replacementClearance} cm · clear` : "43 cm · blocked"}</b>
           </div>
-          <SpatialCanvas plan={activePlan} selectedId={selectedItem} onSelect={onSelectItem} />
+          <SpatialCanvas plan={activePlan} selectedId={selectedItem} onSelect={onSelectItem} focusMainSpace />
           <div className={styles.blueprintHint}><Ruler size={14} /> Select a furniture item on the plan to inspect its geometry.</div>
         </section>
         <aside className={styles.fitInspector}>
@@ -638,7 +664,7 @@ function FitStage({
 function OptimizationExperience({ objective, phase }: { objective: DemoObjective; phase: OptimizationState }) {
   const phaseIndex = { idle: 0, exploring: 1, clearance: 2, ranking: 3, complete: 4 }[phase];
   const target = objectiveConfigs[objective];
-  const currentPlan = phase === "exploring" ? plans[1] : phase === "clearance" ? plans[2] : target.plan;
+  const currentPlan = phase === "exploring" ? demoPlans[1] : phase === "clearance" ? demoPlans[2] : target.plan;
   const phaseCopy = {
     idle: ["Preparing the room model", "Loading verified furniture and room geometry."],
     exploring: ["Testing orientations", "Rotating and relocating existing pieces across usable room zones."],
@@ -661,7 +687,7 @@ function OptimizationExperience({ objective, phase }: { objective: DemoObjective
             <b><LayoutGrid size={14} /> {phase === "ranking" ? "3 finalists" : "Testing arrangements"}</b>
           </div>
           <div className={join(styles.planSearch, styles[`searchPhase${phaseIndex}`])}>
-            <FloorPlan mode="new" plan={currentPlan} showWalkway={phaseIndex >= 2} scanning={phase === "exploring"} />
+            <FloorPlan mode="new" plan={currentPlan} showWalkway={phaseIndex >= 2} scanning={phase === "exploring"} focusMainSpace />
             <div className={styles.arrangementStamp} key={phase}>
               <span>{phase === "exploring" ? "Arrangement 08" : phase === "clearance" ? "Arrangement 14" : "Best match"}</span>
               <b>{phase === "clearance" ? "43 cm · rejected" : phase === "ranking" ? `${target.plan.walkwayClearance} cm · feasible` : "Objects repositioning"}</b>
@@ -710,12 +736,12 @@ function ResultStage({
   onBack,
 }: {
   objective: DemoObjective;
-  view: "room" | "plan" | "preview";
+  view: "room" | "plan" | "three" | "preview";
   visualizationState: VisualizationState;
   marketplaceState: MarketplaceState;
   scenarioSwitching: boolean;
   onSelectObjective: (objective: DemoObjective) => void;
-  onSetView: (view: "room" | "plan" | "preview") => void;
+  onSetView: (view: "room" | "plan" | "three" | "preview") => void;
   onSaved: (objective: DemoObjective) => void;
   onBack: () => void;
 }) {
@@ -733,7 +759,7 @@ function ResultStage({
     <section className={join(styles.stage, styles.resultStage)}>
       <StoryHeader
         step="05 · Move plan"
-        title={`${result.plan.reused} of 7 items fit. Welcome home.`}
+        title={`${result.plan.reused} of ${demoFurnitureTotal} familiar pieces move with you.`}
         copy="Keep what works. Make one considered change. Your next chapter is taking shape."
       />
       <div className={styles.resultObjectives} role="group" aria-label="Compare optimized objectives">
@@ -742,7 +768,7 @@ function ResultStage({
           return (
             <button type="button" aria-pressed={objective === id} disabled={scenarioSwitching} key={id} onClick={() => onSelectObjective(id)} className={join(styles.resultObjective, objective === id && styles.resultObjectiveActive)}>
               <span>{option.label}{scenarioSwitching && objective === id ? <em>Rebalancing</em> : null}</span>
-              <div><b>{option.plan.reused}/7</b><small>reused</small><b>{option.plan.openArea} m²</b><small>open</small><b>{option.plan.walkwayClearance} cm</b><small>route</small></div>
+              <div><b>{option.plan.reused}/{demoFurnitureTotal}</b><small>reused</small><b>{option.plan.openArea} m²</b><small>open</small><b>{option.plan.walkwayClearance} cm</b><small>route</small></div>
             </button>
           );
         })}
@@ -754,14 +780,20 @@ function ResultStage({
             <div><span>{result.label}</span><strong>Geometry verified · 310 sq ft</strong></div>
             <div className={styles.viewSwitch} role="group" aria-label="Result view">
               <button type="button" aria-pressed={view === "room"} className={view === "room" ? styles.viewActive : undefined} onClick={() => onSetView("room")}><ScanLine size={14} /> Room study</button>
-              <button type="button" aria-pressed={view === "plan"} className={view === "plan" ? styles.viewActive : undefined} onClick={() => onSetView("plan")}><Map size={14} /> Measured plan</button>
-              <button type="button" aria-pressed={view === "preview"} className={view === "preview" ? styles.viewActive : undefined} onClick={() => onSetView("preview")}><ImageIcon size={14} /> New space</button>
+              <button type="button" aria-pressed={view === "plan"} className={view === "plan" ? styles.viewActive : undefined} onClick={() => onSetView("plan")}><Map size={14} /> 2D Plan</button>
+              <button type="button" aria-pressed={view === "three"} className={view === "three" ? styles.viewActive : undefined} onClick={() => onSetView("three")}><Box size={14} /> 3D Preview</button>
+              <button type="button" aria-pressed={view === "preview"} className={view === "preview" ? styles.viewActive : undefined} onClick={() => onSetView("preview")}><ImageIcon size={14} /> Final visualization</button>
             </div>
           </div>
           <div className={styles.resultSurface} key={`${objective}-${view}`}>
-            {view !== "preview" ? (
+            {view === "three" ? (
+              <div className={styles.planningPreview}>
+                <FurniturePreview plan={result.plan} />
+                <button type="button" className={styles.finalReveal} onClick={() => onSetView("preview")}><ImageIcon size={16} /> See the finished space <ArrowRight size={16} /></button>
+              </div>
+            ) : view !== "preview" ? (
               <div className={styles.verifiedPlan}>
-                <SpatialCanvas key={`${objective}-${view}`} plan={result.plan} initialView={view === "room" ? "room" : "measured"} showToolbar={false} />
+                <SpatialCanvas key={`${objective}-${view}`} plan={result.plan} initialView={view === "room" ? "room" : "measured"} showToolbar={false} focusMainSpace />
                 <span><ShieldCheck size={14} /> {view === "room" ? "Illustrative room study · exact dimensions in measured plan" : "Measured placements · clear routes checked"}</span>
               </div>
             ) : (
@@ -791,7 +823,7 @@ function ResultStage({
             </div>
           ) : null}
           <div className={styles.resultMetricStrip}>
-            <div><strong>{result.plan.reused}/7</strong><span>items reused</span></div>
+            <div><strong>{result.plan.reused}/{demoFurnitureTotal}</strong><span>items reused</span></div>
             <div><strong>HK${result.plan.spendingAvoided.toLocaleString()}</strong><span>replacement cost avoided</span></div>
             <div><strong>{result.plan.purchases}</strong><span>new {result.plan.purchases === 1 ? "item" : "items"} needed</span></div>
             <div><strong>{result.plan.walkwayClearance} cm</strong><span>clear route</span></div>
@@ -828,14 +860,14 @@ function ResultStage({
         </aside>
       </div>
       <StageActions onBack={onBack}>
-        <div className={styles.saveAction}><Button type="button" icon={savedObjective === objective ? Check : BookmarkCheck} onClick={() => {
+        <div className={styles.completeActions}><div className={styles.saveAction}><Button type="button" icon={savedObjective === objective ? Check : BookmarkCheck} onClick={() => {
           try {
             window.localStorage.setItem("renest-saved-plan-v1", JSON.stringify({ version: 1, objectiveId: objective, objective: result.label, home: "Northern Metropolis · 310 sq ft", plan: result.plan, recommendation: result.recommendation }));
             setSavedObjective(objective);
             onSaved(objective);
             setSaveError(false);
           } catch { setSaveError(true); }
-        }}>{savedObjective === objective ? "Plan saved" : "Save this plan"}</Button><span role="status">{saveError ? "Storage is unavailable. Please allow local storage and try again." : savedObjective === objective ? "Saved on this device." : ""}</span></div>
+        }}>{savedObjective === objective ? "Plan saved" : "Save this plan"}</Button><span role="status">{saveError ? "Storage is unavailable. Please allow local storage and try again." : savedObjective === objective ? "Saved on this device." : ""}</span></div><LinkButton href="/recommendations">See pieces you may like</LinkButton></div>
       </StageActions>
     </section>
   );
