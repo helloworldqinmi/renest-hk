@@ -19,8 +19,8 @@ type FurnitureSpec = {
 
 const room = { width: 2.85, depth: 3.9 };
 const planRoom = { width: 3.9, depth: 3.1 };
-const windowShift = -0.35;
-const windowLayout = { center: 0.65 + windowShift, width: 1.7 };
+const wallHeight = 1.65;
+const windowLayout = { center: -0.18, width: 2.3, bottom: 0.045, top: 1.61 };
 const modelPath = "/models/";
 
 function previewFurniture(plan: LayoutPlan): FurnitureSpec[] {
@@ -109,14 +109,18 @@ export function FurniturePreview({ plan }: { plan: LayoutPlan }) {
     floor.receiveShadow = true;
     scene.add(floor);
     const wall = new THREE.MeshStandardMaterial({ color: 0xf6f3ec, roughness: 0.94, side: THREE.DoubleSide });
-    // A restrained window backdrop gives the furniture the daylight of the reference room.
+    // A wide, nearly floor-to-ceiling window gives every plan the daylight and
+    // openness of the final visualizations.
     const leftWallWidth = windowLayout.center - windowLayout.width / 2 + room.width / 2;
     const rightWallWidth = room.width / 2 - (windowLayout.center + windowLayout.width / 2);
-    addBox(scene, [leftWallWidth, 1.65, 0.09], [-room.width / 2 + leftWallWidth / 2, 0.825, -room.depth / 2], 0, wall);
-    addBox(scene, [rightWallWidth, 1.65, 0.09], [room.width / 2 - rightWallWidth / 2, 0.825, -room.depth / 2], 0, wall);
-    addBox(scene, [windowLayout.width, 0.42, 0.09], [windowLayout.center, 0.21, -room.depth / 2], 0, wall);
-    addBox(scene, [windowLayout.width, 0.17, 0.09], [windowLayout.center, 1.565, -room.depth / 2], 0, wall);
-    addBox(scene, [0.09, 1.65, room.depth + 0.1], [room.width / 2, 0.825, 0], 0, wall);
+    const windowHeight = windowLayout.top - windowLayout.bottom;
+    const windowCenterY = windowLayout.bottom + windowHeight / 2;
+    const topWallHeight = wallHeight - windowLayout.top;
+    addBox(scene, [leftWallWidth, wallHeight, 0.09], [-room.width / 2 + leftWallWidth / 2, wallHeight / 2, -room.depth / 2], 0, wall);
+    addBox(scene, [rightWallWidth, wallHeight, 0.09], [room.width / 2 - rightWallWidth / 2, wallHeight / 2, -room.depth / 2], 0, wall);
+    addBox(scene, [windowLayout.width, windowLayout.bottom, 0.09], [windowLayout.center, windowLayout.bottom / 2, -room.depth / 2], 0, wall);
+    addBox(scene, [windowLayout.width, topWallHeight, 0.09], [windowLayout.center, windowLayout.top + topWallHeight / 2, -room.depth / 2], 0, wall);
+    addBox(scene, [0.09, wallHeight, room.depth + 0.1], [room.width / 2, wallHeight / 2, 0], 0, wall);
     const viewCanvas = document.createElement("canvas");
     viewCanvas.width = 512; viewCanvas.height = 320;
     const viewContext = viewCanvas.getContext("2d");
@@ -133,13 +137,15 @@ export function FurniturePreview({ plan }: { plan: LayoutPlan }) {
     }
     const viewTexture = new THREE.CanvasTexture(viewCanvas);
     viewTexture.colorSpace = THREE.SRGBColorSpace;
-    const outdoor = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.02), new THREE.MeshBasicMaterial({ map: viewTexture, side: THREE.DoubleSide }));
-    outdoor.position.set(windowLayout.center, 1.03, -room.depth / 2 - 0.015);
+    const outdoor = new THREE.Mesh(new THREE.PlaneGeometry(windowLayout.width - 0.06, windowHeight - 0.06), new THREE.MeshBasicMaterial({ map: viewTexture, side: THREE.DoubleSide }));
+    outdoor.position.set(windowLayout.center, windowCenterY, -room.depth / 2 - 0.015);
     scene.add(outdoor);
     const frameMaterial = new THREE.MeshStandardMaterial({ color: 0x333f40, metalness: 0.38, roughness: 0.52 });
-    addBox(scene, [windowLayout.width + 0.06, 0.045, 0.07], [windowLayout.center, 1.54, -room.depth / 2 + 0.035], 0, frameMaterial);
-    addBox(scene, [windowLayout.width + 0.06, 0.045, 0.07], [windowLayout.center, 0.51, -room.depth / 2 + 0.035], 0, frameMaterial);
-    for (const offset of [-0.88, -0.3, 0.28, 0.88]) addBox(scene, [0.045, 1.06, 0.07], [windowLayout.center + offset, 1.025, -room.depth / 2 + 0.035], 0, frameMaterial);
+    addBox(scene, [windowLayout.width + 0.06, 0.045, 0.07], [windowLayout.center, windowLayout.top, -room.depth / 2 + 0.035], 0, frameMaterial);
+    addBox(scene, [windowLayout.width + 0.06, 0.045, 0.07], [windowLayout.center, windowLayout.bottom, -room.depth / 2 + 0.035], 0, frameMaterial);
+    for (const offset of [-windowLayout.width / 2, -windowLayout.width / 6, windowLayout.width / 6, windowLayout.width / 2]) {
+      addBox(scene, [0.045, windowHeight, 0.07], [windowLayout.center + offset, windowCenterY, -room.depth / 2 + 0.035], 0, frameMaterial);
+    }
     const trim = new THREE.MeshStandardMaterial({ color: 0xb5a997, roughness: 0.77 });
     addBox(scene, [room.width, 0.045, 0.055], [0, 0.07, -room.depth / 2 + 0.07], 0, trim);
     addBox(scene, [0.055, 0.045, room.depth], [room.width / 2 - 0.07, 0.07, 0], 0, trim);

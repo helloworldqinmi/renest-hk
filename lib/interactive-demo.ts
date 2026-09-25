@@ -81,7 +81,7 @@ const workFromHomePlan: LayoutPlan = {
   placements: [
     { furnitureId: "sofa", roomId: "living", position: { x: 0.15, y: 0.85 }, rotation: 270, status: "keep" },
     { furnitureId: "bookshelf", roomId: "living", position: { x: 3.45, y: 0.25 }, rotation: 90, status: "keep" },
-    { furnitureId: "desk", roomId: "living", position: { x: 0.92, y: 0.38 }, rotation: 180, status: "keep" },
+    { furnitureId: "desk", roomId: "living", position: { x: 0.42, y: 0.38 }, rotation: 180, status: "keep" },
     { furnitureId: "dining-table", roomId: "living", position: { x: 2.3, y: 2 }, rotation: 90, status: "new", overrideName: "Drop-leaf Table", overrideDimensions: { width: 0.89, depth: 0.6, height: 0.75 } },
   ],
 };
