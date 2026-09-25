@@ -21,9 +21,10 @@
 .stageActions :global(.button) { min-height: 42px; }
 .scanWorkspace { display: grid; grid-template-columns: minmax(0, 1fr) 320px; border-block: 1px solid var(--border); }
 .photoPanel, .homeImage, .finalPreview, .recommendationImage { position: relative; overflow: hidden; background: var(--surface); }
-.photoPanel { min-height: 565px; }
-.photoPanel > img, .homeImage > img, .finalPreview > img { object-fit: cover; }
-.scanFrame { position: absolute; inset: 24px; }
+.photoPanel { min-width: 0; min-height: 0; align-self: start; }
+.scanViewport { position: relative; width: 100%; aspect-ratio: 3 / 2; overflow: hidden; background: var(--surface); }
+.scanViewport > img, .homeImage > img, .finalPreview > img { object-fit: cover; }
+.scanFrame { position: absolute; inset: 0; }
 .scanFrame > i { position: absolute; height: 25px; width: 25px; border: solid var(--background); }
 .scanFrame > i:nth-child(1) { left: 0; top: 0; border-width: 1px 0 0 1px; }
 .scanFrame > i:nth-child(2) { right: 0; top: 0; border-width: 1px 1px 0 0; }
@@ -33,20 +34,15 @@
 .objectBoxes, .measurementLines { position: absolute; inset: 0; pointer-events: none; }
 .objectBoxes > i { position: absolute; border: 1px solid var(--background); }
 .objectBoxes span { display: none; }
-.boxSofa { left: 1%; bottom: 2%; width: 43%; height: 40%; }
-.boxTable { left: 34%; top: 42%; width: 37%; height: 35%; }
-.boxDesk { right: 4%; top: 44%; width: 25%; height: 24%; }
 .measurementLines span { position: absolute; font: 10px var(--font-geist-mono), monospace; color: var(--background); border-bottom: 1px solid; padding: 4px 0; text-align: center; text-shadow: 0 1px 3px var(--foreground); }
 .measureSofa { left: 12%; bottom: 12%; width: 34%; }
 .measureTable { left: 44%; top: 66%; width: 24%; }
 .measureDesk { right: 5%; top: 75%; width: 23%; }
-.detectedTag { position: absolute; display: grid; gap: 3px; padding: 7px 9px; color: var(--foreground); background: var(--background); border: 1px solid var(--border); border-radius: 3px; text-align: left; }
+.detectedTag { position: absolute; z-index: 4; display: grid; gap: 3px; padding: 7px 9px; color: var(--foreground); background: rgba(250,249,245,.94); border: 1px solid var(--border); border-radius: 3px; text-align: left; transform: translate(-50%, -100%); box-shadow: 0 5px 16px rgba(25,40,34,.1); }
 .detectedTag span { font-size: 11px; }
 .detectedTag b { font: 10px var(--font-geist-mono), monospace; color: var(--foreground-muted); }
-.tagSofa { left: 12%; bottom: 29%; }
-.tagTable { left: 46%; top: 42%; }
-.tagDesk { right: 5%; top: 46%; }
-.photoCaption { position: absolute; inset-inline: 0; bottom: 0; background: var(--surface); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; font: 10px var(--font-geist-mono), monospace; }
+.detectedTagSelected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 7px 20px rgba(25,40,34,.14); }
+.photoCaption { position: static; background: var(--surface); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; font: 10px var(--font-geist-mono), monospace; }
 .photoCaption b { font-weight: 400; color: var(--accent); font-size: 10px; }
 .inventoryPanel { min-width: 0; background: var(--surface-subtle); border-left: 1px solid var(--border); }
 .emptyState, .scanProgress, .inspectPrompt, .conflictDetail { padding: 30px 24px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; height: 100%; }
@@ -288,47 +284,28 @@
 .depthMode, .depthReadout { position: absolute; z-index: 3; padding: 7px 9px; background: rgba(17,44,37,.78); color: #dcffec; font: 9px var(--font-geist-mono), monospace; letter-spacing: .08em; }
 .depthMode { top: 52px; left: 12px; }
 .depthReadout { left: 12px; bottom: 48px; }
-.depthBox { position: absolute; border: 1.5px solid rgba(179,255,218,.7); background: rgba(108,231,177,.06); box-shadow: inset 0 0 0 1px rgba(221,255,238,.13), 0 0 18px rgba(71,191,136,.22); opacity: .37; transition: opacity .35s ease, box-shadow .35s ease, transform .35s ease; transform: perspective(700px) rotateY(-8deg); }
-.depthBox::before, .depthBox::after { content: ""; position: absolute; background: rgba(108,231,177,.11); border: 1px solid rgba(179,255,218,.7); }
-.depthBox::before { height: 17px; left: 0; right: -13px; top: -18px; clip-path: polygon(0 100%, 13px 0, 100% 0, calc(100% - 13px) 100%); }
-.depthBox::after { width: 13px; top: -17px; bottom: 0; right: -14px; clip-path: polygon(0 17px, 100% 0, 100% calc(100% - 17px), 0 100%); }
+.depthBox { position: absolute; box-sizing: border-box; border: 1.5px solid rgba(179,255,218,.7); background: linear-gradient(135deg, rgba(108,231,177,.12), rgba(108,231,177,.025)); box-shadow: inset 0 0 0 1px rgba(221,255,238,.13), 0 0 18px rgba(71,191,136,.22); opacity: .37; transition: opacity .35s ease, box-shadow .35s ease; }
 .depthBox span { position: absolute; bottom: 100%; left: -1px; display: block; margin-bottom: 22px; padding: 5px 7px; white-space: nowrap; background: rgba(17,44,37,.85); color: #eafff2; font: 9px var(--font-geist-mono), monospace; }
-.depthActive { opacity: 1; box-shadow: inset 0 0 0 1px rgba(221,255,238,.55), 0 0 28px rgba(71,191,136,.66); transform: perspective(700px) rotateY(-8deg) translateY(-3px); }
-.boxCoffee { left: 30%; bottom: 1%; width: 42%; height: 27%; }
-.boxShelf { left: 53%; top: 10%; width: 21%; height: 57%; }
+.depthActive { opacity: 1; box-shadow: inset 0 0 0 1px rgba(221,255,238,.55), 0 0 28px rgba(71,191,136,.66); }
 .scanItemProgress { display: block; padding: 7px 2px 0; color: var(--foreground-muted); font: 9px var(--font-geist-mono), monospace; text-transform: uppercase; }
 .scanModelComplete .scanItemProgress { padding: 6px 0 9px; }
 @keyframes depthSweep { from { top: 7%; } to { top: 84%; } }
 @media (prefers-reduced-motion: reduce) { .depthBeam { animation: none; top: 50%; } .depthBox { transition: none; } }
 @media (max-width: 760px) { .depthMode, .depthReadout { font-size: 8px; } .depthMode { top: 45px; } .depthReadout { bottom: 42px; max-width: calc(100% - 20px); } .depthBox span { font-size: 8px; } }
 
-.tagCoffee { left: 34%; bottom: 13%; }
-.tagShelf { left: 59%; top: 17%; }
-@media (max-width: 760px) { .tagCoffee { left: 31%; bottom: 12%; } .tagShelf { left: 55%; top: 15%; } }
-
-.boxChair { left: 71%; top: 53%; width: 17%; height: 29%; }
-.tagChair { right: 15%; top: 73%; }
-@media (max-width: 760px) { .tagChair { right: 12%; top: 74%; } }
-
-/* Keep the photo and every scan marker in the source image's 3:2 coordinate space. */
-.photoPanel { aspect-ratio: 3 / 2; min-height: 0; align-self: start; }
-.photoPanel > img { object-fit: fill; }
+/* The scan viewport is the image's normalized 1536 × 1024 coordinate space. */
+.photoPanel { min-height: 0; }
 .scanFrame { inset: 0; }
+.depthReadout { bottom: 12px; }
 .scanFrame > i:first-child { left: 20px; top: 20px; }
 .scanFrame > i:nth-child(2) { right: 20px; top: 20px; }
-.scanFrame > i:nth-child(3) { left: 20px; bottom: 56px; }
-.scanFrame > i:nth-child(4) { right: 20px; bottom: 56px; }
-@media (max-width: 760px) { .photoPanel { min-height: 0; } .scanFrame { inset: 0; } }
-.tagDesk { right: 20%; top: 46%; }
-.tagCoffee { left: 42%; bottom: 13%; }
-.tagChair { right: 15%; top: 68%; }
+.scanFrame > i:nth-child(3) { left: 20px; bottom: 20px; }
+.scanFrame > i:nth-child(4) { right: 20px; bottom: 20px; }
 @media (max-width: 760px) {
+  .depthReadout { bottom: 12px; }
   .detectedTag { padding: 4px 5px; }
   .detectedTag span { font-size: 8px; }
   .detectedTag b { display: none; }
-  .tagDesk { right: 17%; top: 45%; }
-  .tagCoffee { left: 39%; }
-  .tagChair { right: 14%; top: 68%; }
 }
 
 .completeActions { display: flex; align-items: start; gap: 10px; }

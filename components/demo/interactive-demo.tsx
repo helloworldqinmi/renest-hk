@@ -58,6 +58,14 @@ const furnitureAssetById: Partial<Record<string, string>> = {
   "dining-table": "/photos/furniture-dining-table.webp",
 };
 const fitTestItems = ["sofa", "coffee-table", "bookshelf", "desk", "work-chair", "dining-table"];
+const scanObjectOverlays = [
+  { id: "sofa", label: "Sofa", dimensions: "204 × 88 cm", box: { left: "4.5%", top: "47%", width: "41.5%", height: "48%" }, tag: { left: "18%", top: "61%" } },
+  { id: "dining-table", label: "Dining table", dimensions: "140 × 80 cm", box: { left: "37%", top: "44%", width: "25%", height: "23%" }, tag: { left: "48%", top: "49%" } },
+  { id: "desk", label: "Study desk", dimensions: "120 × 60 cm", box: { left: "62.5%", top: "38%", width: "20%", height: "32%" }, tag: { left: "76%", top: "43%" } },
+  { id: "work-chair", label: "Work chair", dimensions: "58 × 58 cm", box: { left: "62.5%", top: "43%", width: "14%", height: "29%" }, tag: { left: "67%", top: "54%" } },
+  { id: "coffee-table", label: "Coffee table", dimensions: "100 × 55 cm", box: { left: "36.8%", top: "63.5%", width: "25%", height: "29.5%" }, tag: { left: "49%", top: "70%" } },
+  { id: "bookshelf", label: "Bookshelf", dimensions: "80 × 32 cm", box: { left: "52.4%", top: "13.2%", width: "14%", height: "52%" }, tag: { left: "58%", top: "20%" } },
+] as const;
 const FurniturePreview = dynamic(() => import("./furniture-preview").then((module) => module.FurniturePreview), { ssr: false });
 const ScanModelPreview = dynamic(() => import("./scan-model-preview").then((module) => module.ScanModelPreview), { ssr: false });
 
@@ -345,34 +353,22 @@ function CurrentHomeStage({
       />
       <div className={styles.scanWorkspace}>
         <div className={styles.photoPanel}>
-          <Image src="/photos/old-home.webp" alt="Your lived-in Kowloon apartment" fill loading="eager" sizes="(max-width: 900px) 94vw, 62vw" preload />
-          <div className={styles.scanFrame}>
-            <i /><i /><i /><i />
-            {scanStep > 0 && scanStep < 4 ? <span className={styles.scanPhaseBadge}><ScanLine size={18} /> {scanCopy[0]}</span> : null}
-            {scanStep > 0 && scanStep < 4 ? <><div className={styles.depthField} aria-hidden="true" /><div className={styles.depthBeam} aria-hidden="true" /><span className={styles.depthMode}>DEPTH CAPTURE · 3D MESH</span></> : null}
-            {scanStep >= 2 && scanStep < 4 ? (
-              <div className={styles.objectBoxes} aria-hidden="true">
-                {[
-                  ["sofa", "Sofa", styles.boxSofa],
-                  ["dining-table", "Dining table", styles.boxTable],
-                  ["desk", "Study desk", styles.boxDesk],
-                  ["work-chair", "Work chair", styles.boxChair],
-                  ["coffee-table", "Coffee table", styles.boxCoffee],
-                  ["bookshelf", "Storage", styles.boxShelf],
-                ].map(([id, label, position]) => <div key={id} className={join(styles.depthBox, position, selectedInventory === id && styles.depthActive)}><span>{label}</span></div>)}
-              </div>
-            ) : null}
-            {scanStep >= 2 && scanStep < 4 ? <span className={styles.depthReadout}>VOLUME LOCKED · {selectedItem.name.toUpperCase()} · {Math.round(selectedItem.dimensions.width * 100)} × {Math.round(selectedItem.dimensions.depth * 100)} × {Math.round(selectedItem.dimensions.height * 100)} CM</span> : null}
-            {scanState === "complete" ? (
-              <>
-                <button type="button" className={join(styles.detectedTag, styles.tagSofa)} onClick={() => onSelect("sofa")}><span>Sofa</span><b>204 × 88 cm</b></button>
-                <button type="button" className={join(styles.detectedTag, styles.tagTable)} onClick={() => onSelect("dining-table")}><span>Dining table</span><b>140 × 80 cm</b></button>
-                <button type="button" className={join(styles.detectedTag, styles.tagDesk)} onClick={() => onSelect("desk")}><span>Study desk</span><b>120 × 60 cm</b></button>
-                <button type="button" className={join(styles.detectedTag, styles.tagChair)} onClick={() => onSelect("work-chair")}><span>Work chair</span><b>58 × 58 cm</b></button>
-                <button type="button" className={join(styles.detectedTag, styles.tagCoffee)} onClick={() => onSelect("coffee-table")}><span>Coffee table</span><b>100 × 55 cm</b></button>
-                <button type="button" className={join(styles.detectedTag, styles.tagShelf)} onClick={() => onSelect("bookshelf")}><span>Bookshelf</span><b>80 × 32 cm</b></button>
-              </>
-            ) : null}
+          <div className={styles.scanViewport}>
+            <Image src="/photos/old-home.webp" alt="Your lived-in Kowloon apartment" fill loading="eager" sizes="(max-width: 900px) 94vw, 62vw" preload />
+            <div className={styles.scanFrame}>
+              <i /><i /><i /><i />
+              {scanStep > 0 && scanStep < 4 ? <span className={styles.scanPhaseBadge}><ScanLine size={18} /> {scanCopy[0]}</span> : null}
+              {scanStep > 0 && scanStep < 4 ? <><div className={styles.depthField} aria-hidden="true" /><div className={styles.depthBeam} aria-hidden="true" /><span className={styles.depthMode}>DEPTH CAPTURE · 3D MESH</span></> : null}
+              {scanStep >= 2 && scanStep < 4 ? (
+                <div className={styles.objectBoxes} aria-hidden="true">
+                  {scanObjectOverlays.map((item) => <div key={item.id} style={item.box} className={join(styles.depthBox, selectedInventory === item.id && styles.depthActive)}><span>{item.label}</span></div>)}
+                </div>
+              ) : null}
+              {scanStep >= 2 && scanStep < 4 ? <span className={styles.depthReadout}>VOLUME LOCKED · {selectedItem.name.toUpperCase()} · {Math.round(selectedItem.dimensions.width * 100)} × {Math.round(selectedItem.dimensions.depth * 100)} × {Math.round(selectedItem.dimensions.height * 100)} CM</span> : null}
+              {scanState === "complete" ? scanObjectOverlays.map((item) => (
+                <button type="button" key={item.id} style={item.tag} className={join(styles.detectedTag, selectedInventory === item.id && styles.detectedTagSelected)} onClick={() => onSelect(item.id)}><span>{item.label}</span><b>{item.dimensions}</b></button>
+              )) : null}
+            </div>
           </div>
           <div className={styles.photoCaption}><span>Kowloon · 380 sq ft</span><b>{scanState === "complete" ? "SCAN COMPLETE" : "CURRENT HOME"}</b></div>
         </div>
