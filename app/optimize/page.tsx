@@ -75,7 +75,7 @@ export default function OptimizePage() {
             <FloorPlan mode="new" plan={currentPlan} selectedId={selectedFurniture} onSelect={setSelectedFurniture} showWalkway />
           ) : (
             <div className="plan-photo">
-              <Image src="/photos/layout-planning.webp" alt="Three-dimensional top-down preview of the compact apartment with a verified walking route" fill sizes="(max-width: 900px) 92vw, 64vw" />
+              <Image src="/photos/spatial-room.webp" alt="Three-dimensional top-down preview of the compact apartment with a verified walking route" fill sizes="(max-width: 900px) 92vw, 64vw" />
               <span>Illustrative 3D preview · geometry verified in Floor plan</span>
             </div>
           )}

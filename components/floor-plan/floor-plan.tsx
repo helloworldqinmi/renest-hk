@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useId } from "react";
 import { Check, MoveUpRight, Plus, RefreshCw, ShoppingBag, X } from "lucide-react";
 import { furnitureInventory } from "@/lib/demo-data";
 import type { FurnitureStatus, LayoutPlan, MarketplaceProduct, Placement } from "@/types";
@@ -18,11 +19,11 @@ interface FloorPlanProps {
 }
 
 const statusStyle: Record<FurnitureStatus, { fill: string; stroke: string; icon: typeof Check }> = {
-  keep: { fill: "#dceee5", stroke: "#315d4c", icon: Check },
-  move: { fill: "#fff1d7", stroke: "#a37017", icon: MoveUpRight },
-  replace: { fill: "#fae9e4", stroke: "#b5503a", icon: RefreshCw },
-  new: { fill: "#dceaf2", stroke: "#426c80", icon: Plus },
-  sell: { fill: "#f3e8ef", stroke: "#79516b", icon: ShoppingBag },
+  keep: { fill: "var(--surface)", stroke: "var(--stone)", icon: Check },
+  move: { fill: "var(--warning-soft)", stroke: "var(--warning)", icon: MoveUpRight },
+  replace: { fill: "var(--danger-soft)", stroke: "var(--danger)", icon: RefreshCw },
+  new: { fill: "var(--success-soft)", stroke: "var(--accent)", icon: Plus },
+  sell: { fill: "var(--surface)", stroke: "var(--clay)", icon: ShoppingBag },
 };
 
 const oldPlacements: Placement[] = [
@@ -68,6 +69,8 @@ function FurnitureGlyph({ category, x, y, width, depth }: { category: string; x:
 }
 
 export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = false, scanning = false, compact = false, trialProduct }: FloorPlanProps) {
+  const id = useId().replace(/:/g, "");
+  const reducedMotion = useReducedMotion();
   const isOld = mode === "old";
   const scale = isOld ? 70 : 85;
   const origins = isOld
@@ -84,16 +87,16 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
 
   return (
     <div className={`floor-plan-wrap ${compact ? "is-compact" : ""} ${scanning ? "is-scanning" : ""}`}>
-      <svg viewBox="0 0 750 370" role="img" aria-label={`${isOld ? "Old" : "New"} home floor plan`}>
+      <svg viewBox="0 0 750 370" role={onSelect ? "group" : "img"} aria-label={`${isOld ? "Old" : "New"} home floor plan`}>
         <defs>
-          <pattern id={`grid-${mode}`} width="17" height="17" patternUnits="userSpaceOnUse"><path d="M 17 0 L 0 0 0 17" fill="none" stroke="#dfe4df" strokeWidth=".65" /></pattern>
-          <pattern id={`living-floor-${mode}`} width="18" height="18" patternUnits="userSpaceOnUse"><path d="M 0 18 L 18 0 M -4 4 L 4 -4 M 14 22 L 22 14" stroke="#d7ddd8" strokeWidth=".65" /></pattern>
-          <pattern id={`bedroom-floor-${mode}`} width="24" height="12" patternUnits="userSpaceOnUse"><path d="M 0 6 H 24 M 12 0 V 12" stroke="#dfe5e1" strokeWidth=".55" /></pattern>
-          <filter id="selected-shadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#1f3d32" floodOpacity=".25" /></filter>
-          <filter id={`furniture-shadow-${mode}`} x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="1.6" floodColor="#26312d" floodOpacity=".16" /></filter>
+          <pattern id={`grid-${id}`} width="17" height="17" patternUnits="userSpaceOnUse"><path d="M 17 0 L 0 0 0 17" fill="none" stroke="#dfe4df" strokeWidth=".65" /></pattern>
+          <pattern id={`living-floor-${id}`} width="96" height="48" patternUnits="userSpaceOnUse"><image href="/photos/oak-floor.webp" width="96" height="48" preserveAspectRatio="none" /><path d="M 0 12 H 96 M 0 24 H 96 M 0 36 H 96 M 0 48 H 96 M 48 0 V 12 M 24 12 V 24 M 72 24 V 36 M 36 36 V 48" stroke="var(--stone)" opacity=".35" strokeWidth=".4" /></pattern>
+          <pattern id={`bedroom-floor-${id}`} width="96" height="48" patternUnits="userSpaceOnUse"><image href="/photos/oak-floor.webp" width="96" height="48" preserveAspectRatio="none" /><path d="M 0 12 H 96 M 0 24 H 96 M 0 36 H 96" stroke="var(--stone)" opacity=".4" strokeWidth=".4" /></pattern>
+          <filter id={`selected-shadow-${id}`} x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#1f3d32" floodOpacity=".25" /></filter>
+          <filter id={`furniture-shadow-${id}`} x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="1.6" floodColor="#26312d" floodOpacity=".16" /></filter>
         </defs>
         <rect className="plan-sheet" x="0" y="0" width="750" height="370" />
-        <rect className="plan-grid" x="16" y="18" width="718" height="334" fill={`url(#grid-${mode})`} />
+        <rect className="plan-grid" x="16" y="18" width="718" height="334" fill={`url(#grid-${id})`} />
         <g className="floor-title">
           <text x="22" y="33">{isOld ? "EXISTING HOME · AS-BUILT INVENTORY" : "NEW HOME · VERIFIED PLACEMENT PLAN"}</text>
           <text x="728" y="33" textAnchor="end">{isOld ? "KOWLOON · 380 SQ FT" : "NORTHERN METROPOLIS · 310 SQ FT"}</text>
@@ -102,8 +105,8 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
         {isOld ? (
           <>
             <g className="room-outline">
-              <rect className="living-room" x="38" y="48" width={4.5 * scale} height={3.4 * scale} fill={`url(#living-floor-${mode})`} />
-              <rect className="bedroom-room" x="388" y="48" width={4 * scale} height={3.2 * scale} fill={`url(#bedroom-floor-${mode})`} />
+              <rect className="living-room" x="38" y="48" width={4.5 * scale} height={3.4 * scale} fill={`url(#living-floor-${id})`} />
+              <rect className="bedroom-room" x="388" y="48" width={4 * scale} height={3.2 * scale} fill={`url(#bedroom-floor-${id})`} />
             </g>
             <g className="room-label-block"><rect x="49" y="57" width="132" height="22" rx="3" /><text x="59" y="72" className="room-label">LIVING AREA · 4.5 × 3.4 M</text></g>
             <g className="room-label-block"><rect x="399" y="57" width="150" height="22" rx="3" /><text x="409" y="72" className="room-label">MAIN BEDROOM · 4.0 × 3.2 M</text></g>
@@ -114,8 +117,8 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
         ) : (
           <>
             <g className="room-outline">
-              <rect className="living-room" x="38" y="48" width={3.9 * scale} height={3.1 * scale} fill={`url(#living-floor-${mode})`} />
-              <rect className="bedroom-room" x="420" y="48" width={3.35 * scale} height={2.85 * scale} fill={`url(#bedroom-floor-${mode})`} />
+              <rect className="living-room" x="38" y="48" width={3.9 * scale} height={3.1 * scale} fill={`url(#living-floor-${id})`} />
+              <rect className="bedroom-room" x="420" y="48" width={3.35 * scale} height={2.85 * scale} fill={`url(#bedroom-floor-${id})`} />
               <rect x="420" y="302" width="122" height="50" className="utility-room" />
               <rect x="542" y="302" width="106" height="50" className="utility-room" />
             </g>
@@ -135,9 +138,9 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
             <path d="M 420 255 L 471 255 A 51 51 0 0 1 420 204" className="door-swing" />
             {showWalkway ? (
               <g className={`walkway ${walkwayPasses ? "" : "is-blocked"}`}>
-                <motion.path key={plan?.id} initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: .65 }} d={walkwayPath} />
-                <rect x="207" y="202" width="150" height="30" rx="15" />
-                <text x="282" y="221">{walkwayClearance} cm clearance {walkwayPasses ? "✓" : "×"}</text>
+                <motion.path key={plan?.id} initial={false} animate={{ pathLength: 1 }} transition={{ duration: reducedMotion ? 0 : .28 }} d={walkwayPath} />
+                <rect x="226" y="200" width="131" height="25" rx="3" />
+                <text x="291" y="216">{walkwayClearance} cm clearance {walkwayPasses ? "✓" : "×"}</text>
               </g>
             ) : null}
           </>
@@ -161,18 +164,18 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
           return (
             <motion.g
               key={placement.furnitureId}
-              initial={{ opacity: 0, scale: .92, x, y }}
+              initial={false}
               animate={{ opacity: 1, scale: 1, x, y }}
-              transition={{ delay: scanning ? index * .34 : index * .035, duration: .42 }}
+              transition={{ delay: scanning ? index * .34 : index * .035, duration: reducedMotion ? 0 : .28 }}
               onClick={() => onSelect?.(placement.furnitureId)}
               onKeyDown={(event) => {
-                if (onSelect && (event.key === "Enter" || event.key === " ")) onSelect(placement.furnitureId);
+                if (onSelect && (event.key === "Enter" || event.key === " ")) { event.preventDefault(); onSelect(placement.furnitureId); }
               }}
-              className={onSelect ? "furniture-selectable" : ""}
+              className={`furniture-object furniture-${item.category} ${onSelect ? "furniture-selectable" : ""}`}
               role={onSelect ? "button" : undefined}
               tabIndex={onSelect ? 0 : undefined}
               aria-label={onSelect ? `Inspect ${label}` : undefined}
-              filter={selected ? "url(#selected-shadow)" : `url(#furniture-shadow-${mode})`}
+              filter={selected ? `url(#selected-shadow-${id})` : `url(#furniture-shadow-${id})`}
             >
               {selected ? <rect className="clearance-outline" x={-6} y={-6} width={width + 12} height={depth + 12} rx="10" /> : null}
               <rect
@@ -180,17 +183,18 @@ export function FloorPlan({ mode, plan, selectedId, onSelect, showWalkway = fals
                 y={0}
                 width={width}
                 height={depth}
-                rx="7" fill={style.fill} stroke={selected ? "#16201d" : style.stroke} strokeWidth={selected ? 3 : 1.5}
+                rx={item.category === "sofa" ? 5 : 2} fill={item.category === "table" || item.category === "desk" ? "var(--material-oak)" : item.category === "sofa" ? "var(--material-linen)" : style.fill} stroke={selected ? "var(--accent)" : "var(--material-edge)"} strokeWidth={selected ? 1.8 : .7}
               />
               <g className="furniture-glyph"><FurnitureGlyph category={item.category} x={0} y={0} width={width} depth={depth} /></g>
-              <text x={width / 2} y={depth / 2 + 3} className="furniture-label">{label.length > 19 ? label.split(" ")[0] : label}</text>
-              {!isOld ? <text x={5} y={depth - 6} className="furniture-status">{status.toUpperCase()}</text> : null}
+              <title>{`${label} · ${Math.round(rawDimensions.width * 100)} × ${Math.round(rawDimensions.depth * 100)} cm`}</title>
+              {selected ? <text x={width / 2} y={depth + 13} className="furniture-label">{label}</text> : null}
+
             </motion.g>
           );
         })}
 
         {trialProduct && !isOld ? (
-          <motion.g className="trial-furniture" initial={{ opacity: 0, scale: .55 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", delay: .2 }} filter={`url(#furniture-shadow-${mode})`}>
+          <motion.g className="trial-furniture" initial={{ opacity: 0, scale: .55 }} animate={{ opacity: 1, scale: 1 }} transition={{ type: "spring", delay: .2 }} filter={`url(#furniture-shadow-${id})`}>
             <rect x={origins.living.x + 2.73 * scale} y={origins.living.y + 2.17 * scale} width={trialProduct.width * scale} height={trialProduct.depth * scale} rx="7" fill="#dceaf2" stroke="#315d4c" strokeWidth="3" />
             <g className="furniture-glyph"><FurnitureGlyph category="table" x={origins.living.x + 2.73 * scale} y={origins.living.y + 2.17 * scale} width={trialProduct.width * scale} depth={trialProduct.depth * scale} /></g>
             <text x={origins.living.x + 3.18 * scale} y={origins.living.y + 2.48 * scale} className="furniture-label">TRY-IN TABLE</text>

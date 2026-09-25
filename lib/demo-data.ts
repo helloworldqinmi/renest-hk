@@ -12,7 +12,7 @@ export const demoScenario = {
   replacementRate: 14,
   circularMoveScore: 92,
   currentTable: { name: "Current Dining Table", widthCm: 140, depthCm: 80, clearanceCm: 43, resaleLow: 700, resaleHigh: 900 },
-  replacementTable: { name: "Compact Folding Table", widthCm: 90, depthCm: 60, clearanceCm: 82, spaceUnlockedSqM: 1.5 },
+  replacementTable: { name: "Compact Folding Table", widthCm: 89, depthCm: 60, clearanceCm: 82, spaceUnlockedSqM: 1.5 },
 } as const;
 
 export const furnitureInventory: FurnitureItem[] = [
@@ -82,7 +82,7 @@ export const plans: LayoutPlan[] = [
       { furnitureId: "sofa", roomId: "living", position: { x: 0.18, y: 0.18 }, rotation: 0, status: "keep" },
       { furnitureId: "coffee-table", roomId: "living", position: { x: 0.86, y: 1.28 }, rotation: 0, status: "keep" },
       { furnitureId: "bookshelf", roomId: "living", position: { x: 3.25, y: 0.2 }, rotation: 90, status: "keep" },
-      { furnitureId: "dining-table", roomId: "living", position: { x: 2.73, y: 2.17 }, rotation: 0, status: "new", overrideName: "Compact Folding Table", overrideDimensions: { width: 0.9, depth: 0.6, height: 0.75 } },
+      { furnitureId: "dining-table", roomId: "living", position: { x: 2.73, y: 2.17 }, rotation: 0, status: "new", overrideName: "Compact Folding Table", overrideDimensions: { width: 0.89, depth: 0.6, height: 0.75 } },
       { furnitureId: "bed", roomId: "bedroom", position: { x: 0.16, y: 1.3 }, rotation: 0, status: "keep" },
       { furnitureId: "desk", roomId: "bedroom", position: { x: 2.05, y: 0.12 }, rotation: 0, status: "keep" },
       { furnitureId: "wardrobe", roomId: "bedroom", position: { x: 0.16, y: 0.12 }, rotation: 0, status: "keep" },

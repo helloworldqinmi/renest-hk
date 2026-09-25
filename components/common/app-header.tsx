@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { HelpCircle } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useState } from "react";
 import { Modal, cn } from "@/components/common/ui";
 
@@ -35,8 +35,8 @@ export function AppHeader() {
               </div>
             ))}
           </nav>
-        ) : <div className="tagline-nav">Move what matters. Fit what works.</div>}
-        <button className="header-action" onClick={() => setShowHow(true)}><HelpCircle size={17} /> How it works</button>
+        ) : pathname === "/" ? <nav className="header-nav" aria-label="Main navigation"><Link href="/#how-it-works">How it works</Link><Link href="/#less-waste">A more thoughtful move</Link></nav> : <span className="workspace-label">YOUR MOVING WORKSPACE</span>}
+        <div className="header-end">{pathname === "/" ? <Link href="/demo" className="button button-primary">Try the demo <ArrowRight size={14} /></Link> : <button className="header-action" onClick={() => setShowHow(true)}>How it works</button>}</div>
       </header>
 
       <Modal open={showHow} onClose={() => setShowHow(false)} title="How your move works" wide>

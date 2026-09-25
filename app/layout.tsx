@@ -1,7 +1,15 @@
 import type { Metadata } from "next";
+import localFont from "next/font/local";
 import "./globals.css";
 import { DemoProvider } from "@/components/state-provider";
 import { AppHeader } from "@/components/common/app-header";
+
+const sans = localFont({ src: "./fonts/geist-sans.woff2", variable: "--font-geist-sans", display: "swap" });
+const mono = localFont({ src: "./fonts/geist-mono.woff2", variable: "--font-geist-mono", display: "swap", preload: false });
+const editorial = localFont({ src: [
+  { path: "./fonts/newsreader.ttf", weight: "400", style: "normal" },
+  { path: "./fonts/newsreader-italic.ttf", weight: "400", style: "italic" },
+], variable: "--font-editorial", display: "swap" });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.cyberironman.com"),
@@ -20,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html lang="en" data-scroll-behavior="smooth" className={`${sans.variable} ${mono.variable} ${editorial.variable}`}>
       <body>
         <DemoProvider>
           <AppHeader />

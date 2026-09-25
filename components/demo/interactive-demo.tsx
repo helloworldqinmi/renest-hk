@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -21,11 +21,12 @@ import {
   ScanLine,
   Search,
   ShieldCheck,
-  Sparkles,
+  BookmarkCheck,
   UtensilsCrossed,
 } from "lucide-react";
+import { SpatialCanvas } from "@/components/floor-plan/spatial-canvas";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
-import { Button } from "@/components/common/ui";
+import { Button, LinkButton } from "@/components/common/ui";
 import { furnitureInventory, plans } from "@/lib/demo-data";
 import { objectiveConfigs, objectiveOrder, type DemoObjective } from "@/lib/interactive-demo";
 import styles from "./interactive-demo.module.css";
@@ -38,6 +39,7 @@ type MarketplaceState = "idle" | "searching" | "complete";
 
 const workflowSteps = [
   { label: "Scan", stage: 0 },
+  { label: "Map", stage: 1 },
   { label: "Plan", stage: 2 },
   { label: "Fit", stage: 3 },
   { label: "Move", stage: 4 },
@@ -48,7 +50,6 @@ const featuredInventory = ["sofa", "desk", "bed", "wardrobe", "coffee-table", "b
 const totalInventoryValue = furnitureInventory.reduce((total, item) => total + (item.estimatedValue ?? 0), 0);
 const furnitureAssetById: Partial<Record<string, string>> = {
   sofa: "/photos/furniture-sofa.webp",
-  desk: "/photos/furniture-chair.webp",
   wardrobe: "/photos/furniture-cabinet.webp",
   "coffee-table": "/photos/furniture-coffee-table.webp",
   bookshelf: "/photos/furniture-bookshelf.webp",
@@ -62,6 +63,7 @@ function join(...classes: Array<string | false | undefined>) {
 
 export function InteractiveDemo() {
   const [stage, setStage] = useState(0);
+  const [savedPlan, setSavedPlan] = useState<DemoObjective | null>(null);
   const [furthestStage, setFurthestStage] = useState(0);
   const [scanState, setScanState] = useState<ScanState>("idle");
   const [selectedInventory, setSelectedInventory] = useState("sofa");
@@ -73,19 +75,23 @@ export function InteractiveDemo() {
   const [visualizationState, setVisualizationState] = useState<VisualizationState>("idle");
   const [marketplaceState, setMarketplaceState] = useState<MarketplaceState>("idle");
   const [pendingObjective, setPendingObjective] = useState<DemoObjective | null>(null);
-  const [resultView, setResultView] = useState<"plan" | "preview">("plan");
+  const [resultView, setResultView] = useState<"room" | "plan" | "preview">("room");
   const timers = useRef<number[]>([]);
 
-  const selectedItem = useMemo(
-    () => furnitureInventory.find((item) => item.id === selectedInventory) ?? furnitureInventory[0],
-    [selectedInventory],
-  );
+  const selectedItem = furnitureInventory.find((item) => item.id === selectedInventory) ?? furnitureInventory[0];
   const displayedObjective = pendingObjective ?? objective;
-  const activeWorkflowStep = stage < 2 ? 0 : stage - 1;
+  const activeWorkflowStep = stage;
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "instant" });
   }, [stage]);
+
+  useEffect(() => {
+    try {
+      const stored = JSON.parse(window.localStorage.getItem("renest-saved-plan-v1") ?? "null");
+      if (stored?.version === 1 && objectiveOrder.includes(stored.objectiveId)) setSavedPlan(stored.objectiveId);
+    } catch { /* The demo also works when local storage is unavailable. */ }
+  }, []);
 
   useEffect(() => () => {
     timers.current.forEach((timer) => window.clearTimeout(timer));
@@ -125,24 +131,24 @@ export function InteractiveDemo() {
     setVisualizationState("idle");
     setMarketplaceState("idle");
     setPendingObjective(null);
-    setResultView("plan");
+    setResultView("room");
     advance(4);
-    later(() => setOptimizationState("clearance"), 1250);
-    later(() => setOptimizationState("ranking"), 2550);
+    later(() => setOptimizationState("clearance"), 650);
+    later(() => setOptimizationState("ranking"), 1250);
     later(() => {
       setOptimizationState("complete");
       setMarketplaceState("searching");
       later(() => setMarketplaceState("complete"), 1150);
-    }, 3750);
+    }, 1900);
   }
 
-  function changeResultView(view: "plan" | "preview") {
+  function changeResultView(view: "room" | "plan" | "preview") {
     setResultView(view);
     if (view === "preview" && visualizationState === "idle") {
       setVisualizationState("composition");
-      later(() => setVisualizationState("materials"), 1350);
-      later(() => setVisualizationState("lighting"), 3100);
-      later(() => setVisualizationState("complete"), 4850);
+      later(() => setVisualizationState("materials"), 220);
+      later(() => setVisualizationState("lighting"), 420);
+      later(() => setVisualizationState("complete"), 650);
     }
   }
 
@@ -152,7 +158,7 @@ export function InteractiveDemo() {
     later(() => {
       setObjective(nextObjective);
       setPendingObjective(null);
-    }, 1200);
+    }, 350);
   }
 
   function resetDemo() {
@@ -169,7 +175,7 @@ export function InteractiveDemo() {
     setVisualizationState("idle");
     setMarketplaceState("idle");
     setPendingObjective(null);
-    setResultView("plan");
+    setResultView("room");
   }
 
   return (
@@ -179,9 +185,15 @@ export function InteractiveDemo() {
           <span>Your move</span>
           <strong>Kowloon <MoveRight size={14} /> Northern Metropolis</strong>
         </div>
+        <div className={styles.topbarActions}>
+        {savedPlan ? <button type="button" className={styles.resetButton} onClick={() => {
+          clearTimers(); setSelectedFitItem("dining-table"); setObjective(savedPlan); setPendingObjective(null); setScanState("complete"); setMapState("complete");
+          setReplacementTested(true); setOptimizationState("complete"); setMarketplaceState("complete"); setResultView("room"); advance(4);
+        }}><BookmarkCheck size={14} /> Saved plan</button> : null}
         <button type="button" onClick={resetDemo} className={styles.resetButton}>
           <RotateCcw size={15} /> Restart
         </button>
+        </div>
       </div>
 
       <nav className={styles.stageRail} aria-label="Move progress">
@@ -191,9 +203,10 @@ export function InteractiveDemo() {
             key={step.label}
             disabled={step.stage > furthestStage}
             className={join(styles.stageStep, index === activeWorkflowStep && styles.stageActive, index < activeWorkflowStep && styles.stageDone)}
+            aria-current={index === activeWorkflowStep ? "step" : undefined}
             onClick={() => setStage(step.stage)}
           >
-            <span>{index < activeWorkflowStep ? <Check size={13} /> : index + 1}</span>
+            <span>{index < activeWorkflowStep ? <Check size={13} /> : `0${index + 1}`}</span>
             <em>{step.label}</em>
           </button>
         ))}
@@ -253,6 +266,7 @@ export function InteractiveDemo() {
           scenarioSwitching={pendingObjective !== null}
           onSelectObjective={switchObjective}
           onSetView={changeResultView}
+          onSaved={setSavedPlan}
           onBack={() => setStage(3)}
         />
       ) : null}
@@ -260,7 +274,7 @@ export function InteractiveDemo() {
       <div className={styles.liveStatus} aria-live="polite">
         {stage === 0 && scanState === "complete" ? "7 furniture items detected" : null}
         {stage === 1 && mapState === "complete" ? "New home mapped: 18% smaller" : null}
-        {stage === 3 && replacementTested ? "Alternative verified: 82 cm clearance" : null}
+        {stage === 3 && replacementTested ? `Alternative verified: ${objectiveConfigs[objective].plan.walkwayClearance} cm clearance` : null}
         {stage === 4 && optimizationState === "complete" ? "Optimal layout verified" : null}
       </div>
     </main>
@@ -315,11 +329,11 @@ function CurrentHomeStage({
       <StoryHeader
         step="01 · Current home"
         title="Start with what you already own."
-        copy="A room scan turns a lived-in Kowloon apartment into a measured furniture inventory, including the value already sitting in the room."
+        copy="A familiar room. Seven pieces of furniture. Let’s see what comes with you."
       />
       <div className={styles.scanWorkspace}>
         <div className={styles.photoPanel}>
-          <Image src="/photos/old-home.webp" alt="Your lived-in Kowloon apartment" fill sizes="(max-width: 900px) 94vw, 62vw" priority />
+          <Image src="/photos/old-home.webp" alt="Your lived-in Kowloon apartment" fill loading="eager" sizes="(max-width: 900px) 94vw, 62vw" preload />
           <div className={styles.scanFrame}>
             <i /><i /><i /><i />
             {scanStep > 0 && scanStep < 4 ? <span className={styles.scanPhaseBadge}><ScanLine size={18} /> {scanCopy[0]}</span> : null}
@@ -425,17 +439,17 @@ function HomeComparisonStage({
     <section className={styles.stage}>
       <StoryHeader
         step="02 · New home"
-        title="The next home is 70 sq ft smaller."
-        copy="The problem becomes visible before any layout is generated: the same seven items now have 18% less floor area to work with."
+        title="A little less space. A new possibility."
+        copy="From 380 to 310 sq ft. Map the new room, its windows and the paths you’ll use every day."
       />
       <div className={styles.comparisonWorkspace}>
         <article className={styles.homeImage}>
-          <Image src="/photos/old-home.webp" alt="Your current larger apartment" fill sizes="(max-width: 900px) 94vw, 45vw" />
+          <Image src="/photos/old-home.webp" alt="Your current larger apartment" fill loading="eager" sizes="(max-width: 900px) 94vw, 45vw" />
           <div className={styles.homeLabel}><span>Current home</span><strong>380 sq ft</strong><small>Kowloon</small></div>
         </article>
         <div className={styles.sizeDelta}><MoveRight size={22} /><strong>−18%</strong><span>less floor area</span></div>
         <article className={styles.homeImage}>
-          <Image src="/photos/empty-new-home.webp" alt="Your smaller empty new apartment" fill sizes="(max-width: 900px) 94vw, 45vw" />
+          <Image src="/photos/empty-new-home.webp" alt="Your smaller empty new apartment" fill loading="eager" sizes="(max-width: 900px) 94vw, 45vw" />
           <div className={styles.homeLabel}><span>New home</span><strong>310 sq ft</strong><small>Northern Metropolis</small></div>
           {mapStep > 0 ? (
             <div className={join(styles.geometryOverlay, mapState === "complete" && styles.geometryComplete)} aria-hidden="true">
@@ -481,8 +495,8 @@ function PriorityStage({
     <section className={styles.stage}>
       <StoryHeader
         step="03 · One clear goal"
-        title="What should the optimizer protect first?"
-        copy="Choose one objective. This is not a mood prompt: it changes measurable layout rules, furniture decisions and the final result."
+        title="Make room for the way you live."
+        copy="Choose what matters most. Compare the arrangements once your furniture is in place."
       />
       <div className={styles.priorityWorkspace}>
         <div className={styles.objectiveList} role="radiogroup" aria-label="Optimization objective">
@@ -490,7 +504,14 @@ function PriorityStage({
             const option = objectiveConfigs[id];
             const Icon = icons[id];
             return (
-              <button type="button" role="radio" aria-checked={objective === id} key={id} className={join(styles.objectiveButton, objective === id && styles.objectiveSelected)} onClick={() => onSelect(id)}>
+              <button type="button" role="radio" aria-checked={objective === id} tabIndex={objective === id ? 0 : -1} onKeyDown={(event) => {
+                if (!["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight"].includes(event.key)) return;
+                event.preventDefault();
+                const direction = event.key === "ArrowDown" || event.key === "ArrowRight" ? 1 : -1;
+                const next = (index + direction + objectiveOrder.length) % objectiveOrder.length;
+                onSelect(objectiveOrder[next]);
+                (event.currentTarget.parentElement?.children[next] as HTMLButtonElement | undefined)?.focus();
+              }} key={id} className={join(styles.objectiveButton, objective === id && styles.objectiveSelected)} onClick={() => onSelect(id)}>
                 <span>0{index + 1}</span>
                 <Icon size={23} />
                 <div><strong>{option.label}</strong><p>{option.description}</p></div>
@@ -500,7 +521,7 @@ function PriorityStage({
           })}
         </div>
         <aside className={styles.rulePanel}>
-          <span><Sparkles size={14} /> Selected optimization rule</span>
+          <span><Ruler size={14} /> Your planning priority</span>
           <h2>{selected.label}</h2>
           <p>{selected.rule}</p>
           <div className={styles.ruleTranslation}>
@@ -535,39 +556,45 @@ function FitStage({
   onBack: () => void;
   onContinue: () => void;
 }) {
-  const isConflict = selectedItem === "dining-table";
+  const inspectedItem = selectedItem ?? (replacementTested ? "dining-table" : null);
+  const isConflict = inspectedItem === "dining-table";
   const activePlan = replacementTested ? objectiveConfigs[objective].plan : plans[2];
+  const replacementClearance = objectiveConfigs[objective].plan.walkwayClearance;
+  const replacement = objectiveConfigs[objective].recommendation;
+  const selectedFurniture = furnitureInventory.find((item) => item.id === inspectedItem);
+  const selectedPlacement = activePlan.placements.find((placement) => placement.furnitureId === inspectedItem);
   return (
     <section className={styles.stage}>
       <StoryHeader
-        step="04 · Geometry before imagery"
-        title={replacementTested ? "Clear walkway restored." : "It fits the room. Not the way you live in it."}
-        copy={replacementTested ? "A compact table recovers 1.5 m² of usable circulation." : "The dining table leaves only 43 cm beside the entrance."}
+        step="04 · See what fits"
+        title={replacementTested ? "A little change. Room to move." : "Six pieces fit. One needs a rethink."}
+        copy={replacementTested ? `The smaller table leaves ${replacementClearance} cm of clear route through your new home.` : "Your dining table leaves a tight 43 cm route. Let’s give you more breathing room."}
       />
       <div className={styles.fitWorkspace}>
-        <section className={styles.blueprintPanel}>
-          <div className={styles.blueprintHead}>
-            <div><span>{replacementTested ? "Alternative fit test" : "Existing furniture fit test"}</span><strong>Northern Metropolis · 310 sq ft</strong></div>
-            <b className={replacementTested ? styles.passLabel : styles.failLabel}>{replacementTested ? <CircleCheck size={13} /> : <AlertTriangle size={13} />}{replacementTested ? "82 cm · verified" : "43 cm · blocked"}</b>
-          </div>
+        <aside className={styles.furnitureSidebar}><span className={styles.sidebarLabel}>YOUR FURNITURE</span>
           <div className={styles.objectTestRail} aria-label="Detected furniture fit checks">
             {fitTestItems.map((id) => {
               const item = furnitureInventory.find((candidate) => candidate.id === id)!;
               const conflict = id === "dining-table" && !replacementTested;
-              return (
-                <button type="button" key={id} className={join(styles.objectTest, selectedItem === id && styles.objectTestSelected)} onClick={() => onSelectItem(id)}>
-                  <span>{furnitureAssetById[id] ? <Image src={furnitureAssetById[id]!} alt="" fill sizes="68px" /> : <Box size={20} />}</span>
-                  <b>{item.name}</b>
-                  <em className={conflict ? styles.objectFail : styles.objectPass}>{conflict ? "Conflict" : "Fits"}</em>
-                </button>
-              );
+              const included = activePlan.placements.some((placement) => placement.furnitureId === id);
+              return <button type="button" key={id} aria-pressed={selectedItem === id} className={join(styles.objectTest, selectedItem === id && styles.objectTestSelected)} onClick={() => onSelectItem(id)}>
+                <span><Image src={id === "dining-table" && replacementTested ? replacement.image : furnitureAssetById[id]!} alt="" fill sizes="50px" /></span>
+                <b>{id === "dining-table" && replacementTested ? "Smaller table" : item.name}</b>
+                <em className={conflict ? styles.objectFail : styles.objectPass}>{conflict ? "Tight clearance" : included ? "Fits comfortably" : "Not in this layout"}</em>
+              </button>;
             })}
+          </div><p className={styles.inventoryFootnote}>Plus your bed and study desk.<br />7 pieces, measured in centimetres.</p>
+        </aside>
+        <section className={styles.blueprintPanel}>
+          <div className={styles.blueprintHead}>
+            <div><span>{replacementTested ? "Alternative fit test" : "Existing furniture fit test"}</span><strong>Northern Metropolis · 310 sq ft</strong></div>
+            <b className={replacementTested ? styles.passLabel : styles.failLabel}>{replacementTested ? <CircleCheck size={13} /> : <AlertTriangle size={13} />}{replacementTested ? `${replacementClearance} cm · clear` : "43 cm · blocked"}</b>
           </div>
-          <FloorPlan mode="new" plan={activePlan} selectedId={selectedItem} onSelect={onSelectItem} showWalkway />
+          <SpatialCanvas plan={activePlan} selectedId={selectedItem} onSelect={onSelectItem} />
           <div className={styles.blueprintHint}><Ruler size={14} /> Select a furniture item on the plan to inspect its geometry.</div>
         </section>
         <aside className={styles.fitInspector}>
-          {!selectedItem ? (
+          {!inspectedItem ? (
             <div className={styles.inspectPrompt}>
               <span><AlertTriangle size={24} /></span>
               <h2>It fits.</h2>
@@ -580,28 +607,29 @@ function FitStage({
             <div className={styles.conflictDetail}>
               <span className={replacementTested ? styles.successIcon : styles.warningIcon}>{replacementTested ? <Check size={22} /> : <AlertTriangle size={22} />}</span>
               <small>{replacementTested ? "Clear walkway restored" : "43 cm clearance"}</small>
-              <h2>{replacementTested ? "Compact Folding Table" : "Dining Table"}</h2>
-              <strong>{replacementTested ? "89 × 60 cm" : "140 × 80 cm"}</strong>
+              <h2>{replacementTested ? replacement.name : "Dining Table"}</h2>
+              <strong>{replacementTested ? replacement.dimensions : "140 × 80 cm"}</strong>
               <dl>
-                <div><dt>Walking clearance</dt><dd className={replacementTested ? styles.goodText : styles.badText}>{replacementTested ? "82 cm ✓" : "43 cm ×"}</dd></div>
+                <div><dt>Walking clearance</dt><dd className={replacementTested ? styles.goodText : styles.badText}>{replacementTested ? `${replacementClearance} cm` : "43 cm"}</dd></div>
                 <div><dt>Minimum preferred</dt><dd>70 cm</dd></div>
                 <div><dt>Door / storage access</dt><dd className={replacementTested ? styles.goodText : styles.badText}>{replacementTested ? "Clear" : "Restricted"}</dd></div>
               </dl>
-              <p>{replacementTested ? "The route is now 12 cm above the minimum and 1.5 m² of usable circulation returns." : "The table leaves only 43 cm beside the entrance. A chair in use also blocks the cabinet route."}</p>
+              <p>{replacementTested ? `The route is now ${replacementClearance - 70} cm above your preferred minimum. There is room to move comfortably.` : "The table leaves only 43 cm beside the entrance. A chair in use also blocks the cabinet route."}</p>
               {!replacementTested ? <Button type="button" icon={Ruler} onClick={onTestReplacement}>Test a smaller table</Button> : null}
             </div>
           ) : (
             <div className={styles.inspectPrompt}>
               <span className={styles.successIcon}><Check size={23} /></span>
-              <h2>This item passes.</h2>
-              <p>Its footprint stays inside the usable zone and preserves the strongest available walking path.</p>
-              <button type="button" onClick={() => onSelectItem("dining-table")} className={styles.conflictButton}><span><b>Dining Table</b><small>Conflict remains</small></span><em>Inspect <ArrowRight size={14} /></em></button>
+              <h2>{selectedFurniture?.name ?? "Your furniture"}</h2>
+              <p>{selectedFurniture ? `${Math.round(selectedFurniture.dimensions.width * 100)} × ${Math.round(selectedFurniture.dimensions.depth * 100)} cm` : ""}</p>
+              <p>{selectedPlacement ? "Fits inside the usable zone with room for your everyday route." : "Left out of this arrangement to make room for your chosen priority. Compare layouts to keep this piece."}</p>
+              <button type="button" onClick={() => onSelectItem("dining-table")} className={styles.conflictButton}><span><b>Dining Table</b><small>{replacementTested ? "Alternative fits" : "Tight clearance"}</small></span><em>Inspect <ArrowRight size={14} /></em></button>
             </div>
           )}
         </aside>
       </div>
       <StageActions onBack={onBack}>
-        {replacementTested ? <Button type="button" icon={Sparkles} onClick={onContinue}>Optimize layout</Button> : null}
+        {replacementTested ? <Button type="button" icon={ArrowRight} onClick={onContinue}>See my move plan</Button> : null}
       </StageActions>
     </section>
   );
@@ -646,7 +674,7 @@ function OptimizationExperience({ objective, phase }: { objective: DemoObjective
           </div>
         </section>
         <aside className={styles.reasoningPanel}>
-          <span className={styles.computeSignal}><Sparkles size={16} /> Spatial reasoning</span>
+          <span className={styles.computeSignal}><Ruler size={16} /> Spatial reasoning</span>
           <h2>{phaseCopy[0]}</h2>
           <p>{phaseCopy[1]}</p>
           <ol className={styles.computeSteps}>
@@ -678,18 +706,22 @@ function ResultStage({
   scenarioSwitching,
   onSelectObjective,
   onSetView,
+  onSaved,
   onBack,
 }: {
   objective: DemoObjective;
-  view: "plan" | "preview";
+  view: "room" | "plan" | "preview";
   visualizationState: VisualizationState;
   marketplaceState: MarketplaceState;
   scenarioSwitching: boolean;
   onSelectObjective: (objective: DemoObjective) => void;
-  onSetView: (view: "plan" | "preview") => void;
+  onSetView: (view: "room" | "plan" | "preview") => void;
+  onSaved: (objective: DemoObjective) => void;
   onBack: () => void;
 }) {
   const result = objectiveConfigs[objective];
+  const [savedObjective, setSavedObjective] = useState<DemoObjective | null>(null);
+  const [saveError, setSaveError] = useState(false);
   const renderCopy = {
     idle: ["Ready to visualize", "Start from the verified floor plan."],
     composition: ["Building the arrangement", "Translating verified placements into the room."],
@@ -701,14 +733,14 @@ function ResultStage({
     <section className={join(styles.stage, styles.resultStage)}>
       <StoryHeader
         step="05 · Move plan"
-        title="Your new space, built around what you own."
-        copy="Compare priorities without losing sight of the measured room. Every option remains traceable to a verified arrangement."
+        title={`${result.plan.reused} of 7 items fit. Welcome home.`}
+        copy="Keep what works. Make one considered change. Your next chapter is taking shape."
       />
-      <div className={styles.resultObjectives} role="tablist" aria-label="Compare optimized objectives">
+      <div className={styles.resultObjectives} role="group" aria-label="Compare optimized objectives">
         {objectiveOrder.map((id) => {
           const option = objectiveConfigs[id];
           return (
-            <button type="button" role="tab" aria-selected={objective === id} disabled={scenarioSwitching} key={id} onClick={() => onSelectObjective(id)} className={join(styles.resultObjective, objective === id && styles.resultObjectiveActive)}>
+            <button type="button" aria-pressed={objective === id} disabled={scenarioSwitching} key={id} onClick={() => onSelectObjective(id)} className={join(styles.resultObjective, objective === id && styles.resultObjectiveActive)}>
               <span>{option.label}{scenarioSwitching && objective === id ? <em>Rebalancing</em> : null}</span>
               <div><b>{option.plan.reused}/7</b><small>reused</small><b>{option.plan.openArea} m²</b><small>open</small><b>{option.plan.walkwayClearance} cm</b><small>route</small></div>
             </button>
@@ -721,15 +753,16 @@ function ResultStage({
           <div className={styles.resultVisualHead}>
             <div><span>{result.label}</span><strong>Geometry verified · 310 sq ft</strong></div>
             <div className={styles.viewSwitch} role="group" aria-label="Result view">
-              <button type="button" className={view === "plan" ? styles.viewActive : undefined} onClick={() => onSetView("plan")}><Map size={14} /> Plan</button>
-              <button type="button" className={view === "preview" ? styles.viewActive : undefined} onClick={() => onSetView("preview")}><ImageIcon size={14} /> New space</button>
+              <button type="button" aria-pressed={view === "room"} className={view === "room" ? styles.viewActive : undefined} onClick={() => onSetView("room")}><ScanLine size={14} /> Room study</button>
+              <button type="button" aria-pressed={view === "plan"} className={view === "plan" ? styles.viewActive : undefined} onClick={() => onSetView("plan")}><Map size={14} /> Measured plan</button>
+              <button type="button" aria-pressed={view === "preview"} className={view === "preview" ? styles.viewActive : undefined} onClick={() => onSetView("preview")}><ImageIcon size={14} /> New space</button>
             </div>
           </div>
           <div className={styles.resultSurface} key={`${objective}-${view}`}>
-            {view === "plan" ? (
+            {view !== "preview" ? (
               <div className={styles.verifiedPlan}>
-                <FloorPlan mode="new" plan={result.plan} showWalkway />
-                <span><ShieldCheck size={14} /> Geometry result · collisions and routes verified</span>
+                <SpatialCanvas key={`${objective}-${view}`} plan={result.plan} initialView={view === "room" ? "room" : "measured"} showToolbar={false} />
+                <span><ShieldCheck size={14} /> {view === "room" ? "Illustrative room study · exact dimensions in measured plan" : "Measured placements · clear routes checked"}</span>
               </div>
             ) : (
               <div className={join(styles.finalPreview, styles[`renderPhase${visualizationState}`])}>
@@ -767,15 +800,8 @@ function ResultStage({
 
         <aside className={styles.resultDecision}>
           <span className={styles.verifiedLine}><CircleCheck size={16} /> Selected plan verified</span>
-          <h2>{result.outcome}</h2>
+          <h2>{objective === "keep" ? "The things you love. Room to enjoy them." : objective === "work" ? "A brighter place to do your best work." : "Make room for one more at the table."}</h2>
           <p>{result.decision}</p>
-          <div className={styles.causeEffect}>
-            <div><span>Because</span><b>the new home is 18% smaller</b></div>
-            <ArrowRight size={16} />
-            <div><span>Conflict</span><b>43 cm table bottleneck</b></div>
-            <ArrowRight size={16} />
-            <div><span>Therefore</span><b>{result.recommendation.name}</b></div>
-          </div>
           {marketplaceState === "complete" ? (
             <div className={styles.recommendation}>
               <div className={styles.recommendationImage}><Image src={result.recommendation.image} alt={result.recommendation.name} fill sizes="150px" /></div>
@@ -789,19 +815,27 @@ function ResultStage({
             </div>
           ) : (
             <div className={styles.marketplaceSkeleton} role="status">
-              <span><Search size={16} /> Checking local marketplace inventory</span>
+              <span><Search size={16} /> Finding a table for this space</span>
               <div><i /><i /><i /></div>
-              <small>Filtering by verified dimensions and available stock</small>
+              <small>Comparing footprints and walking clearance</small>
             </div>
           )}
+          {objective === "keep" ? <LinkButton href="/shop" variant="secondary">Compare fitted tables</LinkButton> : null}
           <div className={styles.finalSummary}>
             <span><Recycle size={18} /><b>{result.plan.reused} pieces continue their journey</b></span>
-            <span><Sparkles size={18} /><b>{result.plan.purchases === 1 ? "Only 1 purchase is dimension-checked" : `Only ${result.plan.purchases} purchases are dimension-checked`}</b></span>
+            <span><Ruler size={18} /><b>{result.plan.purchases === 1 ? "Only 1 purchase is dimension-checked" : `Only ${result.plan.purchases} purchases are dimension-checked`}</b></span>
           </div>
         </aside>
       </div>
       <StageActions onBack={onBack}>
-        <p className={styles.switchHint}>Scenario changes reuse the room model, so alternatives resolve in about a second.</p>
+        <div className={styles.saveAction}><Button type="button" icon={savedObjective === objective ? Check : BookmarkCheck} onClick={() => {
+          try {
+            window.localStorage.setItem("renest-saved-plan-v1", JSON.stringify({ version: 1, objectiveId: objective, objective: result.label, home: "Northern Metropolis · 310 sq ft", plan: result.plan, recommendation: result.recommendation }));
+            setSavedObjective(objective);
+            onSaved(objective);
+            setSaveError(false);
+          } catch { setSaveError(true); }
+        }}>{savedObjective === objective ? "Plan saved" : "Save this plan"}</Button><span role="status">{saveError ? "Storage is unavailable. Please allow local storage and try again." : savedObjective === objective ? "Saved on this device." : ""}</span></div>
       </StageActions>
     </section>
   );
