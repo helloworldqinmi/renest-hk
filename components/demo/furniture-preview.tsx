@@ -17,14 +17,20 @@ type FurnitureSpec = {
   rotation: number;
 };
 
-const room = { width: 3.9, depth: 3.1 };
+const room = { width: 2.85, depth: 3.9 };
+const planRoom = { width: 3.9, depth: 3.1 };
+const windowShift = -0.35;
+const windowLayout = { center: 0.65 + windowShift, width: 1.7 };
 const modelPath = "/models/";
 
 function previewFurniture(plan: LayoutPlan): FurnitureSpec[] {
   const living = (id: string) => plan.placements.find((item) => item.roomId === "living" && item.furnitureId === id);
   const fromPlan = (placement: NonNullable<ReturnType<typeof living>>, width: number, depth: number): [number, number] => {
     const rotated = placement.rotation % 180 !== 0;
-    return [placement.position.x + (rotated ? depth : width) / 2, placement.position.y + (rotated ? width : depth) / 2];
+    return [
+      placement.position.x * room.width / planRoom.width + (rotated ? depth : width) / 2,
+      placement.position.y * room.depth / planRoom.depth + (rotated ? width : depth) / 2,
+    ];
   };
   const sofa = living("sofa");
   const coffee = living("coffee-table");
@@ -34,7 +40,9 @@ function previewFurniture(plan: LayoutPlan): FurnitureSpec[] {
   const specs: FurnitureSpec[] = [];
   if (sofa) {
     const dimensions = sofa.overrideDimensions ?? { width: 2.04, depth: 0.88, height: 0.82 };
-    specs.push({ id: "sofa", label: "Sofa", asset: "sofa.glb", size: [dimensions.width, dimensions.height, dimensions.depth], center: fromPlan(sofa, dimensions.width, dimensions.depth), rotation: sofa.rotation });
+    const sofaCenter = fromPlan(sofa, dimensions.width, dimensions.depth);
+    sofaCenter[1] += 0.63;
+    specs.push({ id: "sofa", label: "Sofa", asset: "sofa.glb", size: [dimensions.width, dimensions.height, dimensions.depth], center: sofaCenter, rotation: sofa.rotation + 180 });
   }
   if (coffee) specs.push({ id: "coffee", label: "Coffee table", asset: "coffee-table.glb", size: [0.86, 0.6, 0.75], center: fromPlan(coffee, 1, 0.55), rotation: coffee.rotation });
   if (bookshelf) specs.push({ id: "bookshelf", label: "Bookshelf", asset: "bookshelf.glb", size: [0.8, 1.8, 0.32], center: fromPlan(bookshelf, 0.8, 0.32), rotation: bookshelf.rotation });
@@ -95,17 +103,19 @@ export function FurniturePreview({ plan }: { plan: LayoutPlan }) {
     sun.shadow.normalBias = 0.035;
     scene.add(sun);
 
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(4.25, 3.45), new THREE.MeshStandardMaterial({ color: 0xd8cec0, roughness: 0.93 }));
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(room.width, room.depth), new THREE.MeshStandardMaterial({ color: 0xd8cec0, roughness: 0.93 }));
     floor.rotation.x = -Math.PI / 2;
     floor.position.y = -0.025;
     floor.receiveShadow = true;
     scene.add(floor);
     const wall = new THREE.MeshStandardMaterial({ color: 0xf6f3ec, roughness: 0.94, side: THREE.DoubleSide });
     // A restrained window backdrop gives the furniture the daylight of the reference room.
-    addBox(scene, [1.77, 1.65, 0.09], [-1.09, 0.825, -room.depth / 2], 0, wall);
-    addBox(scene, [0.47, 1.65, 0.09], [1.72, 0.825, -room.depth / 2], 0, wall);
-    addBox(scene, [1.7, 0.42, 0.09], [0.65, 0.21, -room.depth / 2], 0, wall);
-    addBox(scene, [1.7, 0.17, 0.09], [0.65, 1.565, -room.depth / 2], 0, wall);
+    const leftWallWidth = windowLayout.center - windowLayout.width / 2 + room.width / 2;
+    const rightWallWidth = room.width / 2 - (windowLayout.center + windowLayout.width / 2);
+    addBox(scene, [leftWallWidth, 1.65, 0.09], [-room.width / 2 + leftWallWidth / 2, 0.825, -room.depth / 2], 0, wall);
+    addBox(scene, [rightWallWidth, 1.65, 0.09], [room.width / 2 - rightWallWidth / 2, 0.825, -room.depth / 2], 0, wall);
+    addBox(scene, [windowLayout.width, 0.42, 0.09], [windowLayout.center, 0.21, -room.depth / 2], 0, wall);
+    addBox(scene, [windowLayout.width, 0.17, 0.09], [windowLayout.center, 1.565, -room.depth / 2], 0, wall);
     addBox(scene, [0.09, 1.65, room.depth + 0.1], [room.width / 2, 0.825, 0], 0, wall);
     const viewCanvas = document.createElement("canvas");
     viewCanvas.width = 512; viewCanvas.height = 320;
@@ -124,12 +134,12 @@ export function FurniturePreview({ plan }: { plan: LayoutPlan }) {
     const viewTexture = new THREE.CanvasTexture(viewCanvas);
     viewTexture.colorSpace = THREE.SRGBColorSpace;
     const outdoor = new THREE.Mesh(new THREE.PlaneGeometry(1.7, 1.02), new THREE.MeshBasicMaterial({ map: viewTexture, side: THREE.DoubleSide }));
-    outdoor.position.set(0.65, 1.03, -room.depth / 2 - 0.015);
+    outdoor.position.set(windowLayout.center, 1.03, -room.depth / 2 - 0.015);
     scene.add(outdoor);
     const frameMaterial = new THREE.MeshStandardMaterial({ color: 0x333f40, metalness: 0.38, roughness: 0.52 });
-    addBox(scene, [1.76, 0.045, 0.07], [0.65, 1.54, -room.depth / 2 + 0.035], 0, frameMaterial);
-    addBox(scene, [1.76, 0.045, 0.07], [0.65, 0.51, -room.depth / 2 + 0.035], 0, frameMaterial);
-    for (const x of [-0.23, 0.35, 0.93, 1.53]) addBox(scene, [0.045, 1.06, 0.07], [x, 1.025, -room.depth / 2 + 0.035], 0, frameMaterial);
+    addBox(scene, [windowLayout.width + 0.06, 0.045, 0.07], [windowLayout.center, 1.54, -room.depth / 2 + 0.035], 0, frameMaterial);
+    addBox(scene, [windowLayout.width + 0.06, 0.045, 0.07], [windowLayout.center, 0.51, -room.depth / 2 + 0.035], 0, frameMaterial);
+    for (const offset of [-0.88, -0.3, 0.28, 0.88]) addBox(scene, [0.045, 1.06, 0.07], [windowLayout.center + offset, 1.025, -room.depth / 2 + 0.035], 0, frameMaterial);
     const trim = new THREE.MeshStandardMaterial({ color: 0xb5a997, roughness: 0.77 });
     addBox(scene, [room.width, 0.045, 0.055], [0, 0.07, -room.depth / 2 + 0.07], 0, trim);
     addBox(scene, [0.055, 0.045, room.depth], [room.width / 2 - 0.07, 0.07, 0], 0, trim);
