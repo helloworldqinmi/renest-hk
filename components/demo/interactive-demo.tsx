@@ -73,21 +73,22 @@ function join(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
 
-export function InteractiveDemo() {
-  const [stage, setStage] = useState(0);
+export function InteractiveDemo({ resumeObjective }: { resumeObjective?: DemoObjective }) {
+  const restoringPlan = Boolean(resumeObjective);
+  const [stage, setStage] = useState(restoringPlan ? 4 : 0);
   const [savedPlan, setSavedPlan] = useState<DemoObjective | null>(null);
-  const [furthestStage, setFurthestStage] = useState(0);
-  const [scanState, setScanState] = useState<ScanState>("idle");
+  const [furthestStage, setFurthestStage] = useState(restoringPlan ? 4 : 0);
+  const [scanState, setScanState] = useState<ScanState>(restoringPlan ? "complete" : "idle");
   const [scanAutoPlay, setScanAutoPlay] = useState(true);
   const [selectedInventory, setSelectedInventory] = useState("sofa");
-  const [mapState, setMapState] = useState<MapState>("idle");
-  const [objective, setObjective] = useState<DemoObjective>("keep");
-  const [selectedFitItem, setSelectedFitItem] = useState<string | null>(null);
-  const [replacementTested, setReplacementTested] = useState(false);
-  const [optimizationState, setOptimizationState] = useState<OptimizationState>("idle");
+  const [mapState, setMapState] = useState<MapState>(restoringPlan ? "complete" : "idle");
+  const [objective, setObjective] = useState<DemoObjective>(resumeObjective ?? "keep");
+  const [selectedFitItem, setSelectedFitItem] = useState<string | null>(restoringPlan ? "dining-table" : null);
+  const [replacementTested, setReplacementTested] = useState(restoringPlan);
+  const [optimizationState, setOptimizationState] = useState<OptimizationState>(restoringPlan ? "complete" : "idle");
   const [visualizationState, setVisualizationState] = useState<VisualizationState>("idle");
-  const [marketplaceState, setMarketplaceState] = useState<MarketplaceState>("idle");
-  const [resultView, setResultView] = useState<"room" | "plan" | "three" | "preview">("room");
+  const [marketplaceState, setMarketplaceState] = useState<MarketplaceState>(restoringPlan ? "complete" : "idle");
+  const [resultView, setResultView] = useState<"room" | "plan" | "three" | "preview">(restoringPlan ? "three" : "room");
   const timers = useRef<number[]>([]);
 
   const selectedItem = demoFurnitureInventory.find((item) => item.id === selectedInventory) ?? demoFurnitureInventory[0];
@@ -846,7 +847,7 @@ function ResultStage({
             onSaved(objective);
             setSaveError(false);
           } catch { setSaveError(true); }
-        }}>{savedObjective === objective ? "Plan saved" : "Save this plan"}</Button><span role="status">{saveError ? "Storage is unavailable. Please allow local storage and try again." : savedObjective === objective ? "Saved on this device." : ""}</span></div><LinkButton href="/recommendations">See pieces you may like</LinkButton></div>
+        }}>{savedObjective === objective ? "Plan saved" : "Save this plan"}</Button><span role="status">{saveError ? "Storage is unavailable. Please allow local storage and try again." : savedObjective === objective ? "Saved on this device." : ""}</span></div><LinkButton href={`/recommendations?from=demo&objective=${objective}`}>See pieces you may like</LinkButton></div>
       </StageActions>
     </section>
   );

@@ -1,4 +1,6 @@
 .page { width: min(1380px, calc(100% - 64px)); margin: auto; padding: 55px 0 80px; }
+.returnLink { width: fit-content; display: inline-flex; align-items: center; gap: 7px; margin-bottom: 28px; color: var(--foreground-muted); font: 10px var(--font-geist-mono), monospace; text-transform: uppercase; letter-spacing: .06em; }
+.returnLink:hover { color: var(--accent); }
 .hero { display: grid; grid-template-columns: 1.2fr .8fr; gap: 80px; align-items: end; margin-bottom: 42px; }
 .hero > div > span { display: flex; gap: 8px; align-items: center; color: var(--accent); font: 10px var(--font-geist-mono), monospace; letter-spacing: .08em; }
 .hero h1 { font: 400 clamp(46px, 6vw, 82px)/.95 var(--font-editorial), Georgia, serif; letter-spacing: -.04em; margin: 18px 0 0; }

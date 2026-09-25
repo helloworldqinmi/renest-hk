@@ -1,12 +1,21 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, Check, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import { foldingProducts } from "@/lib/folding-products";
 import styles from "./recommendations.module.css";
 
-export default function RecommendationsPage() {
+type RecommendationsPageProps = {
+  searchParams: Promise<{ from?: string; objective?: string }>;
+};
+
+export default async function RecommendationsPage({ searchParams }: RecommendationsPageProps) {
+  const params = await searchParams;
+  const objective = params.objective === "work" || params.objective === "host" ? params.objective : "keep";
+  const returnToDemo = params.from === "demo";
+
   return (
     <main className={styles.page}>
+      {returnToDemo ? <Link href={`/demo?resume=${objective}`} className={styles.returnLink}><ArrowLeft size={15} /> Back to my plan</Link> : null}
       <header className={styles.hero}>
         <div><span><Sparkles size={14} /> CURATED FOR YOUR NEW SPACE</span><h1>You may like this.</h1></div>
         <p>Your layout is complete. These flexible pieces add function without giving up the clear space ReNest protected.</p>
