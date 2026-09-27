@@ -504,3 +504,4 @@ button { cursor: pointer; }
 .scan-overlay circle { fill: var(--accent); }
 .header-end { grid-column: 3; }
 @media (max-width: 760px) { .header-end { grid-column: 2; } }
+.home-header{background:#17271f;color:#ecefdd;border-color:#72875b28;height:80px;backdrop-filter:none}.home-header .header-nav{color:#a9b899}.home-header .header-nav a:hover{color:#f3f5e7}.home-header .button-primary{background:#d5dfc7;color:#314a29;border-color:#d5dfc7}.home-header .brand{color:#e8eedb}

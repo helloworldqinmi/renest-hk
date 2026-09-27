@@ -1,0 +1,683 @@
+[
+  {
+    "id": "old-home",
+    "label": "旧家",
+    "subtitle": "熟悉的日常",
+    "area": 44,
+    "description": "按旧家平面图重建。18 件可搬家具构成新家的共同资产。",
+    "newIds": [],
+    "stored": [],
+    "placements": [
+      {
+        "id": "F01",
+        "x": 2.56,
+        "z": 1.65,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F02",
+        "x": 3.57,
+        "z": 1.66,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F03",
+        "x": 5.05,
+        "z": 1.65,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F04",
+        "x": 3.82,
+        "z": 4.38,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F05",
+        "x": 3.14,
+        "z": 4.06,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F06",
+        "x": 3.14,
+        "z": 4.7,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F07",
+        "x": 4.5,
+        "z": 4.06,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F08",
+        "x": 4.5,
+        "z": 4.7,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F09",
+        "x": 7.28,
+        "z": 1.35,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F10",
+        "x": 5.7,
+        "z": 1.05,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F11",
+        "x": 8.1,
+        "z": 0.32,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F12",
+        "x": 8.1,
+        "z": 2.45,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F13",
+        "x": 8.12,
+        "z": 4.05,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F14",
+        "x": 6.48,
+        "z": 4.03,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F15",
+        "x": 7.04,
+        "z": 5.15,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "F16",
+        "x": 7.04,
+        "z": 4.57,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F17",
+        "x": 0.84,
+        "z": 4.48,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F18",
+        "x": 2.45,
+        "z": 0.32,
+        "rotation": 0,
+        "origin": "existing"
+      }
+    ],
+    "reusedIds": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F16",
+      "F17",
+      "F18"
+    ],
+    "file": "models/old-home.glb",
+    "meshes": 1167,
+    "triangles": 222728,
+    "bytes": 5794984
+  },
+  {
+    "id": "new-home-a",
+    "label": "新家 · A",
+    "subtitle": "延续日常",
+    "area": 45,
+    "description": "沙发面向左侧电视墙，餐区置于玄关内侧。保留全部 18 件家具，增加可折叠备餐推车。",
+    "newIds": [
+      "N01"
+    ],
+    "stored": [],
+    "placements": [
+      {
+        "id": "F09",
+        "x": 5.96,
+        "z": 1.69,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F10",
+        "x": 7.96,
+        "z": 1.45,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F11",
+        "x": 4.9,
+        "z": 0.85,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F12",
+        "x": 7.04,
+        "z": 0.85,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F13",
+        "x": 7.25,
+        "z": 4.89,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F14",
+        "x": 8.07,
+        "z": 4.02,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F15",
+        "x": 5.83,
+        "z": 5.32,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F16",
+        "x": 6.36,
+        "z": 5.32,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F17",
+        "x": 0.37,
+        "z": 5.35,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F01",
+        "x": 2.64,
+        "z": 2.55,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F02",
+        "x": 1.68,
+        "z": 2.55,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F03",
+        "x": 0.33,
+        "z": 2.53,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F04",
+        "x": 2.07,
+        "z": 5.03,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F05",
+        "x": 1.74,
+        "z": 4.4,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F06",
+        "x": 2.37,
+        "z": 4.4,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F07",
+        "x": 1.74,
+        "z": 5.65,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "F08",
+        "x": 2.37,
+        "z": 5.65,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "F18",
+        "x": 2.64,
+        "z": 3.95,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "N01",
+        "x": 0.43,
+        "z": 4.18,
+        "rotation": 90,
+        "origin": "new"
+      }
+    ],
+    "reusedIds": [
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F16",
+      "F17",
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F18"
+    ],
+    "file": "models/new-home-a.glb",
+    "meshes": 1204,
+    "triangles": 227464,
+    "bytes": 6099500
+  },
+  {
+    "id": "new-home-b",
+    "label": "新家 · B",
+    "subtitle": "开放会客",
+    "area": 45,
+    "description": "客厅转向，沙发与电视形成横向会客区，东侧留出通行带。折叠餐桌替代旧餐桌，旧餐椅继续使用。",
+    "newIds": [
+      "N02",
+      "N04"
+    ],
+    "stored": [
+      "F04"
+    ],
+    "placements": [
+      {
+        "id": "F09",
+        "x": 5.96,
+        "z": 1.69,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F10",
+        "x": 7.96,
+        "z": 1.45,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F11",
+        "x": 4.9,
+        "z": 0.85,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F12",
+        "x": 7.04,
+        "z": 0.85,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F13",
+        "x": 7.25,
+        "z": 4.89,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F14",
+        "x": 8.07,
+        "z": 4.02,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F15",
+        "x": 5.83,
+        "z": 5.32,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F16",
+        "x": 6.36,
+        "z": 5.32,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F17",
+        "x": 0.37,
+        "z": 5.35,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F01",
+        "x": 1.77,
+        "z": 2.02,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F02",
+        "x": 1.77,
+        "z": 2.99,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F03",
+        "x": 1.77,
+        "z": 3.77,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "N02",
+        "x": 1.97,
+        "z": 5.18,
+        "rotation": 0,
+        "origin": "new"
+      },
+      {
+        "id": "F05",
+        "x": 1.66,
+        "z": 4.54,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F06",
+        "x": 2.28,
+        "z": 4.54,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F07",
+        "x": 1.66,
+        "z": 5.78,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "F08",
+        "x": 2.28,
+        "z": 5.78,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "F18",
+        "x": 0.43,
+        "z": 2.06,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "N04",
+        "x": 3.12,
+        "z": 5.4,
+        "rotation": -90,
+        "origin": "new"
+      }
+    ],
+    "reusedIds": [
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F15",
+      "F16",
+      "F17",
+      "F01",
+      "F02",
+      "F03",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F18"
+    ],
+    "file": "models/new-home-b.glb",
+    "meshes": 1178,
+    "triangles": 223780,
+    "bytes": 5911412
+  },
+  {
+    "id": "new-home-c",
+    "label": "新家 · C",
+    "subtitle": "双人办公",
+    "area": 45,
+    "description": "客厅反向摆放，旧书桌移入公共区；次卧增加壁挂折叠桌及梯凳椅，形成第二办公位。",
+    "newIds": [
+      "N03",
+      "N04"
+    ],
+    "stored": [],
+    "placements": [
+      {
+        "id": "F09",
+        "x": 5.96,
+        "z": 1.69,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F10",
+        "x": 7.96,
+        "z": 1.45,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F11",
+        "x": 4.9,
+        "z": 0.85,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F12",
+        "x": 7.04,
+        "z": 0.85,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F13",
+        "x": 7.25,
+        "z": 4.89,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F14",
+        "x": 8.07,
+        "z": 4.02,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F17",
+        "x": 0.37,
+        "z": 5.35,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F01",
+        "x": 0.75,
+        "z": 2.65,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F02",
+        "x": 1.75,
+        "z": 2.65,
+        "rotation": 90,
+        "origin": "existing"
+      },
+      {
+        "id": "F03",
+        "x": 2.96,
+        "z": 2.65,
+        "rotation": -90,
+        "origin": "existing"
+      },
+      {
+        "id": "F15",
+        "x": 2.15,
+        "z": 4.02,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "F16",
+        "x": 2.15,
+        "z": 3.46,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F04",
+        "x": 2.16,
+        "z": 5.2,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F05",
+        "x": 1.82,
+        "z": 4.575,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F06",
+        "x": 2.49,
+        "z": 4.575,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "F07",
+        "x": 1.82,
+        "z": 5.83,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "F08",
+        "x": 2.49,
+        "z": 5.83,
+        "rotation": 180,
+        "origin": "existing"
+      },
+      {
+        "id": "F18",
+        "x": 0.42,
+        "z": 4.04,
+        "rotation": 0,
+        "origin": "existing"
+      },
+      {
+        "id": "N03",
+        "x": 5.83,
+        "z": 5.38,
+        "rotation": 90,
+        "origin": "new"
+      },
+      {
+        "id": "N04",
+        "x": 6.45,
+        "z": 5.38,
+        "rotation": -90,
+        "origin": "new"
+      }
+    ],
+    "reusedIds": [
+      "F09",
+      "F10",
+      "F11",
+      "F12",
+      "F13",
+      "F14",
+      "F17",
+      "F01",
+      "F02",
+      "F03",
+      "F15",
+      "F16",
+      "F04",
+      "F05",
+      "F06",
+      "F07",
+      "F08",
+      "F18"
+    ],
+    "file": "models/new-home-c.glb",
+    "meshes": 1210,
+    "triangles": 229704,
+    "bytes": 6066076
+  }
+]

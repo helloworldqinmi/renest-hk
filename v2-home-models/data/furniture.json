@@ -1,0 +1,292 @@
+[
+  {
+    "id": "F01",
+    "name": "三人亚麻沙发",
+    "type": "sofa",
+    "dimensions": [
+      2.15,
+      0.86,
+      0.88
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F02",
+    "name": "橡木长茶几",
+    "type": "coffee",
+    "dimensions": [
+      1.05,
+      0.55,
+      0.4
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F03",
+    "name": "电视与橡木电视柜",
+    "type": "tv",
+    "dimensions": [
+      1.85,
+      0.35,
+      1.33
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F04",
+    "name": "四人橡木餐桌",
+    "type": "dining",
+    "dimensions": [
+      1.35,
+      0.8,
+      0.78
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F05",
+    "name": "餐椅 01",
+    "type": "chair",
+    "dimensions": [
+      0.44,
+      0.45,
+      0.87
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F06",
+    "name": "餐椅 02",
+    "type": "chair",
+    "dimensions": [
+      0.44,
+      0.45,
+      0.87
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F07",
+    "name": "餐椅 03",
+    "type": "chair",
+    "dimensions": [
+      0.44,
+      0.45,
+      0.87
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F08",
+    "name": "餐椅 04",
+    "type": "chair",
+    "dimensions": [
+      0.44,
+      0.45,
+      0.87
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F09",
+    "name": "双人床与床品",
+    "type": "bed",
+    "dimensions": [
+      1.59,
+      2.06,
+      0.9
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F10",
+    "name": "主卧双门衣柜",
+    "type": "wardrobe",
+    "dimensions": [
+      1.6,
+      0.52,
+      1.95
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F11",
+    "name": "床头柜 01",
+    "type": "nightstand",
+    "dimensions": [
+      0.4,
+      0.38,
+      0.47
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F12",
+    "name": "床头柜 02",
+    "type": "nightstand",
+    "dimensions": [
+      0.4,
+      0.38,
+      0.47
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F13",
+    "name": "次卧单人床",
+    "type": "single",
+    "dimensions": [
+      0.93,
+      2.06,
+      0.9
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F14",
+    "name": "次卧储物柜",
+    "type": "smallWardrobe",
+    "dimensions": [
+      1.05,
+      0.42,
+      1.75
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F15",
+    "name": "橡木书桌",
+    "type": "desk",
+    "dimensions": [
+      1.15,
+      0.52,
+      0.77
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F16",
+    "name": "书桌椅",
+    "type": "chair",
+    "dimensions": [
+      0.44,
+      0.45,
+      0.87
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F17",
+    "name": "玄关矮柜",
+    "type": "entry",
+    "dimensions": [
+      0.85,
+      0.3,
+      0.8
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "F18",
+    "name": "黄铜落地灯",
+    "type": "floorlamp",
+    "dimensions": [
+      0.44,
+      0.44,
+      1.64
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "existing",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "N01",
+    "name": "折叠备餐推车",
+    "type": "cart",
+    "dimensions": [
+      1.3,
+      0.48,
+      0.88
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "new",
+    "productSlug": "folding-kitchen-cart",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "N02",
+    "name": "双翼折叠餐桌",
+    "type": "dropTable",
+    "dimensions": [
+      1.2,
+      0.78,
+      0.78
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "new",
+    "productSlug": "nesting-drop-leaf-table",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "N03",
+    "name": "壁挂折叠书桌",
+    "type": "wallDesk",
+    "dimensions": [
+      0.92,
+      0.58,
+      1.3
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "new",
+    "productSlug": "wall-mounted-desk",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  },
+  {
+    "id": "N04",
+    "name": "梯凳两用椅",
+    "type": "stepChair",
+    "dimensions": [
+      0.44,
+      0.52,
+      0.87
+    ],
+    "dimensionOrder": "width, depth, height (metres)",
+    "origin": "new",
+    "productSlug": "ladder-chair",
+    "note": "Concept geometry; approximate dimensions, not manufacturer CAD."
+  }
+]

@@ -1,52 +1,10 @@
-import { ImageResponse } from "next/og";
-
-export const alt = "ReNest HK moves existing furniture from an old home into a dimensionally verified new home";
-export const size = { width: 1200, height: 630 };
-export const contentType = "image/png";
-
-const furniture = [
-  { left: 34, top: 34, width: 118, height: 50 },
-  { left: 174, top: 34, width: 70, height: 40 },
-  { left: 34, top: 106, width: 86, height: 58 },
-  { left: 142, top: 104, width: 102, height: 60 },
-];
-
-function HomePlan({ label, result, accent }: { label: string; result: string; accent: string }) {
-  return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 14, width: 310 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <span style={{ fontSize: 18, fontWeight: 800, color: "#65706b" }}>{label}</span>
-        <span style={{ fontSize: 18, fontWeight: 700, color: accent }}>{result}</span>
-      </div>
-      <div style={{ width: 310, height: 218, display: "flex", position: "relative", background: "#ffffff", border: "5px solid #26312d" }}>
-        <div style={{ position: "absolute", left: 160, top: 0, bottom: 0, width: 4, background: "#26312d" }} />
-        {furniture.map((item, index) => (
-          <div key={index} style={{ position: "absolute", ...item, border: `3px solid ${accent}`, background: index === 3 && label === "NEW HOME" ? "#dceaf2" : "#dceee5", borderRadius: 8 }} />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-export default function Image() {
-  return new ImageResponse(
-    (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", background: "#edf2ee", color: "#16201d", padding: "64px 72px" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 14, fontSize: 26, fontWeight: 800 }}><span style={{ width: 38, height: 38, display: "flex", border: "4px solid #315d4c" }} />ReNest <span style={{ color: "#e27057", marginLeft: -8 }}>HK</span></div>
-          <span style={{ fontSize: 16, fontWeight: 700, color: "#65706b" }}>Furniture migration for compact homes</span>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <HomePlan label="OLD HOME" result="7 items" accent="#315d4c" />
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 10, color: "#65706b" }}><span style={{ fontSize: 18, fontWeight: 800 }}>SPATIAL PLANNING</span><span style={{ fontSize: 48, color: "#e27057" }}>→</span><span style={{ fontSize: 16, fontWeight: 700 }}>Geometry checked</span></div>
-          <HomePlan label="NEW HOME" result="6 reused · 1 replaced" accent="#315d4c" />
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <span style={{ width: 700, fontSize: 48, lineHeight: 1.05, fontWeight: 700 }}>Your furniture already has a home. Let&apos;s find its next one.</span>
-          <span style={{ fontSize: 22, fontWeight: 800, color: "#315d4c" }}>Buy only what fits.</span>
-        </div>
-      </div>
-    ),
-    size,
-  );
+import { ImageResponse } from 'next/og';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+export const alt='ReNest — The Moving Studio. Eighteen familiar pieces, a new beginning.';
+export const size={width:1200,height:630};
+export const contentType='image/png';
+export default async function Image(){
+ const image=await readFile(path.join(process.cwd(),'public/models/v2/previews/new-home-a.png'));
+ return new ImageResponse(<div style={{width:'100%',height:'100%',display:'flex',background:'#f4f6ef',color:'#2d4138',position:'relative',padding:'56px'}}><div style={{position:'absolute',right:0,top:95,width:730,height:535,display:'flex'}}><img src={`data:image/png;base64,${image.toString('base64')}`} width={730} height={535} alt="" style={{objectFit:'contain'}}/></div><div style={{display:'flex',flexDirection:'column',position:'relative',width:520}}><div style={{display:'flex',alignItems:'center',gap:16}}><svg width="40" height="46" viewBox="0 0 34 40" fill="none"><path d="M4.5 16.2 15.6 6.8a2.2 2.2 0 0 1 2.8 0l11.1 9.4a3.4 3.4 0 0 1 1.2 2.6V33a2.5 2.5 0 0 1-2.5 2.5H5.8A2.5 2.5 0 0 1 3.3 33V18.8c0-1 .4-1.9 1.2-2.6Z" stroke="#2d4138" strokeWidth="1.8"/><path d="M12.6 35.5V24.7a1.8 1.8 0 0 1 1.8-1.8h5.2a1.8 1.8 0 0 1 1.8 1.8v10.8" stroke="#2d4138" strokeWidth="1.8"/></svg><span style={{fontFamily:'serif',fontSize:45}}>ReNest</span></div><span style={{fontSize:11,letterSpacing:4,marginTop:15,color:'#8d9b80'}}>THE MOVING STUDIO</span><h1 style={{fontFamily:'serif',fontSize:69,lineHeight:1.05,fontWeight:400,marginTop:90,letterSpacing:-3}}>Same furniture.<br/>A whole new life.</h1><span style={{fontSize:15,color:'#889e78',marginTop:45}}>18 familiar pieces · 3 new possibilities</span></div></div>,size);
 }

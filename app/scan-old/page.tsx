@@ -1,3 +1,5 @@
-import { ScanExperience } from "@/components/scanning/scan-experience";
+import { redirect } from "next/navigation";
 
-export default function ScanOldPage() { return <ScanExperience kind="old" />; }
+export default function Page() {
+  redirect("/demo");
+}

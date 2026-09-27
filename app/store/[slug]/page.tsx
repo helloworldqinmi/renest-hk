@@ -10,14 +10,15 @@ export function generateStaticParams() {
   return foldingProducts.map((product) => ({ slug: product.slug }));
 }
 
-export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
-  const product = findFoldingProduct((await params).slug);
+export default async function ProductPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ from?: string }> }) {
+  const [{ slug }, { from }] = await Promise.all([params, searchParams]);
+  const product = findFoldingProduct(slug);
   if (!product) notFound();
   const related = foldingProducts.filter((item) => item.slug !== product.slug).slice(0, 3);
 
   return (
     <main className={styles.page}>
-      <Link href="/recommendations" className={styles.back}><ArrowLeft size={15} /> Back to recommendations</Link>
+      <Link href={from === "studio" ? "/demo" : "/recommendations"} className={styles.back}><ArrowLeft size={15} /> {from === "studio" ? "Back to your moving studio" : "Back to recommendations"}</Link>
       <div className={styles.product}>
         <section className={styles.gallery}>
           <div className={styles.mainImage}><Image src={product.gallery[0]} alt={product.name} fill sizes="(max-width: 850px) 100vw, 61vw" priority /></div>

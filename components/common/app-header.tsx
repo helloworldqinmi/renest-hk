@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BrandLogo } from "./brand-logo";
 import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { useState } from "react";
@@ -19,12 +20,13 @@ export function AppHeader() {
   const active = stepRoutes.findIndex((step) => step.routes.includes(pathname) || (pathname.startsWith("/store/") && step.label === "Fit"));
   const isInteractiveDemo = pathname === "/demo";
 
+  if (isInteractiveDemo) return null;
+
   return (
     <>
-      <header className="app-header">
+      <header className={`app-header ${pathname === "/" ? "home-header" : ""}`}>
         <Link href="/" className="brand" aria-label="ReNest HK home">
-          <span className="brand-mark"><span /></span>
-          <span>ReNest <b>HK</b></span>
+          <BrandLogo />
         </Link>
         {pathname !== "/" && !isInteractiveDemo ? (
           <nav className="progress-steps" aria-label="Move progress">
