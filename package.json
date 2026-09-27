@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:scan-model": "bash scripts/build-old-home-scan.sh",
     "start": "next start",
     "lint": "next lint"
   },

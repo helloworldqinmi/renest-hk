@@ -22,7 +22,9 @@
 .scanWorkspace { display: grid; grid-template-columns: minmax(0, 1fr) 320px; border-block: 1px solid var(--border); }
 .photoPanel, .homeImage, .finalPreview, .recommendationImage { position: relative; overflow: hidden; background: var(--surface); }
 .photoPanel { min-width: 0; min-height: 0; align-self: start; }
-.scanViewport { position: relative; width: 100%; aspect-ratio: 3 / 2; overflow: hidden; background: var(--surface); }
+.scanViewport { position: relative; width: 100%; aspect-ratio: 1460 / 708; overflow: hidden; background: var(--surface); }
+.scanLoading { position: absolute; inset: 0; }
+.scanLoading > img { object-fit: cover; }
 .scanViewport > img, .homeImage > img, .finalPreview > img { object-fit: cover; }
 .scanFrame { position: absolute; inset: 0; }
 .scanFrame > i { position: absolute; height: 25px; width: 25px; border: solid var(--background); }
@@ -295,6 +297,7 @@
 
 /* The scan viewport is the image's normalized 1536 × 1024 coordinate space. */
 .photoPanel { min-height: 0; }
+@media (max-width: 760px) { .photoPanel { width: 100%; align-self: stretch; } }
 .scanFrame { inset: 0; }
 .depthReadout { bottom: 12px; }
 .scanFrame > i:first-child { left: 20px; top: 20px; }

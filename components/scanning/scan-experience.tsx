@@ -2,11 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import { CheckCircle2, FileJson, Radar, ScanLine } from "lucide-react";
 import { useDemo } from "@/components/state-provider";
 import { Button, Eyebrow, LinkButton } from "@/components/common/ui";
 import { demoScenario } from "@/lib/demo-data";
 import { parseRoomPlanJSON } from "@/lib/roomplan";
+import type { RoomScanPhase } from "./room-scan-sequence";
+
+const RoomScanSequence = dynamic(() => import("./room-scan-sequence").then((module) => module.RoomScanSequence), {
+  ssr: false,
+  loading: () => <div className="room-scan-loading"><Image src="/photos/old-home-scan-reference.png" alt="Your lived-in Kowloon apartment" fill loading="eager" sizes="(max-width: 900px) 92vw, 64vw" /></div>,
+});
 
 const oldEvents = [
   ["SCANNING ROOM...", "Depth capture started"],
@@ -30,12 +37,13 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
   const { scanStatus, setScanStatus } = useDemo();
   const phase = scanStatus[kind];
   const [eventIndex, setEventIndex] = useState(0);
+  const [scanReplayKey, setScanReplayKey] = useState(0);
   const [uploadNote, setUploadNote] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
   const events = kind === "old" ? oldEvents : newEvents;
 
   useEffect(() => {
-    if (phase !== "scanning") return;
+    if (phase !== "scanning" || kind === "old") return;
     const timers = events.map((_, index) => window.setTimeout(() => setEventIndex(index), index * 520));
     timers.push(window.setTimeout(() => setScanStatus(kind, "complete"), events.length * 520 + 250));
     return () => timers.forEach(window.clearTimeout);
@@ -44,7 +52,13 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
   function start() {
     setEventIndex(0);
     setUploadNote("");
+    setScanReplayKey((value) => value + 1);
     setScanStatus(kind, "scanning");
+  }
+
+  function handleOldScanPhase(next: RoomScanPhase) {
+    const index = { idle: 0, phone: 0, points: 1, wireframe: 2, solid: 3, inventory: 4, complete: 5 }[next];
+    setEventIndex(index);
   }
 
   function handleFile(file?: File) {
@@ -97,20 +111,32 @@ export function ScanExperience({ kind }: { kind: "old" | "new" }) {
 
       <section className="scan-stage card">
         <div className="scan-visual">
-          <div className={`scan-photo ${phase === "scanning" ? "is-scanning" : ""}`}>
-            <Image
-              src={kind === "old" ? "/photos/old-home.webp" : "/photos/empty-new-home.webp"}
-              alt={kind === "old" ? "Your lived-in Kowloon apartment with existing furniture" : "Your empty compact apartment in the Northern Metropolis"}
-              fill
-              sizes="(max-width: 900px) 92vw, 64vw"
-              loading="eager"
-            />
-            <div className="scan-corners" aria-hidden="true"><i /><i /><i /><i /></div>
-          </div>
+          {kind === "old" ? (
+            <div className="room-scan-host">
+              <RoomScanSequence
+                active={phase === "scanning"}
+                replayKey={scanReplayKey}
+                onPhaseChange={handleOldScanPhase}
+                onComplete={() => setScanStatus("old", "complete")}
+                onReplay={start}
+              />
+            </div>
+          ) : (
+            <div className={`scan-photo ${phase === "scanning" ? "is-scanning" : ""}`}>
+              <Image
+                src="/photos/empty-new-home.webp"
+                alt="Your empty compact apartment in the Northern Metropolis"
+                fill
+                sizes="(max-width: 900px) 92vw, 64vw"
+                loading="eager"
+              />
+              <div className="scan-corners" aria-hidden="true"><i /><i /><i /><i /></div>
+            </div>
+          )}
           {phase === "idle" && kind === "new" ? (
             <div className="scan-idle-overlay"><Radar size={34} /><span>Ready to capture</span></div>
           ) : null}
-          {phase === "scanning" ? (
+          {phase === "scanning" && kind === "new" ? (
             <div className="detection-toast">
               <ScanLine size={18} />
               <span><b>{events[eventIndex][0]}</b>{events[eventIndex][1]}</span>

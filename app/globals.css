@@ -396,6 +396,9 @@ button { cursor: pointer; }
 .furniture-thumb.has-photo img { object-fit:contain; }
 
 .scan-photo { position:relative; width:100%; aspect-ratio:4/3; overflow:hidden; background:#e7ebe7; box-shadow:0 12px 35px rgba(25,40,34,.12); }
+.room-scan-host { position:relative; width:100%; aspect-ratio:1460/708; overflow:hidden; background:#e7ebe7; box-shadow:0 12px 35px rgba(25,40,34,.12); }
+.room-scan-loading { position:absolute; inset:0; }
+.room-scan-loading > img { object-fit:cover; }
 .scan-photo img { object-fit:cover; }
 .scan-photo:after { content:""; position:absolute; inset:0; border:1px solid rgba(255,255,255,.5); pointer-events:none; }
 .scan-corners { position:absolute; z-index:2; inset:18px; pointer-events:none; }

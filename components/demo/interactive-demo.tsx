@@ -28,11 +28,12 @@ import {
 import { SpatialCanvas } from "@/components/floor-plan/spatial-canvas";
 import { FloorPlan } from "@/components/floor-plan/floor-plan";
 import { Button, LinkButton } from "@/components/common/ui";
+import type { RoomScanPhase } from "@/components/scanning/room-scan-sequence";
 import { furnitureInventory } from "@/lib/demo-data";
 import { demoFurnitureInventory, demoFurnitureTotal, demoInventoryIds, demoPlans, objectiveConfigs, objectiveOrder, type DemoObjective } from "@/lib/interactive-demo";
 import styles from "./interactive-demo.module.css";
 
-type ScanState = "idle" | "room" | "furniture" | "measuring" | "complete";
+type ScanState = RoomScanPhase;
 type MapState = "idle" | "boundaries" | "openings" | "dimensions" | "complete";
 type OptimizationState = "idle" | "exploring" | "clearance" | "ranking" | "complete";
 type VisualizationState = "idle" | "composition" | "materials" | "lighting" | "complete";
@@ -58,16 +59,12 @@ const furnitureAssetById: Partial<Record<string, string>> = {
   "dining-table": "/photos/furniture-dining-table.webp",
 };
 const fitTestItems = ["sofa", "coffee-table", "bookshelf", "desk", "work-chair", "dining-table"];
-const scanObjectOverlays = [
-  { id: "sofa", label: "Sofa", dimensions: "204 × 88 cm", box: { left: "4.5%", top: "47%", width: "41.5%", height: "48%" }, tag: { left: "18%", top: "61%" } },
-  { id: "dining-table", label: "Dining table", dimensions: "140 × 80 cm", box: { left: "37%", top: "44%", width: "25%", height: "23%" }, tag: { left: "48%", top: "49%" } },
-  { id: "desk", label: "Study desk", dimensions: "120 × 60 cm", box: { left: "62.5%", top: "38%", width: "20%", height: "32%" }, tag: { left: "76%", top: "43%" } },
-  { id: "work-chair", label: "Work chair", dimensions: "58 × 58 cm", box: { left: "62.5%", top: "43%", width: "14%", height: "29%" }, tag: { left: "67%", top: "54%" } },
-  { id: "coffee-table", label: "Coffee table", dimensions: "100 × 55 cm", box: { left: "36.8%", top: "63.5%", width: "25%", height: "29.5%" }, tag: { left: "49%", top: "70%" } },
-  { id: "bookshelf", label: "Bookshelf", dimensions: "80 × 32 cm", box: { left: "52.4%", top: "13.2%", width: "14%", height: "52%" }, tag: { left: "58%", top: "20%" } },
-] as const;
 const FurniturePreview = dynamic(() => import("./furniture-preview").then((module) => module.FurniturePreview), { ssr: false });
 const ScanModelPreview = dynamic(() => import("./scan-model-preview").then((module) => module.ScanModelPreview), { ssr: false });
+const RoomScanSequence = dynamic(() => import("@/components/scanning/room-scan-sequence").then((module) => module.RoomScanSequence), {
+  ssr: false,
+  loading: () => <div className={styles.scanLoading}><Image src="/photos/old-home-scan-reference.png" alt="Your lived-in Kowloon apartment" fill loading="eager" sizes="(max-width: 900px) 94vw, 62vw" /></div>,
+});
 
 function join(...classes: Array<string | false | undefined>) {
   return classes.filter(Boolean).join(" ");
@@ -80,6 +77,8 @@ export function InteractiveDemo({ resumeObjective }: { resumeObjective?: DemoObj
   const [furthestStage, setFurthestStage] = useState(restoringPlan ? 4 : 0);
   const [scanState, setScanState] = useState<ScanState>(restoringPlan ? "complete" : "idle");
   const [scanAutoPlay, setScanAutoPlay] = useState(true);
+  const [scanReplayKey, setScanReplayKey] = useState(0);
+  const [detectedCount, setDetectedCount] = useState(0);
   const [selectedInventory, setSelectedInventory] = useState("sofa");
   const [mapState, setMapState] = useState<MapState>(restoringPlan ? "complete" : "idle");
   const [objective, setObjective] = useState<DemoObjective>(resumeObjective ?? "keep");
@@ -137,13 +136,9 @@ export function InteractiveDemo({ resumeObjective }: { resumeObjective?: DemoObj
     clearTimers();
     setScanAutoPlay(true);
     setSelectedInventory(demoInventoryIds[0]);
-    setScanState("room");
-    later(() => setScanState("furniture"), 650);
-    demoInventoryIds.slice(1).forEach((id, index) => later(() => {
-      setSelectedInventory(id);
-      if (index === 2) setScanState("measuring");
-    }, 1450 + index * 800));
-    later(() => setScanState("complete"), 5550);
+    setDetectedCount(0);
+    setScanReplayKey((value) => value + 1);
+    setScanState("phone");
   }
 
   function mapNewHome() {
@@ -189,6 +184,7 @@ export function InteractiveDemo({ resumeObjective }: { resumeObjective?: DemoObj
     setFurthestStage(0);
     setScanState("idle");
     setScanAutoPlay(true);
+    setDetectedCount(0);
     setSelectedInventory("sofa");
     setMapState("idle");
     setObjective("keep");
@@ -237,10 +233,14 @@ export function InteractiveDemo({ resumeObjective }: { resumeObjective?: DemoObj
       {stage === 0 ? (
         <CurrentHomeStage
           scanState={scanState}
+          scanReplayKey={scanReplayKey}
+          detectedCount={detectedCount}
           selectedItem={selectedItem}
           selectedInventory={selectedInventory}
           onSelect={(id) => { setScanAutoPlay(false); setSelectedInventory(id); }}
           onScan={startScan}
+          onScanPhase={setScanState}
+          onObjectDetected={(id, count) => { setSelectedInventory(id); setDetectedCount(count); }}
           onContinue={() => advance(1)}
         />
       ) : null}
@@ -323,25 +323,35 @@ function StageActions({ onBack, children }: { onBack?: () => void; children: Rea
 
 function CurrentHomeStage({
   scanState,
+  scanReplayKey,
+  detectedCount,
   selectedItem,
   selectedInventory,
   onSelect,
   onScan,
+  onScanPhase,
+  onObjectDetected,
   onContinue,
 }: {
   scanState: ScanState;
+  scanReplayKey: number;
+  detectedCount: number;
   selectedItem: (typeof furnitureInventory)[number];
   selectedInventory: string;
   onSelect: (id: string) => void;
   onScan: () => void;
+  onScanPhase: (phase: RoomScanPhase) => void;
+  onObjectDetected: (id: string, count: number) => void;
   onContinue: () => void;
 }) {
-  const scanStep = { idle: 0, room: 1, furniture: 2, measuring: 3, complete: 4 }[scanState];
+  const scanStep = { idle: 0, phone: 1, points: 2, wireframe: 3, solid: 4, inventory: 5, complete: 6 }[scanState];
   const scanCopy = {
     idle: ["Ready to scan", "Capture the room once. ReNest will separate the space from the furniture inside it."],
-    room: ["Mapping room depth", "A phone depth sensor traces surfaces and builds a spatial mesh."],
-    furniture: ["Separating object volumes", "Furniture is detected as 3D volume, then matched to a model."],
-    measuring: ["Resolving dimensions", "Each object's width, depth and height is locked to the scan."],
+    phone: ["Calibrating depth sensor", "The camera and LiDAR origin are aligned with the room."],
+    points: ["Capturing depth points", "A simulated depth sweep samples walls, surfaces and furniture volumes."],
+    wireframe: ["Building triangular mesh", "Depth points connect into a continuous spatial surface."],
+    solid: ["Resolving room surfaces", "The mesh is classified into room structure and physical objects."],
+    inventory: ["Separating furniture volumes", `${detectedCount} of ${demoFurnitureTotal} familiar objects resolved.`],
     complete: ["Spatial inventory ready", "Six familiar objects now have measured dimensions."],
   }[scanState];
 
@@ -355,21 +365,15 @@ function CurrentHomeStage({
       <div className={styles.scanWorkspace}>
         <div className={styles.photoPanel}>
           <div className={styles.scanViewport}>
-            <Image src="/photos/old-home.webp" alt="Your lived-in Kowloon apartment" fill loading="eager" sizes="(max-width: 900px) 94vw, 62vw" preload />
-            <div className={styles.scanFrame}>
-              <i /><i /><i /><i />
-              {scanStep > 0 && scanStep < 4 ? <span className={styles.scanPhaseBadge}><ScanLine size={18} /> {scanCopy[0]}</span> : null}
-              {scanStep > 0 && scanStep < 4 ? <><div className={styles.depthField} aria-hidden="true" /><div className={styles.depthBeam} aria-hidden="true" /><span className={styles.depthMode}>DEPTH CAPTURE · 3D MESH</span></> : null}
-              {scanStep >= 2 && scanStep < 4 ? (
-                <div className={styles.objectBoxes} aria-hidden="true">
-                  {scanObjectOverlays.map((item) => <div key={item.id} style={item.box} className={join(styles.depthBox, selectedInventory === item.id && styles.depthActive)}><span>{item.label}</span></div>)}
-                </div>
-              ) : null}
-              {scanStep >= 2 && scanStep < 4 ? <span className={styles.depthReadout}>VOLUME LOCKED · {selectedItem.name.toUpperCase()} · {Math.round(selectedItem.dimensions.width * 100)} × {Math.round(selectedItem.dimensions.depth * 100)} × {Math.round(selectedItem.dimensions.height * 100)} CM</span> : null}
-              {scanState === "complete" ? scanObjectOverlays.map((item) => (
-                <button type="button" key={item.id} style={item.tag} className={join(styles.detectedTag, selectedInventory === item.id && styles.detectedTagSelected)} onClick={() => onSelect(item.id)}><span>{item.label}</span><b>{item.dimensions}</b></button>
-              )) : null}
-            </div>
+            <RoomScanSequence
+              active={scanState !== "idle"}
+              replayKey={scanReplayKey}
+              selectedObjectId={selectedInventory}
+              onPhaseChange={onScanPhase}
+              onObjectDetected={onObjectDetected}
+              onComplete={() => onScanPhase("complete")}
+              onReplay={onScan}
+            />
           </div>
           <div className={styles.photoCaption}><span>Kowloon · 380 sq ft</span><b>{scanState === "complete" ? "SCAN COMPLETE" : "CURRENT HOME"}</b></div>
         </div>
@@ -388,11 +392,12 @@ function CurrentHomeStage({
               <strong>{scanCopy[0]}</strong>
               <p>{scanCopy[1]}</p>
               <ul>
-                <li className={scanStep > 1 ? styles.completeLine : styles.activeLine}>Depth mesh captured</li>
-                <li className={scanStep > 2 ? styles.completeLine : scanStep === 2 ? styles.activeLine : undefined}>Furniture volumes separated</li>
-                <li className={scanStep > 3 ? styles.completeLine : scanStep === 3 ? styles.activeLine : undefined}>3D models matched</li>
+                <li className={scanStep > 2 ? styles.completeLine : scanStep >= 1 ? styles.activeLine : undefined}>Depth points captured</li>
+                <li className={scanStep > 3 ? styles.completeLine : scanStep === 3 ? styles.activeLine : undefined}>Triangular mesh built</li>
+                <li className={scanStep > 4 ? styles.completeLine : scanStep === 4 ? styles.activeLine : undefined}>Room surfaces resolved</li>
+                <li className={scanStep > 5 ? styles.completeLine : scanStep === 5 ? styles.activeLine : undefined}>Furniture volumes separated</li>
               </ul>
-              {scanStep >= 2 ? <div className={styles.scanModelProgress}><ScanModelPreview key={selectedInventory} itemId={selectedInventory} label={selectedItem.name} /><span className={styles.scanItemProgress}>{demoInventoryIds.indexOf(selectedInventory as (typeof demoInventoryIds)[number]) + 1} / {demoFurnitureTotal} objects resolved</span></div> : null}
+              {scanStep >= 5 ? <span className={styles.scanItemProgress}>{detectedCount} / {demoFurnitureTotal} objects resolved</span> : null}
             </div>
           ) : (
             <>
