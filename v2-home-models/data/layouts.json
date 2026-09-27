@@ -158,7 +158,7 @@
     "file": "models/old-home.glb",
     "meshes": 1167,
     "triangles": 222728,
-    "bytes": 5794984
+    "bytes": 5794996
   },
   {
     "id": "new-home-a",
@@ -328,7 +328,7 @@
     "file": "models/new-home-a.glb",
     "meshes": 1204,
     "triangles": 227464,
-    "bytes": 6099500
+    "bytes": 6099512
   },
   {
     "id": "new-home-b",
@@ -500,7 +500,7 @@
     "file": "models/new-home-b.glb",
     "meshes": 1178,
     "triangles": 223780,
-    "bytes": 5911412
+    "bytes": 5911420
   },
   {
     "id": "new-home-c",
@@ -678,6 +678,6 @@
     "file": "models/new-home-c.glb",
     "meshes": 1210,
     "triangles": 229704,
-    "bytes": 6066076
+    "bytes": 6066084
   }
 ]
