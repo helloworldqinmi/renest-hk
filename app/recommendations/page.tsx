@@ -18,9 +18,10 @@ export default async function RecommendationsPage({ searchParams }: Recommendati
       {returnToDemo ? <Link href={`/demo?resume=${objective}`} className={styles.returnLink}><ArrowLeft size={15} /> Back to my plan</Link> : null}
       <header className={styles.hero}>
         <div><span><Sparkles size={14} /> CURATED FOR YOUR NEW SPACE</span><h1>You may like this.</h1></div>
-        <p>Your layout is complete. These flexible pieces add function without giving up the clear space ReNest protected.</p>
+        <p>Thoughtful additions for compact homes. Keep what works, and choose only the pieces that make everyday life easier.</p>
       </header>
 
+      <p className={styles.priceNote}>Illustrative demo prices in HKD · delivery and installation excluded.</p>
       <section className={styles.featured}>
         <Link href={`/store/${foldingProducts[0].slug}`} className={styles.featuredImage}>
           <Image src={foldingProducts[0].image} alt={foldingProducts[0].name} fill sizes="(max-width: 800px) 100vw, 62vw" priority />

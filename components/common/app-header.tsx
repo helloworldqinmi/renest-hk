@@ -18,6 +18,7 @@ export function AppHeader() {
   const pathname = usePathname();
   const [showHow, setShowHow] = useState(false);
   const active = stepRoutes.findIndex((step) => step.routes.includes(pathname) || (pathname.startsWith("/store/") && step.label === "Fit"));
+  const isEditorial = pathname === "/" || pathname === "/about";
   const isInteractiveDemo = pathname === "/demo";
 
   if (isInteractiveDemo) return null;
@@ -28,7 +29,7 @@ export function AppHeader() {
         <Link href="/" className="brand" aria-label="ReNest HK home">
           <BrandLogo />
         </Link>
-        {pathname !== "/" && !isInteractiveDemo ? (
+        {!isEditorial && !isInteractiveDemo ? (
           <nav className="progress-steps" aria-label="Move progress">
             {stepRoutes.map((step, index) => (
               <div key={step.label} className={cn("progress-step", index === active && "is-active", index < active && "is-done")}>
@@ -37,8 +38,8 @@ export function AppHeader() {
               </div>
             ))}
           </nav>
-        ) : pathname === "/" ? <nav className="header-nav" aria-label="Main navigation"><Link href="/recommendations">Furniture shop</Link><Link href="/#how-it-works">How it works</Link></nav> : <span className="workspace-label">YOUR MOVING WORKSPACE</span>}
-        <div className="header-end">{pathname === "/" ? <Link href="/demo" className="button button-primary">Try the demo <ArrowRight size={14} /></Link> : <button className="header-action" onClick={() => setShowHow(true)}>How it works</button>}</div>
+        ) : isEditorial ? <nav className="header-nav" aria-label="Main navigation"><Link href="/recommendations">Furniture shop</Link><Link href="/#how-it-works">How it works</Link><Link href="/about" aria-current={pathname === "/about" ? "page" : undefined}>About us</Link></nav> : <span className="workspace-label">YOUR MOVING WORKSPACE</span>}
+        <div className="header-end">{isEditorial && <Link href="/about" className="mobile-about" aria-current={pathname === "/about" ? "page" : undefined}>About us</Link>}{isEditorial ? <Link href="/demo" className="button button-primary">Try the demo <ArrowRight size={14} /></Link> : <button className="header-action" onClick={() => setShowHow(true)}>How it works</button>}</div>
       </header>
 
       <Modal open={showHow} onClose={() => setShowHow(false)} title="How your move works" wide>

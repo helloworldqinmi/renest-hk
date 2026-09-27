@@ -28,6 +28,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
           <div className={styles.meta}><span>{product.category}</span>{product.badge ? <b>{product.badge}</b> : null}</div>
           <h1>{product.name}</h1><p>{product.description}</p>
           <div className={styles.price}><strong>HK${product.price.toLocaleString()}</strong>{product.originalPrice ? <del>HK${product.originalPrice.toLocaleString()}</del> : null}</div>
+          <p className={styles.priceNote}>Illustrative demo price · delivery and installation excluded.</p>
           <dl className={styles.specs}><div><dt><Ruler size={15} /> Open size</dt><dd>{product.dimensions}</dd></div><div><dt><PackageCheck size={15} /> Space-saving mode</dt><dd>{product.foldedDimensions}</dd></div></dl>
           <div className={styles.fit}><Check size={17} /><span><b>Selected for your plan</b><small>{product.fitNote}</small></span></div>
           <ProductActions name={product.name} />

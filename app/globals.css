@@ -505,3 +505,10 @@ button { cursor: pointer; }
 .header-end { grid-column: 3; }
 @media (max-width: 760px) { .header-end { grid-column: 2; } }
 .home-header{background:#17271f;color:#ecefdd;border-color:#72875b28;height:80px;backdrop-filter:none}.home-header .header-nav{color:#a9b899}.home-header .header-nav a:hover{color:#f3f5e7}.home-header .button-primary{background:#d5dfc7;color:#314a29;border-color:#d5dfc7}.home-header .brand{color:#e8eedb}
+
+/* Quiet, consistent spacing for editorial and catalogue surfaces. */
+:root{--space-unit:8px;--page-gutter:clamp(24px,4vw,64px)}
+.header-nav{gap:28px}.header-nav a{padding-block:12px}.header-nav a[aria-current=page]{color:var(--foreground)}
+.header-end{display:flex;align-items:center;gap:18px}.mobile-about{display:none}
+@media(max-width:760px){.mobile-about{display:inline-flex;font-size:11px;padding:12px 0;color:inherit;white-space:nowrap}.header-end{gap:14px}.app-header{padding-inline:20px}.header-end .button{font-size:11px;padding-inline:12px}.home-header{height:72px}}
+@media(max-width:370px){.header-end .button svg{display:none}.header-end{gap:10px}.app-header{padding-inline:16px}}
