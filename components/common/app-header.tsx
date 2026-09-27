@@ -39,7 +39,7 @@ export function AppHeader() {
             ))}
           </nav>
         ) : isEditorial ? <nav className="header-nav" aria-label="Main navigation"><Link href="/recommendations">Furniture shop</Link><Link href="/#how-it-works">How it works</Link><Link href="/about" aria-current={pathname === "/about" ? "page" : undefined}>About us</Link></nav> : <span className="workspace-label">YOUR MOVING WORKSPACE</span>}
-        <div className="header-end">{isEditorial && <Link href="/about" className="mobile-about" aria-current={pathname === "/about" ? "page" : undefined}>About us</Link>}{isEditorial ? <Link href="/demo" className="button button-primary">Try the demo <ArrowRight size={14} /></Link> : <button className="header-action" onClick={() => setShowHow(true)}>How it works</button>}</div>
+        <div className="header-end">{isEditorial && <Link href="/about" className="mobile-about" aria-current={pathname === "/about" ? "page" : undefined}>About us</Link>}{isEditorial ? <Link href="/demo?step=old" className="button button-primary">Try the demo <ArrowRight size={14} /></Link> : <button className="header-action" onClick={() => setShowHow(true)}>How it works</button>}</div>
       </header>
 
       <Modal open={showHow} onClose={() => setShowHow(false)} title="How your move works" wide>

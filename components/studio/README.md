@@ -12,7 +12,7 @@ Both the studio and standalone preview keep camera up fixed at `(0,1,0)`. Floor-
 
 Storage is versioned: `renest-spatial-session-v2` in sessionStorage, `renest-spatial-plan-v2` in localStorage. Missing or corrupt storage is tolerated. The product pages return to the saved in-session studio.
 
-The homepage uses the same live scene engine, a slow orbital camera and a three-chapter story. Rendering pauses off-screen. All active brand surfaces share `components/common/brand-logo.tsx`; the favicon, share image and standalone viewer use the matching house mark.
+The homepage uses the same live scene engine for a restrained vignette containing only the original sofa, coffee table and floor lamp. A bounded, pausable camera drift shows the furniture without revealing either apartment or the moving animation. Rendering pauses off-screen. All active brand surfaces share `components/common/brand-logo.tsx`; the favicon, share image and standalone viewer use the matching house mark.
 
 Validation commands: `npx --no-install tsc --noEmit` and `npm run build -- --webpack`. Webpack is the local build fallback because Turbopack's CSS worker port binding is restricted in this environment. Browser verification covers scans, true furniture exclusion, three layouts, camera endpoints/yaw, product preview, impact, CSV, save/restore, and mobile layouts.
 
@@ -27,3 +27,7 @@ Rendering uses shared, small procedural grain/weave/plaster surface maps, materi
 Impact gives the live room its own unobstructed framing, with an original-home reference card, live reuse/addition counts, a reuse highlight toggle and a slow, pausable room tour. Direct manipulation and switching to Floor plan stop the tour; reduced-motion settings disable it.
 
 Scan timing is shared in `lib/scan-timeline.ts`: phone rotation completes before acquisition starts; the sensor, spatially sorted point cutoff and a narrow triangular reconstruction band follow the same world-X frontier. Solid surfaces follow immediately behind it and finish before the scan ends. Point samples are distributed over triangle surface area (about 65k desktop / 28k mobile), rather than selected vertices. The sample counter reports the actual displayed simulated points.
+
+Homepage demo links explicitly start at the old-home opening. After Generate, the full truck sequence leads into a short room reveal: furniture lands, lighting rises and the camera settles before layout controls appear. Reduced motion bypasses the reveal delay, and Skip animation opens the result immediately. Existing-room photography is shown uncropped below the hero; no completed new-home layout is previewed there.
+
+The scanning phone now turns for 6% of the scan (about 0.6s) and remains outside the apartment boundary. Moving furniture uses dimension-fitted, non-overlapping cargo slots and lift/travel/lower paths. The truck follows a straight minimum-jerk drive with distance-based wheel rotation; its rear gate closes after loading and opens after stopping, before unloading. Scene readiness is keyed by mode to prevent the reveal completion race; results also provide an immediate skip and bounded timeout.
