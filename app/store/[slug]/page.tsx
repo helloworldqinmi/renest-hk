@@ -33,7 +33,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
           <dl className={styles.specs}><div><dt><Ruler size={15} /><LocalText>{" Open size"}</LocalText></dt><dd><LocalText>{product.dimensions}</LocalText></dd></div><div><dt><PackageCheck size={15} /><LocalText>{" Space-saving mode"}</LocalText></dt><dd><LocalText>{product.foldedDimensions}</LocalText></dd></div></dl>
           <div className={styles.fit}><Check size={17} /><span><b><LocalText>{"Why it fits compact rooms"}</LocalText></b><small><LocalText>{product.fitNote}</LocalText></small></span></div>
           <ProductActions name={product.name} slug={product.slug} />
-          <div className={styles.delivery}><Truck size={18} /><span><b><LocalText>{"Hong Kong delivery"}</LocalText></b><small><LocalText>{"Estimated 3–5 working days · assembly available"}</LocalText></small></span></div>
+          <div className={styles.delivery}><Truck size={18} /><span><b><LocalText>{product.secondhand?"Local pickup":"Hong Kong delivery"}</LocalText></b><small><LocalText>{product.secondhand?"Confirm condition and collection with the seller":"Estimated 3–5 working days · assembly available"}</LocalText></small></span></div>
           <div className={styles.features}><span><LocalText>{"PRODUCT DETAILS"}</LocalText></span>{product.features.map((feature) => <div key={feature}><Check size={13} /><LocalText>{feature}</LocalText></div>)}</div>
         </aside>
       </div>

@@ -7,7 +7,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createIPhone, createMovingTruck, lidarPosition } from './scene-props';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { allExistingIds, oldPlacements, studioLayouts, type LayoutId, type Placement } from '@/lib/studio-data';
+import { studioInventory, allExistingIds, oldPlacements, studioLayouts, type LayoutId, type Placement } from '@/lib/studio-data';
 import styles from './studio.module.css';
 import { cargoSlot, cargoScale, driveProgress, overheadTransfer, smoothMotion, tailgateOpen } from '@/lib/migration-motion';
 import { scanTimeline, revealedPointCount } from '@/lib/scan-timeline';
@@ -122,11 +122,11 @@ export function HomeScene(props:HomeSceneProps){
      return prepare(corner,key);
     })();pending.set(key,task);return task;
    }
-   const task=(async()=>{const url=key==='old'?'/models/v2/old-home.glb':key==='empty'?'/models/v2/new-home-empty.glb':key.startsWith('product')?`/models/v2/furniture/${key.split(':')[1]}.glb`:'/models/v2/new-home-a.glb';const gltf=await loader.loadAsync(url);if(disposed){gltf.scene.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();materialList(o).forEach(m=>m.dispose());}});throw new Error('Scene disposed');}const raw=prepare(gltf.scene,key);
+   const task=(async()=>{const url=key==='old'?'/models/v2/old-home.glb':key==='empty'?'/models/v2/new-home-empty.glb':key.startsWith('product')?`/models/v2/furniture/${studioInventory.find(i=>i.id===key.split(':')[1])?.modelSourceId??key.split(':')[1]}.glb`:'/models/v2/new-home-a.glb';const gltf=await loader.loadAsync(url);if(disposed){gltf.scene.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();materialList(o).forEach(m=>m.dispose());}});throw new Error('Scene disposed');}const raw=prepare(gltf.scene,key);
    if(key==='layout'){
-    const extras=await Promise.all(['N02','N03','N04'].map(id=>loader.loadAsync(`/models/v2/furniture/${id}.glb`)));
+    const extraIds=['N02','N03','N04','N05','N06'];const extras=await Promise.all(extraIds.map(id=>loader.loadAsync(`/models/v2/furniture/${studioInventory.find(i=>i.id===id)?.modelSourceId??id}.glb`)));
     if(disposed)throw new Error('Scene disposed');
-    extras.forEach(gltf=>{let object:T.Object3D|undefined;gltf.scene.traverse(o=>{if(o.userData.selectable)object=o;});if(!object)return;object.removeFromParent();raw.add(object);batchStatic(object);roots.get(key)!.set(object.userData.id,object);object.visible=false;object.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=true;o.receiveShadow=true;const m=(o.material as T.MeshStandardMaterial).clone();finishMaterial(m,surfaces,o.name);if(m.userData.lampGlow)lampMaterials.add(m);m.clippingPlanes=[clips.get(key)!];m.clipShadows=true;bases.set(m,{color:m.color.clone(),opacity:m.opacity,transparent:m.transparent,emissive:m.emissive.clone(),emissiveIntensity:m.emissiveIntensity});o.material=m;allMaterials.add(m);allGeometry.add(o.geometry);}});addContactShadow(object,clips.get(key)!);});
+    extras.forEach((gltf,index)=>{let object:T.Object3D|undefined;gltf.scene.traverse(o=>{if(o.userData.selectable)object=o;});if(!object)return;object.userData.id=extraIds[index];object.userData.origin='new';object.removeFromParent();raw.add(object);batchStatic(object);roots.get(key)!.set(object.userData.id,object);object.visible=false;object.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=true;o.receiveShadow=true;const m=(o.material as T.MeshStandardMaterial).clone();finishMaterial(m,surfaces,o.name);if(m.userData.lampGlow)lampMaterials.add(m);m.clippingPlanes=[clips.get(key)!];m.clipShadows=true;bases.set(m,{color:m.color.clone(),opacity:m.opacity,transparent:m.transparent,emissive:m.emissive.clone(),emissiveIntensity:m.emissiveIntensity});o.material=m;allMaterials.add(m);allGeometry.add(o.geometry);}});addContactShadow(object,clips.get(key)!);});
    }
    if(key.startsWith('product')){const bounds=new T.Box3().setFromObject(raw);const c=bounds.getCenter(new T.Vector3());raw.position.set(-c.x,-bounds.min.y,-c.z);}
    return raw;})();pending.set(key,task);return task;

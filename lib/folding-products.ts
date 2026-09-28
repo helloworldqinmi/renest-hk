@@ -1,4 +1,5 @@
 export type FoldingProduct = {
+  secondhand?: boolean;
   slug: string;
   name: string;
   category: string;
@@ -149,6 +150,11 @@ foldingProducts.push(
     fitNote: "Useful when a guest sleeping space must share a room with daily activities.",
     features: ["Fold-away bed frame", "Side shelving", "Integrated support legs", "Wall anchoring required"], badge: "New arrival",
   },
+);
+
+foldingProducts.push(
+ {slug:'preowned-oak-desk',name:'Pre-owned Oak Writing Desk',category:'Second-hand furniture',secondhand:true,price:280,dimensions:'115 × 52 × 77 cm',foldedDimensions:'Fixed desk · no folding required',image:'/photos/furniture-study-desk.png',gallery:['/photos/furniture-study-desk.png'],description:'Demo second-hand listing: a freestanding oak writing desk with light signs of use. Confirm actual condition and collection details before purchase.',fitNote:'Replaces the new folding desk in the focus layout and keeps an existing desk in circulation.',features:['Pre-owned · demo listing','Good condition · confirm with seller','Local collection to be arranged','Illustrative image and dimensions'],badge:'Second-hand'},
+ {slug:'preowned-desk-chair',name:'Pre-owned Desk Chair',category:'Second-hand furniture',secondhand:true,price:120,dimensions:'44 × 45 × 87 cm',foldedDimensions:'Everyday seating',image:'/photos/furniture-chair.webp',gallery:['/photos/furniture-chair.webp'],description:'Demo second-hand listing: a compact wooden chair for everyday seating. Confirm actual condition and collection details before purchase.',fitNote:'A compact second-hand alternative to the new step chair, with a smaller footprint and a lower demo price.',features:['Pre-owned · demo listing','Good condition · confirm with seller','Local collection to be arranged','Illustrative image and dimensions'],badge:'Second-hand'}
 );
 
 export function findFoldingProduct(slug: string) {

@@ -48,6 +48,8 @@ English, Simplified Chinese and Traditional Chinese can be selected in the heade
 
 ## Saved arrangements
 
+Saving opens a naming dialog. Custom names appear in the homepage archive, alongside timestamps; older unnamed saves still open normally.
+
 “Save to this device” means **localStorage in the current browser and origin**, not a downloaded file or cloud backup. The homepage shows up to 20 saved versions, including questionnaire answers and manual furniture placements. Existing v2 saves remain readable.
 
 - Latest arrangement: `renest-spatial-plan-v2`
@@ -85,6 +87,10 @@ types/                Spatial and furniture domain types
 ```
 
 ## Mocked integrations
+
+The catalogue includes clearly labelled second-hand desk and chair demo listings. These can replace compatible new recommendations in the live 3D layout; their models, dimensions, purchase costs and saved placements stay in sync. The final step gives the purchase/resale workspace more width, with furniture cards, a focused post editor, condition-based demo estimates, pickup notes and copy/download actions. Posts still require review and manual publication on the marketplace.
+
+The 2D-to-3D sequence has explicit play/replay controls. A requested full playback runs for approximately ten seconds and stays on its completed frame until the user continues; it is no longer silently collapsed to a sub-second transition by reduced-motion preferences.
 
 - Room scanning is a deterministic browser animation. A sample RoomPlan JSON adapter is included at `lib/roomplan.ts`.
 - Layout ranking uses deterministic local questionnaire/preferences rules and curated presets, not live generative AI.

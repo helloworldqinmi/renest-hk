@@ -2,14 +2,14 @@
 
 import {useEffect,useRef,useState} from 'react';
 import Image from 'next/image';
-import {FileImage,ScanLine} from 'lucide-react';
+import {FileImage,ScanLine,Play} from 'lucide-react';
 import * as T from 'three';
 import {demoBlueprint,constructionFrame} from '@/lib/floor-plan-blueprints';
 import {useLocale} from '@/components/locale-provider';
 import type {HomeInputChoice} from '@/lib/home-input';
 import styles from './plan-construction.module.css';
 
-type Props={progress?:number;choice:HomeInputChoice;reduced:boolean;onReady:()=>void};
+type Props={progress?:number;choice:HomeInputChoice;reduced:boolean;onReady:()=>void;onPlay:()=>void};
 export function PlanConstruction(props:Props){
  const {tr}=useLocale();const host=useRef<HTMLDivElement>(null),live=useRef(props);live.current=props;
  const [failed,setFailed]=useState(false);const placeholder=props.progress===undefined&&props.choice.method!=='library';
@@ -80,6 +80,6 @@ export function PlanConstruction(props:Props){
  return <div className={styles.experience} data-converting={props.progress!==undefined}>
   <div ref={host} className={styles.canvas} hidden={placeholder||failed}/>
   {failed&&!placeholder&&<div className={styles.fallback}><Image src="/plans/northern-demo-a-2d.svg" alt={tr('Demo floor plan','示例平面图','範例平面圖')} width={900} height={720}/><p>{tr('3D animation is unavailable on this device. The floor plan is still available.','此设备暂时无法播放 3D 动画，可继续查看平面图。','此裝置暫時無法播放 3D 動畫，可繼續查看平面圖。')}</p></div>}
-  {placeholder?<div className={styles.placeholder}>{props.choice.method==='floorplan-upload'?<FileImage size={42} strokeWidth={1}/>:<ScanLine size={42} strokeWidth={1}/>}<h3>{props.choice.method==='floorplan-upload'?tr('Start with your floor plan','从你的平面图开始','從你的平面圖開始'):tr('Your new home, yet to be captured','等待记录你的新家','等待記錄你的新居')}</h3><p>{tr('Choose a source on the right. The model appears after reconstruction.','先选择空间资料，完成重建后才显示立体模型。','先選擇空間資料，完成重建後才顯示立體模型。')}</p></div>:<div className={styles.caption}><span>{props.progress===undefined?tr('01 / TWO-DIMENSIONAL PLAN','01 / 二维平面图','01 / 二維平面圖'):props.progress<.23?tr('TRACE / FINDING THE WALLS','描摹 / 识别墙线','描摹 / 識別牆線'):props.progress<.84?tr('EXTRUDE / WALLS TAKING SHAPE','立起 / 墙体逐渐成形','立起 / 牆體逐漸成形'):tr('REVEAL / YOUR SPACE IN 3D','呈现 / 立体空间','呈現 / 立體空間')}</span><p>{props.progress===undefined?tr('A floor plan first. A home takes shape next.','先看平面图，再让空间立起来。','先看平面圖，再讓空間立起來。'):tr('Wall lines become volume. Openings become light.','墙线变成体积，门窗引入光线。','牆線變成體積，門窗引入光線。')}</p></div>}
+  {placeholder?<div className={styles.placeholder}>{props.choice.method==='floorplan-upload'?<FileImage size={42} strokeWidth={1}/>:<ScanLine size={42} strokeWidth={1}/>}<h3>{props.choice.method==='floorplan-upload'?tr('Start with your floor plan','从你的平面图开始','從你的平面圖開始'):tr('Your new home, yet to be captured','等待记录你的新家','等待記錄你的新居')}</h3><p>{tr('Choose a source on the right. The model appears after reconstruction.','先选择空间资料，完成重建后才显示立体模型。','先選擇空間資料，完成重建後才顯示立體模型。')}</p></div>:<div className={styles.caption}><span>{props.progress===undefined?tr('01 / TWO-DIMENSIONAL PLAN','01 / 二维平面图','01 / 二維平面圖'):props.progress<.23?tr('TRACE / FINDING THE WALLS','描摹 / 识别墙线','描摹 / 識別牆線'):props.progress<.84?tr('EXTRUDE / WALLS TAKING SHAPE','立起 / 墙体逐渐成形','立起 / 牆體逐漸成形'):tr('REVEAL / YOUR SPACE IN 3D','呈现 / 立体空间','呈現 / 立體空間')}</span><p>{props.progress===undefined?tr('A floor plan first. A home takes shape next.','先看平面图，再让空间立起来。','先看平面圖，再讓空間立起來。'):tr('Wall lines become volume. Openings become light.','墙线变成体积，门窗引入光线。','牆線變成體積，門窗引入光線。')}</p>{props.progress===undefined&&<button className={styles.playButton} onClick={props.onPlay}><Play size={15}/>{tr('Watch the walls rise · 10 sec','观看墙体立起 · 10 秒','觀看牆體立起 · 10 秒')}</button>}</div>}
  </div>;
 }
