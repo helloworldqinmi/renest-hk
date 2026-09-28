@@ -1,0 +1,8 @@
+'use client';
+import Link from 'next/link';
+import {useEffect,useState} from 'react';
+import {useLocale} from '@/components/locale-provider';
+import {readPlanHistory,STUDIO_SESSION_KEY,studioLayouts,type SavedStudioPlan} from '@/lib/studio-data';
+export function SavedPlans(){const {tr,t,locale}=useLocale();const [plans,setPlans]=useState<SavedStudioPlan[]>([]),[error,setError]=useState('');useEffect(()=>{setPlans(readPlanHistory());},[]);
+ return <section id="saved-plans" className="saved-plans"><div><small>{tr('YOUR MOVING ARCHIVE','你的布置档案','你的佈置檔案')}</small><h2>{tr('Past arrangements','过往布置','過往佈置')}</h2><p>{tr('Saved in this browser on this device — not a downloaded file or cloud backup. Clearing browser data removes these plans.','保存在此设备的当前浏览器中，不是下载文件或云端备份。清除浏览器数据会删除这些方案。','儲存在此裝置的目前瀏覽器中，並非下載檔案或雲端備份。清除瀏覽器資料會刪除這些方案。')}</p></div><div>{plans.length?plans.map((plan,index)=><article key={plan.savedAt??index}><h3>{t(studioLayouts.find(v=>v.id===plan.layout)!.name)}</h3><p>{plan.savedAt?new Date(plan.savedAt).toLocaleString(locale):tr('Saved arrangement','已存布局','已存佈局')} · 45 m² / 484 ft²</p><Link href="/demo" onClick={e=>{try{sessionStorage.setItem(STUDIO_SESSION_KEY,JSON.stringify({...plan,phase:'results'}));}catch{e.preventDefault();setError(tr('Cannot restore while browser storage is blocked.','浏览器存储被禁用，暂时无法恢复。','瀏覽器儲存被停用，暫時無法還原。'));}}}>{tr('Open arrangement','打开布局','開啟佈局')} →</Link></article>):<p>{tr('Your saved moves will appear here. Save an arrangement in the studio to begin.','暂无保存的布局。在布置页保存方案后即可从这里找回。','暫無儲存的佈局。在佈置頁儲存方案後即可從這裡找回。')}</p>}<p role="status">{error}</p></div></section>;
+}

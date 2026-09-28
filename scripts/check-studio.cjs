@@ -1,0 +1,36 @@
+// Run with node scripts/check-studio.cjs. Exercise save compatibility and
+// geometry invariants without starting Next.js or a browser.
+const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),ts=require('typescript');
+const root=path.resolve(__dirname,'..'),cache=new Map();
+function load(file){file=path.resolve(file);if(file.endsWith('.json'))return JSON.parse(fs.readFileSync(file,'utf8'));if(cache.has(file))return cache.get(file);const exports={};cache.set(file,exports);const code=ts.transpile(fs.readFileSync(file,'utf8'),{module:ts.ModuleKind.CommonJS,esModuleInterop:true});new Function('require','exports',code)(id=>{let p=id.startsWith('@/')?path.join(root,id.slice(2)):path.resolve(path.dirname(file),id);if(!path.extname(p))p+='.ts';return load(p);},exports);return exports;}
+const data=load(path.join(root,'lib/studio-data.ts')),geometry=load(path.join(root,'lib/studio-placement.ts')),brief=load(path.join(root,'lib/living-brief.ts'));
+const input=load(path.join(root,'lib/home-input.ts'));
+assert.deepEqual(input.parseHomeInput({method:'unknown'}),{method:'library'});
+assert.deepEqual(input.parseHomeInput({method:'floorplan-upload',fileName:'my-plan.png'}),{method:'floorplan-upload',fileName:'my-plan.png'});
+assert.ok(fs.readFileSync(path.join(root,'public/plans/northern-demo-a.png')).equals(fs.readFileSync(path.join(root,'v2-home-models/references/new-home-plan.png'))),'Library item 01 must remain the original demo floor plan');
+assert.equal(data.parseStudioPlan('{broken'),null);
+assert.equal(data.recommendLayout([], '需要在家辦公'),'c');
+assert.equal(data.recommendLayout([], '朋友聚餐'),'b');
+const old={version:2,phase:'results',selected:['F01','not-real'],habits:['reuse'],note:'old save',layout:'a'};
+assert.deepEqual(data.parseStudioPlan(JSON.stringify(old)).selected,['F01']);
+assert.equal(data.parseStudioPlan(JSON.stringify(old)).brief.budget,6000);
+assert.equal(data.parseStudioPlan(JSON.stringify({...old,homeSource:'scan'})).homeInput.method,'scan-demo');
+assert.equal(brief.parseBrief({budget:-200}).budget,0);
+assert.equal(brief.parseBrief({budget:Infinity}).budget,6000);
+const edited={...old,brief:{...brief.defaultBrief,budget:1500},edits:{a:[{id:'F01',x:2,z:2,rotation:90,origin:'new'}]}};
+const restored=data.parseStudioPlan(JSON.stringify(edited));
+assert.equal(restored.edits.a[0].origin,'existing');assert.equal(restored.edits.a[0].x,2);assert.equal(restored.brief.budget,1500);
+assert.deepEqual(data.parseEdits({a:[]}),{a:[]});
+assert.deepEqual(data.parseEdits({a:[{id:'F01',x:Infinity,z:2,rotation:0}]}),{a:[]});
+assert.equal(geometry.placementIssue({id:'F01',x:-2,z:2,rotation:0,origin:'existing'},[]),'bounds');
+assert.equal(geometry.placementIssue({id:'F02',x:1,z:1.4,rotation:0,origin:'existing'},[]),'wall');
+assert.equal(geometry.placementIssue({id:'F02',x:2,z:2.5,rotation:0,origin:'existing'},[{id:'F01',x:2,z:2.5,rotation:0,origin:'existing'}]),'furniture');
+assert.equal(geometry.placementIssue({id:'F02',x:2,z:2.5,rotation:0,origin:'existing'},[]),null);
+assert.deepEqual(data.studioLayouts.map(l=>l.placements.filter(p=>p.origin==='existing').length),[18,16,15]);
+// Every curated footprint must be usable before manual edits begin.
+for(const layout of data.studioLayouts)for(const p of layout.placements)assert.equal(geometry.placementIssue(p,layout.placements),null,`${layout.id}/${p.id} overlaps ${geometry.placementIssue(p,layout.placements)}`);
+global.localStorage={values:new Map(),getItem(k){return this.values.get(k)??null;},setItem(k,v){this.values.set(k,v);}};
+localStorage.setItem(data.STUDIO_SAVE_KEY,JSON.stringify(old));assert.equal(data.readPlanHistory().length,1);
+for(let i=0;i<25;i++)data.savePlanHistory({...restored,savedAt:new Date(2026,0,i+1).toISOString()});
+assert.equal(data.readPlanHistory().length,20);assert.equal(data.readPlanHistory()[0].brief.budget,1500);
+console.log('Studio checks passed: legacy/corrupt saves, edited placement restoration, budget parsing, collision checks, distinct curated layouts, history retention.');

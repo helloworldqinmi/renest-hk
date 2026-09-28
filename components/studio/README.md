@@ -1,5 +1,9 @@
 # ReNest Moving Studio
 
+The current flow includes a detailed living brief, English/Simplified/Traditional locale controls, dual area units, a built-in example floor plan or simulated scanning, and distinct family/gathering/focus trade-offs. In results, floor-plan furniture dragging and nudge/rotate controls update the same placements used by the live scene, comparison, cost totals, CSV and saved history. Background dragging still pans. `lib/studio-placement.ts` checks basic boundaries, wall segments and footprint overlaps; it does not certify door clearance or accessibility.
+
+`renest-spatial-history-v1` keeps the latest 20 saved versions on the current browser/origin, exposed by the homepage archive. Optional v2 save fields retain the living brief, per-layout edits and home source without breaking older saves. Resale estimates and editable pending posts are local demo drafts (`renest-resale-drafts`), never automatic marketplace publications. `npm run check:studio` validates geometry and storage compatibility.
+
 The `/demo` route is the canonical moving flow. Older `/scan-old`, `/inventory`, `/scan-new`, `/preferences`, `/optimize`, `/move-plan`, and `/impact` bookmarks redirect here. `/shop` redirects to the existing product collection. The original models and generation source remain in `v2-home-models/`.
 
 The stages are old-home capture, furniture selection, new-home capture / unfinished shell, preferences, AI-style design brief / truck migration, three arrangements, and visual impact. LiDAR capture and arrangement generation are explicitly demo simulations. Preferences rank three supplied arrangements; selected furniture genuinely controls the rendered objects.

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { LocaleProvider } from "@/components/locale-provider";
 import { DemoProvider } from "@/components/state-provider";
 import { AppHeader } from "@/components/common/app-header";
 
@@ -30,10 +31,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${sans.variable} ${mono.variable} ${editorial.variable}`}>
       <body>
-        <DemoProvider>
+        <LocaleProvider><DemoProvider>
           <AppHeader />
           {children}
-        </DemoProvider>
+        </DemoProvider></LocaleProvider>
       </body>
     </html>
   );
