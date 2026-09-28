@@ -53,6 +53,13 @@ html:lang(zh) button { letter-spacing: .015em; }
 .plan-library>button { width:100%;border:1px solid var(--accent);border-radius:5px;overflow:hidden;text-align:left; }
 .plan-reference { position:relative;aspect-ratio:1.32;background:#fff; }
 .plan-reference img { object-fit:contain; }
+.blueprint-card{margin-bottom:16px;min-width:0}
+.blueprint-card>button{display:block;width:100%;border:1px solid var(--border);border-radius:5px;overflow:hidden;text-align:left;background:var(--surface)}
+.blueprint-card[data-enabled=true]>button{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.blueprint-card>small{display:block;margin:8px 3px 0;font-size:10px;line-height:1.6;color:var(--foreground-muted)}
+.blueprint-card[data-enabled=false] .plan-reference{opacity:.82}
+.blueprint-reference-preview img{display:block;width:100%;height:auto;max-height:65dvh;object-fit:contain;background:#f8f7f2}
+.blueprint-reference-preview p{font-size:13px;color:var(--foreground-muted);margin-top:15px}
 .plan-library button>span { display:flex;align-items:center;gap:7px;padding:12px 12px 5px;font-size:12px; }
 .plan-library button>b { display:block;padding:0 12px 14px;font-size:12px;font-weight:400; }
 .home-upload label { display:flex;flex-direction:column;gap:10px;padding:20px 14px;border:1px dashed var(--border);border-radius:5px;font-size:12px;background:var(--surface); }

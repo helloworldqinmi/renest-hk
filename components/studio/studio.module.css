@@ -59,3 +59,11 @@
  .toolbar button{gap:4px;padding:9px 7px;font-size:9px}
  .toolbar>i{margin-inline:2px}
 }
+.sceneSurface{position:absolute;inset:0}
+.sceneSurface[data-hidden=true]{visibility:hidden;pointer-events:none}
+.studio[data-phase=new-ready] .sceneActions,.studio[data-phase=new-convert] .sceneActions{display:none}
+.studio[data-phase=new-ready] .sceneHeading,.studio[data-phase=new-convert] .sceneHeading{max-width:calc(100% - 75px)}
+@media(max-width:740px){.studio[data-phase=new-ready] .stage,.studio[data-phase=new-convert] .stage{height:540px;min-height:0}.studio[data-phase=new-ready] .sceneHeading h1,.studio[data-phase=new-convert] .sceneHeading h1{font-size:27px}.studio[data-phase=new-ready] .sceneHeading p,.studio[data-phase=new-convert] .sceneHeading p{display:none}.studio[data-phase=new-ready] .sceneFooter,.studio[data-phase=new-convert] .sceneFooter{bottom:12px}}
+.sideFooter :global(.back-step-strong){display:flex;align-items:center;justify-content:center;gap:12px;min-height:48px;padding:12px 18px;background:#e3ebdd;color:#294b35;border:1px solid #92a586;border-radius:5px;font-size:14px;font-weight:600;line-height:1.4;margin:10px 0;flex:1}
+.sideFooter :global(.back-step-strong):hover{background:#d4e1cb;border-color:#56774c}
+.sideFooter :global(.back-step-strong):focus-visible{outline:2px solid #385744;outline-offset:3px}

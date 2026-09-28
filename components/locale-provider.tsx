@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Globe2 } from 'lucide-react';
 import { translations } from '@/lib/translations';
+import { homeTranslations } from '@/lib/home-translations';
 export type Locale = 'en' | 'zh-CN' | 'zh-HK';
 const LocaleContext = createContext({ locale: 'en' as Locale, setLocale: (_: Locale) => {}, t: (text: string) => text, tr: (en: string, cn: string, hk: string) => en });
 export function LocaleProvider({children}: {children: React.ReactNode}) {
@@ -10,7 +11,7 @@ export function LocaleProvider({children}: {children: React.ReactNode}) {
  function change(value: Locale){setLocale(value);try{localStorage.setItem('renest-language',value);}catch{}}
  useEffect(()=>{document.documentElement.lang=locale;},[locale]);
  const tr=(en:string,cn:string,hk:string)=>locale==='en'?en:locale==='zh-CN'?cn:hk;
- const t=(value:string)=>{const entry=translations[value.trim()];const result=entry?tr(value,entry[0],entry[1]):value;return locale==='en'?result:result.replace(/ft²/g,'平方呎').replace(/m²/g,locale==='zh-CN'?'平方米':'平方米');};
+ const t=(value:string)=>{const entry=homeTranslations[value.trim()]??translations[value.trim()];const result=entry?tr(value,entry[0],entry[1]):value;return locale==='en'?result:result.replace(/ft²/g,'平方呎').replace(/m²/g,'平方米');};
  return <LocaleContext.Provider value={{locale,setLocale:change,t,tr}}>{children}</LocaleContext.Provider>;
 }
 export const useLocale=()=>useContext(LocaleContext);

@@ -1,0 +1,16 @@
+export const homeTranslations:Record<string,[string,string]>={
+ 'A HOME IS MORE THAN AN ADDRESS.':['给香港的小家，多一点可能','給香港的小家，多一點可能'],
+ 'Your familiar pieces. Their next chapter.':['让喜欢的家具，继续陪你生活。','讓喜歡的傢俬，繼續陪你生活。'],
+ 'A DIFFERENT KIND OF MOVE':['搬家，从喜欢的生活开始','搬屋，從喜歡的生活開始'],
+ 'You’re changing your address.':['换一个地址，','換一個地址，'],
+ 'Not everything you love.':['留住家的感觉。','留住家的感覺。'],
+ 'The most meaningful pieces are already yours. ReNest brings them into a measured, three-dimensional picture of your next home — so you can see the possibilities before packing a box.':['新家不必一切从头买起。ReNest 帮你看看：现有家具放得下吗，怎样摆更顺手，还需要添置什么。打包之前，先把新生活想清楚。','新居不必一切重新買過。ReNest 幫你看看：現有傢俬放得下嗎，怎樣擺更順手，還需要添置甚麼。打包之前，先把新生活想清楚。'],
+ 'Every piece has a story.':['熟悉的家具，有自己的故事。','熟悉的傢俬，有自己的故事。'],
+ 'Capture the old home. See your furniture emerge from the scan, then choose what comes with you.':['从旧家开始，看看有哪些家具值得留下，再决定带哪些去新家。','從舊居開始，看看有哪些傢俬值得留下，再決定帶哪些去新居。'],
+ 'Choose the pieces you love. Tell us how you live. Discover their next place when your new home comes together.':['选好想带走的家具，说说你的生活习惯。我们一起，为它们在新家找个合适的位置。','選好想帶走的傢俬，說說你的生活習慣。我們一起，為它們在新居找個合適的位置。'],
+ 'A LITTLE LESS FURNITURE. A LITTLE MORE LIFE.':['家具刚刚好，生活更自在','傢俬剛剛好，生活更自在'],
+ 'A desk that disappears after work. A table that makes room for friends. Add only the pieces that make your everyday better.':['工作结束，书桌可以收起；朋友来了，餐桌就能展开。只添置真正用得上的，让小家住得更从容。','工作結束，書枱可以收起；朋友來了，餐枱就能展開。只添置真正用得上的，讓小家住得更從容。'],
+ 'THE PURPOSE BEHIND THE POSSIBILITIES':['让每次搬家，都少一点浪费','讓每次搬屋，都少一點浪費'],
+ 'Created for a sustainable Northern Metropolis: helping new residents reuse what they own, make small spaces work, and settle in with less waste.':['从北部都会区的新家出发，让旧家具继续被使用，让有限的空间更适合生活，也让搬家少一点浪费。','從北部都會區的新居出發，讓舊傢俬繼續被使用，讓有限的空間更適合生活，也讓搬屋少一點浪費。'],
+ 'No sign-up. Just a little room to imagine.':['无需注册，先试着布置你的新家。','毋須註冊，先試着佈置你的新居。'],
+};
