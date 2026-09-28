@@ -2,7 +2,7 @@
 // geometry invariants without starting Next.js or a browser.
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),ts=require('typescript');
 const root=path.resolve(__dirname,'..'),cache=new Map();
-function load(file){file=path.resolve(file);if(file.endsWith('.json'))return JSON.parse(fs.readFileSync(file,'utf8'));if(cache.has(file))return cache.get(file);const exports={};cache.set(file,exports);const code=ts.transpile(fs.readFileSync(file,'utf8'),{module:ts.ModuleKind.CommonJS,esModuleInterop:true});new Function('require','exports',code)(id=>{let p=id.startsWith('@/')?path.join(root,id.slice(2)):path.resolve(path.dirname(file),id);if(!path.extname(p))p+='.ts';return load(p);},exports);return exports;}
+function load(file){file=path.resolve(file);if(file.endsWith('.json'))return JSON.parse(fs.readFileSync(file,'utf8'));if(cache.has(file))return cache.get(file);const exports={};cache.set(file,exports);const code=ts.transpile(fs.readFileSync(file,'utf8'),{module:ts.ModuleKind.CommonJS,esModuleInterop:true,target:ts.ScriptTarget.ES2020});new Function('require','exports',code)(id=>{let p=id.startsWith('@/')?path.join(root,id.slice(2)):path.resolve(path.dirname(file),id);if(!path.extname(p))p+='.ts';return load(p);},exports);return exports;}
 const data=load(path.join(root,'lib/studio-data.ts')),geometry=load(path.join(root,'lib/studio-placement.ts')),brief=load(path.join(root,'lib/living-brief.ts'));
 const input=load(path.join(root,'lib/home-input.ts'));
 assert.deepEqual(input.parseHomeInput({method:'unknown'}),{method:'library'});
@@ -19,6 +19,29 @@ assert.equal(plans.constructionFrame(1).rise(16,17),1);
 assert.equal(plans.constructionFrame(1).settle,1);
 assert.ok(plans.constructionFrame(.5).rise(0,17)>plans.constructionFrame(.5).rise(16,17));
 assert.equal(data.parseStudioPlan('{broken'),null);
+const profile=load(path.join(root,'lib/living-profile.ts')),planner=load(path.join(root,'lib/profile-planning.ts'));
+const living={...profile.newLivingProfile(),step:'review',completed:[...profile.coreSections],baseSelected:[...data.allExistingIds],answers:{household:'2',doubleBeds:'1',singleBeds:'0',children:'0',overnight:'no',budgetRange:'medium',includesFees:'no',purchaseTiming:'now',secondhand:'prefer',workFrequency:'daily',workers:'2',deskRoom:'study',diners:'2',hosting:'rare',priority:'work'},tags:{access:['none']}};
+assert.equal(profile.coreProfileComplete(profile.newLivingProfile()),false);
+assert.equal(profile.coreProfileComplete(living),true);
+const tailored=brief.withLivingProfile(brief.defaultBrief,living);
+const plan=planner.planForProfile(tailored,data.allExistingIds);
+assert.equal(plan.recommended,'c');assert.equal(plan.plans.find(p=>p.id==='c').cost,400);
+assert.ok(plan.plans.find(p=>p.id==='c').placements.some(p=>p.id==='N06'));
+const keepBed=planner.planForProfile(brief.withLivingProfile(tailored,{...living,furniture:{F13:'must'}}),data.allExistingIds);
+assert.notEqual(keepBed.recommended,'c');assert.ok(keepBed.plans.find(p=>p.id===keepBed.recommended).placements.some(p=>p.id==='F13'));
+const later=planner.planForProfile(brief.withLivingProfile(tailored,{...living,answers:{...living.answers,purchaseTiming:'later'}}),data.allExistingIds);
+assert.ok(later.plans.every(p=>p.cost===0&&!p.placements.some(v=>v.origin==='new')));
+const newOnly=planner.planForProfile(brief.withLivingProfile(tailored,{...living,answers:{...living.answers,secondhand:'no',drilling:'no'}}),data.allExistingIds);
+assert.ok(newOnly.plans.every(p=>!p.placements.some(v=>['N03','N05','N06'].includes(v.id))));
+assert.ok(newOnly.plans.find(p=>p.id==='c').issues.includes('workstations'));
+const fees=brief.withLivingProfile(tailored,{...living,answers:{...living.answers,includesFees:'yes',serviceReserve:'5700'}});
+assert.equal(planner.furnitureAllowance(fees),300);assert.ok(planner.planForProfile(fees,data.allExistingIds).plans.every(p=>p.cost<=300));
+assert.equal(profile.sectionReady({...living,answers:{...living.answers,includesFees:'yes',serviceReserve:'7000'}},'budget'),false);
+const restoredProfile=profile.parseLivingProfile({...living,tags:{pets:['none','cat'],petNeeds:['cat-tree'],access:['none','wheelchair'],accessNeeds:['clear-paths'],secondary:['work','reuse','storage']},hobbyAreas:{coffee:Infinity},furniture:{F01:'must',BAD:'must'}});
+assert.deepEqual(restoredProfile.tags.pets,['none']);assert.deepEqual(restoredProfile.tags.petNeeds,[]);assert.deepEqual(restoredProfile.tags.accessNeeds,[]);assert.equal(restoredProfile.furniture.BAD,undefined);
+assert.ok(!restoredProfile.tags.secondary.includes('work'));assert.equal(restoredProfile.hobbyAreas.coffee,undefined);
+const profileSave=data.parseStudioPlan(JSON.stringify({version:2,phase:'results',selected:data.allExistingIds,habits:['reuse'],note:'',layout:'c',brief:tailored}));
+assert.equal(profileSave.brief.profile.step,'review');assert.equal(profileSave.brief.profile.answers.secondhand,'prefer');assert.equal(profile.coreProfileComplete(profileSave.brief.profile),true);
 const secondhand=load(path.join(root,'lib/secondhand-layout.ts'));
 const usedDesk=secondhand.trySecondhand('N06','c',{},data.allExistingIds);
 assert.ok(usedDesk);assert.ok(usedDesk.placements.some(p=>p.id==='N06'));assert.ok(!usedDesk.placements.some(p=>p.id==='N03'));

@@ -3,7 +3,7 @@ import { useLocale } from '@/components/locale-provider';
 import type { LivingBrief } from '@/lib/living-brief';
 export function LivingQuestionnaire({value,onChange}:{value:LivingBrief;onChange:(v:LivingBrief)=>void}){
  const {tr}=useLocale();
- const fields: {key:Exclude<keyof LivingBrief,'budget'|'moveDate'>;label:string;options:[string,string,string][]}[]=[
+ const fields: {key:Exclude<keyof LivingBrief,'budget'|'moveDate'|'profile'>;label:string;options:[string,string,string][]}[]=[
   {key:'household',label:tr('People at home','常住人数','常住人數'),options:[['1','1 人','1 人'],['2','2 人','2 人'],['3','3 人','3 人'],['4+','4 人以上','4 人以上']]},
   {key:'children',label:tr('Children / older adults','儿童／长者人数','兒童／長者人數'),options:[['0','无','無'],['1','1 人','1 人'],['2+','2 人以上','2 人以上']]},
   {key:'pets',label:tr('Pets','宠物','寵物'),options:[['None','无','無'],['Cat','猫','貓'],['Dog','狗','狗'],['Other','其他','其他']]},
