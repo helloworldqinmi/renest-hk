@@ -1,3 +1,4 @@
+import {stagingArea} from './studio-workspace';
 import {parseHomeInput,type HomeInputChoice} from './home-input';
 import furnitureData from '@/v2-home-models/data/furniture.json';
 import layoutData from '@/v2-home-models/data/layouts.json';
@@ -49,7 +50,7 @@ export type SavedStudioPlan={version:2;name?:string;phase:StudioPhase;selected:s
 export const STUDIO_HISTORY_KEY='renest-spatial-history-v1';
 export function parseEdits(value:unknown):LayoutEdits{
  const result:LayoutEdits={};if(!value||typeof value!=='object')return result;
- for(const id of ['a','b','c'] as const){const entries=(value as Record<string,unknown>)[id];if(!Array.isArray(entries))continue;const seen=new Set<string>();result[id]=entries.filter(p=>p&&typeof p.id==='string'&&studioInventory.some(i=>i.id===p.id)&&!seen.has(p.id)&&[p.x,p.z,p.rotation].every(v=>typeof v==='number'&&Number.isFinite(v))&&p.x>=0&&p.x<=8.4&&p.z>=0&&p.z<=6.15&&(seen.add(p.id),true)).map(p=>({id:p.id,x:p.x,z:p.z,rotation:p.rotation,origin:studioInventory.find(i=>i.id===p.id)!.origin}));}return result;
+ for(const id of ['a','b','c'] as const){const entries=(value as Record<string,unknown>)[id];if(!Array.isArray(entries))continue;const seen=new Set<string>();result[id]=entries.filter(p=>p&&typeof p.id==='string'&&studioInventory.some(i=>i.id===p.id)&&!seen.has(p.id)&&[p.x,p.z,p.rotation].every(v=>typeof v==='number'&&Number.isFinite(v))&&p.x>=0&&p.x<=8.4&&p.z>=0&&p.z<=stagingArea.maxZ&&(seen.add(p.id),true)).map(p=>({id:p.id,x:p.x,z:p.z,rotation:p.rotation,origin:studioInventory.find(i=>i.id===p.id)!.origin}));}return result;
 }
 export function readPlanHistory():SavedStudioPlan[]{try{const raw=JSON.parse(localStorage.getItem(STUDIO_HISTORY_KEY)??'[]');const list=Array.isArray(raw)?raw.map(v=>parseStudioPlan(JSON.stringify(v))).filter((v):v is SavedStudioPlan=>!!v):[];const legacy=parseStudioPlan(localStorage.getItem(STUDIO_SAVE_KEY));return legacy&&!list.some(v=>v.savedAt===legacy.savedAt)?[legacy,...list].slice(0,20):list.slice(0,20);}catch{return [];}}
 export function savePlanHistory(plan:SavedStudioPlan){const list=readPlanHistory();localStorage.setItem(STUDIO_HISTORY_KEY,JSON.stringify([plan,...list].slice(0,20)));localStorage.setItem(STUDIO_SAVE_KEY,JSON.stringify(plan));}
