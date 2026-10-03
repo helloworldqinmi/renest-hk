@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "check:studio": "node scripts/check-studio.cjs",
+    "render:interior": "node scripts/render-interior.cjs",
     "build:scan-model": "bash scripts/build-old-home-scan.sh",
     "start": "next start",
     "lint": "next lint",

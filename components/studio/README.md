@@ -42,3 +42,11 @@ The live V2 assets include Blender-refined bed upholstery with separate
 UV1 local-occlusion atlases. Rebuild them with `npm run build:refined-models`;
 see `docs/blender-refinement.md` for the pipeline, invariants, and measured size
 tradeoffs. The sofa keeps its original geometry and materials. Source models remain under `v2-home-models/models/`.
+
+### Interior film rendering
+
+The film has an independent Three.js lighting setup, wide, level architectural cameras, room-specific lens shifts, ceiling fixtures, a dining pendant and contact shading. The Cycles scene adds procedural oak grain, fabric microstructure, thin reflective glazing and soft folds in the duvet and throw. Captions sit outside the picture; the image keeps a 2:1 composition on both wide and portrait screens.
+
+`npm run render:interior -- --samples 96 --width 1600 --skip-existing` renders the three curated layouts with Blender Cycles (Metal when available). Set `BLENDER_BIN` for a different installed Blender executable, or pass `--cpu`. `--layout a` and `--room living` narrow a preview run. The renderer uses the same placements and camera decisions as the live player and writes day/evening JPEGs under `public/films/interior`. It publishes a manifest only for complete, matching render sets. Per-frame signatures make interrupted jobs resumable and prevent an old camera shot from being advertised as a new render.
+
+The player uses offline frames only when every furniture ID, position and rotation matches. DIY edits automatically use the live room. **Look around** pauses the film and opens that same arrangement for interactive viewing. Each six-second room chapter has one continuous move with a fixed composition center and a maximum 6.5% image crop, keeping the room readable throughout. Cycles stills alternate visible push-ins and pull-backs between rooms, updated at display refresh rate; these are editorial image moves, not newly rendered 3D camera paths. Reduced-motion playback keeps the uncropped still. Furniture purchase and reuse figures return in the closing card.

@@ -84,7 +84,9 @@ for(const layout of data.studioLayouts){
  for(const shot of shots)for(let step=0;step<=20;step++){
   const t=step/20,x=shot.from[0]+(shot.to[0]-shot.from[0])*t,z=shot.from[2]+(shot.to[2]-shot.from[2])*t;
   assert.ok(interior.cameraPositionClear(x,z,layout.placements),`${layout.id}/${shot.id}: camera intersects furniture`);
-  assert.equal(shot.from[1],1.52,'Tour must use human eye height');
+  assert.equal(shot.from[1],interior.TOUR_CAMERA_HEIGHT,'Tour must use a consistent interior photography height');
+  assert.equal(shot.target[1],shot.from[1],'Architecture verticals need a level camera');
+  assert.ok(shot.fov >= 60 && shot.fov <= 70,'Keep a bounded wide interior lens');
  }
 }
 const initialTour=interior.buildInteriorTour(data.studioLayouts[0].placements);
@@ -96,3 +98,26 @@ assert.ok(interior.cameraPositionClear(adjustedTour[0].from[0],adjustedTour[0].f
 assert.deepEqual(interior.tourFrame(100,4),{index:3,progress:1},'Ending must keep the final room camera valid');
 assert.deepEqual(interior.tourFrame(-1,4),{index:0,progress:0});
 console.log('Interior tour checks passed: clear camera paths, edited layouts, eye height and ending bounds.');
+
+const renderedInterior=load(path.join(root,'lib/interior-render.ts'));
+const originalKey=renderedInterior.interiorPlanKey(data.studioLayouts[0].placements);
+assert.equal(originalKey,renderedInterior.interiorPlanKey([...data.studioLayouts[0].placements].reverse()),'Offline frames must not depend on furniture order');
+assert.notEqual(originalKey,renderedInterior.interiorPlanKey(data.studioLayouts[0].placements.map((p,i)=>i===0?{...p,x:p.x+.01}:p)),'Edited furniture must never show a stale offline render');
+
+// A room's image movement must not reset or reverse halfway through playback.
+const filmMotion=load(path.join(root,'lib/interior-film-motion.ts'));
+for(const room of ['living','dining','bedroom','study']){
+ const start=filmMotion.interiorFilmMotion(0,room),end=filmMotion.interiorFilmMotion(1,room);
+ const direction=Math.sign(end.scale-start.scale);
+ let previous=start;
+ for(let step=1;step<=600;step++){
+  const current=filmMotion.interiorFilmMotion(step/600,room);
+  assert.equal(current.origin,start.origin,'A single shot must keep its crop center');
+  assert.ok(current.scale>=1 && current.scale<=1.065,'Keep the full room readable throughout the move');
+  assert.ok((current.scale-previous.scale)*direction>=0,'Camera movement must not reverse');
+  assert.ok(Math.abs(current.scale-previous.scale)<.001,'No mid-shot scale jump');
+  previous=current;
+ }
+ assert.equal(filmMotion.interiorFilmMotion(.7,room,true).scale,1,'Reduced motion keeps the full frame');
+}
+console.log('Film motion checks passed: continuous movement, stable framing, reduced motion.');

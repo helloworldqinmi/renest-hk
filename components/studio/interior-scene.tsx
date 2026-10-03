@@ -18,7 +18,7 @@ import { createSurfaceMaps, finishMaterial } from './scene-finish';
 import { batchStatic } from './scene-geometry';
 import styles from './interior-tour.module.css';
 
-type Props = { placements: Placement[]; shots: TourShot[]; clock: RefObject<number>; lighting: 'day' | 'evening'; reduced: boolean; onReady: () => void; onPause: () => void; onError: () => void; label: string };
+type Props = { placements: Placement[]; shots: TourShot[]; clock: RefObject<number>; lighting: 'day' | 'evening'; reduced: boolean; paused?: boolean; onReady: () => void; onPause: () => void; onError: () => void; label: string };
 
 export function InteriorScene(props: Props) {
   const host = useRef<HTMLDivElement>(null), live = useRef(props);
@@ -31,12 +31,12 @@ export function InteriorScene(props: Props) {
     let renderer: T.WebGLRenderer;
     try { renderer = new T.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' }); }
     catch { live.current.onError(); return; }
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.25 : 1.6));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.5 : 2));
     renderer.outputColorSpace = T.SRGBColorSpace;
     renderer.toneMapping = T.AgXToneMapping;
     renderer.toneMappingExposure = 1.18;
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = T.PCFShadowMap;
+    renderer.shadowMap.type = T.PCFSoftShadowMap;
     renderer.shadowMap.autoUpdate = false;
     renderer.shadowMap.needsUpdate = true;
     renderer.domElement.setAttribute('aria-label', live.current.label);
@@ -44,7 +44,7 @@ export function InteriorScene(props: Props) {
     container.appendChild(renderer.domElement);
     const scene = new T.Scene();
     scene.background = new T.Color('#dce4e6');
-    const camera = new T.PerspectiveCamera(64, 1, .045, 65);
+    const camera = new T.PerspectiveCamera(58, 1, .045, 65);
     const geometry = new Set<T.BufferGeometry>(), materials = new Set<T.Material>(), textures = new Set<T.Texture>();
     function track(root: T.Object3D) { root.traverse(o => { if (o instanceof T.Mesh) { geometry.add(o.geometry); for (const m of Array.isArray(o.material) ? o.material : [o.material]) { materials.add(m); for (const v of Object.values(m)) if (v instanceof T.Texture) textures.add(v); } } }); }
     const surfaces = createSurfaceMaps(Math.min(renderer.capabilities.getMaxAnisotropy(), 8));
@@ -56,7 +56,7 @@ export function InteriorScene(props: Props) {
     const ambient = new T.HemisphereLight('#e9eff8', '#b3a68e', .65);
     scene.add(ambient);
     const sun = new T.DirectionalLight('#fff1d9', 3.2);
-    sun.position.set(2, 7, -4); sun.target.position.set(4, 0, 3);
+    sun.position.set(-3, 4.8, -7); sun.target.position.set(4, 0, 3);
     sun.castShadow = true; sun.shadow.mapSize.set(mobile ? 1536 : 2048, mobile ? 1536 : 2048);
     Object.assign(sun.shadow.camera, { left: -7, right: 7, top: 7, bottom: -7, near: .1, far: 24 });
     sun.shadow.normalBias = .035; sun.shadow.bias = -.0003; sun.shadow.radius = 4;
@@ -71,19 +71,60 @@ export function InteriorScene(props: Props) {
     const glowMaterials: T.MeshStandardMaterial[] = [];
     const ceiling = new T.Mesh(new T.BoxGeometry(8.4, .06, 6.15), new T.MeshStandardMaterial({ color: '#e9e5dc', roughness: .95 }));
     ceiling.position.set(4.2, 2.59, 3.075); ceiling.receiveShadow = true; ceiling.castShadow = true; scene.add(ceiling); track(ceiling);
+    // A pair of restrained prints gives the blank kitchen partition a visual anchor.
+    const frameOak = new T.MeshStandardMaterial({ color: '#8e775c', roughness: .6 });
+    const artPaper = new T.MeshStandardMaterial({ color: '#f0eadd', roughness: 1 });
+    const artSage = new T.MeshStandardMaterial({ color: '#8d9785', roughness: 1 });
+    const artSand = new T.MeshStandardMaterial({ color: '#c6ad8c', roughness: 1 });
+    for (const x of [1.05, 1.64]) {
+      const print = new T.Group(); print.position.set(x, 1.68, 1.48);
+      const frame = new T.Mesh(new T.BoxGeometry(.46, .62, .035), frameOak); print.add(frame);
+      const paper = new T.Mesh(new T.BoxGeometry(.42, .58, .006), artPaper); paper.position.z = .02; print.add(paper);
+      const block = new T.Mesh(new T.PlaneGeometry(.24, .25), artSage); block.position.set(-.035, -.09, .024); print.add(block);
+      const circle = new T.Mesh(new T.CircleGeometry(.115, 48), artSand); circle.position.set(.035, .105, .025); print.add(circle);
+      scene.add(print); track(print);
+    }
+    const ceilingLights: T.RectAreaLight[] = [];
+    const diffuser = new T.MeshStandardMaterial({ color: '#fff5df', roughness: .65, emissive: '#ffe7bc', emissiveIntensity: .35 });
+    const hardware = new T.MeshStandardMaterial({ color: '#a68c67', metalness: .75, roughness: .35 });
+    const fixture = new T.MeshStandardMaterial({ color: '#eee8da', roughness: .85 });
+    function addCeilingLight(x: number, z: number, pendant = false) {
+      const group = new T.Group();
+      group.position.set(x, pendant ? 2.19 : 2.49, z);
+      const body = new T.Mesh(new T.CylinderGeometry(pendant ? .32 : .24, pendant ? .43 : .24, pendant ? .2 : .075, 48, 1, true), pendant ? fixture : hardware);
+      body.castShadow = true; body.receiveShadow = true; group.add(body);
+      const disk = new T.Mesh(new T.CircleGeometry(pendant ? .415 : .225, 48), diffuser);
+      disk.rotation.x = Math.PI / 2; disk.position.y = pendant ? -.102 : -.04; group.add(disk);
+      if (pendant) {
+        const cord = new T.Mesh(new T.CylinderGeometry(.006, .006, .3, 8), hardware);
+        cord.position.y = .25; group.add(cord);
+      }
+      scene.add(group); track(group);
+      const light = new T.RectAreaLight('#ffe3b4', 1.2, pendant ? .8 : 1.1, pendant ? .8 : 1.1);
+      light.position.set(x, group.position.y - .12, z); light.lookAt(x, 0, z); scene.add(light); ceilingLights.push(light);
+    }
+    addCeilingLight(1.85, 2.75);
+    const dining = props.placements.find(p => ['N02', 'F04'].includes(p.id) && !isStaged(p));
+    addCeilingLight(dining?.x ?? 2.05, dining?.z ?? 5.05, true);
+    addCeilingLight(6.15, 1.8); addCeilingLight(6.95, 4.7);
+    // Soft bounced ceiling light belongs inside the shell, not above its roof.
+    for (const [x, z] of [[1.7, 2.8], [6.2, 1.8], [6.9, 4.7]]) {
+      const bounce = new T.RectAreaLight('#fff4e4', 1.5, 2, 1.8);
+      bounce.position.set(x, 2.48, z); bounce.lookAt(x, 0, z); scene.add(bounce);
+    }
     // The second render is a lightweight contact-shading pass, with denoising.
     const supportsHDR = renderer.extensions.has('EXT_color_buffer_float');
     const composer = new EffectComposer(renderer, new T.WebGLRenderTarget(1, 1, { type: supportsHDR ? T.HalfFloatType : T.UnsignedByteType }));
     const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera), output = new OutputPass(), fxaa = new ShaderPass(FXAAShader);
-    ao.blendIntensity = .55;
-    ao.updateGtaoMaterial({ radius: .22, thickness: .15, samples: mobile ? 8 : 12, distanceFallOff: 1 });
+    ao.blendIntensity = .8;
+    ao.updateGtaoMaterial({ radius: .35, thickness: .7, samples: mobile ? 8 : 12, distanceFallOff: 1 });
     ao.updatePdMaterial({ radius: 4, samples: mobile ? 8 : 16 });
-    ao.enabled = false;
+    ao.enabled = supportsHDR && !mobile;
     composer.addPass(renderPass); composer.addPass(ao); composer.addPass(output); composer.addPass(fxaa);
     function resize() {
       const width = container!.clientWidth, height = container!.clientHeight;
       if (!width || !height) return;
-      camera.aspect = width / height; camera.fov = width < 740 ? 78 : 64; camera.updateProjectionMatrix();
+      camera.aspect = width / height; camera.fov = live.current.shots[Math.max(0, previousRoom)]?.fov ?? 58; camera.updateProjectionMatrix();
       dirty = true;
       renderer.setSize(width, height, false); composer.setSize(width, height);
       const ratio = renderer.getPixelRatio(); fxaa.uniforms.resolution.value.set(1 / (width * ratio), 1 / (height * ratio));
@@ -157,7 +198,7 @@ export function InteriorScene(props: Props) {
     function animate(now: number) {
       if (disposed) return;
       frame = requestAnimationFrame(animate);
-      if (document.hidden || !loaded) { lastTime = now; return; }
+      if (document.hidden || !loaded || live.current.paused) { lastTime = now; return; }
       // Avoid doing two full-screen passes at 120 Hz on high-refresh phones.
       if (now - lastTime < 1000 / 30 - .5) return;
       lastTime = now;
@@ -168,17 +209,23 @@ export function InteriorScene(props: Props) {
       if (!dirty && signature === previousFrame) return;
       previousFrame = signature; dirty = false;
       camera.position.lerpVectors(from.fromArray(shot.from), to.fromArray(shot.to), t);
+      // Level optical axis preserves architectural verticals. A small film shift
+      // includes the furniture without tilting the camera down at the floor.
+      camera.fov = shot.fov;
+      camera.setViewOffset(container!.clientWidth, container!.clientHeight, 0, container!.clientHeight * shot.shift, container!.clientWidth, container!.clientHeight);
       camera.lookAt(target.fromArray(shot.target)); camera.rotateY(yaw); camera.rotateX(pitch);
       container!.dataset.room = shot.id; container!.dataset.cameraPosition = camera.position.toArray().map(n => n.toFixed(3)).join(',');
       container!.dataset.visibleFurniture = plan.map(p => p.id).join(',');
       if (previousLight !== current.lighting) {
         previousLight = current.lighting; const evening = current.lighting === 'evening';
         sun.color.set(evening ? '#ffd4a0' : '#fff1d9'); sun.intensity = evening ? 1 : 4;
-        ambient.intensity = evening ? .2 : .3; scene.environmentIntensity = evening ? .2 : .3;
+        ambient.intensity = evening ? .3 : .55; scene.environmentIntensity = evening ? .25 : .45;
         windows.forEach(light => { light.color.set(evening ? '#a9bbdc' : '#eef3ff'); light.intensity = evening ? 2 : 6; });
-        practicals.forEach(light => { light.intensity = evening ? 9 : .6; });
+        practicals.forEach(light => { light.intensity = evening ? 3 : .3; });
+        ceilingLights.forEach(light => { light.intensity = evening ? 5 : 1.2; });
+        diffuser.emissiveIntensity = evening ? 1.6 : .35;
         glowMaterials.forEach(material => { material.emissiveIntensity = evening ? .8 : .06; });
-        scene.background = new T.Color(evening ? '#7a899f' : '#dce4e6'); renderer.toneMappingExposure = evening ? 1.25 : 1.1;
+        scene.background = new T.Color(evening ? '#7a899f' : '#dce4e6'); renderer.toneMappingExposure = evening ? 1.05 : .95;
         renderer.shadowMap.needsUpdate = true;
       }
       composer.render();
