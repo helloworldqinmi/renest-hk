@@ -75,3 +75,24 @@ localStorage.setItem(data.STUDIO_SAVE_KEY,JSON.stringify(old));assert.equal(data
 for(let i=0;i<25;i++)data.savePlanHistory({...restored,savedAt:new Date(2026,0,i+1).toISOString()});
 assert.equal(data.readPlanHistory().length,20);assert.equal(data.readPlanHistory()[0].brief.budget,1500);
 console.log('Studio checks passed: legacy/corrupt saves, edited placement restoration, budget parsing, collision checks, distinct curated layouts, history retention.');
+
+// First-person camera positions must remain usable after changing a layout.
+const interior=load(path.join(root,'lib/interior-tour.ts'));
+for(const layout of data.studioLayouts){
+ const shots=interior.buildInteriorTour(layout.placements);
+ assert.equal(shots.length,4,`${layout.id}: all four rooms need a clear camera position`);
+ for(const shot of shots)for(let step=0;step<=20;step++){
+  const t=step/20,x=shot.from[0]+(shot.to[0]-shot.from[0])*t,z=shot.from[2]+(shot.to[2]-shot.from[2])*t;
+  assert.ok(interior.cameraPositionClear(x,z,layout.placements),`${layout.id}/${shot.id}: camera intersects furniture`);
+  assert.equal(shot.from[1],1.52,'Tour must use human eye height');
+ }
+}
+const initialTour=interior.buildInteriorTour(data.studioLayouts[0].placements);
+const cameraSpot=initialTour[0].from;
+const editedTourPlan=data.studioLayouts[0].placements.map(p=>p.id==='F01'?{...p,x:cameraSpot[0],z:cameraSpot[2]}:p);
+const adjustedTour=interior.buildInteriorTour(editedTourPlan);
+assert.notDeepEqual(adjustedTour[0].from,cameraSpot,'A DIY move must relocate an obstructed camera');
+assert.ok(interior.cameraPositionClear(adjustedTour[0].from[0],adjustedTour[0].from[2],editedTourPlan));
+assert.deepEqual(interior.tourFrame(100,4),{index:3,progress:1},'Ending must keep the final room camera valid');
+assert.deepEqual(interior.tourFrame(-1,4),{index:0,progress:0});
+console.log('Interior tour checks passed: clear camera paths, edited layouts, eye height and ending bounds.');

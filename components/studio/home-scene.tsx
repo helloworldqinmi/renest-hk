@@ -6,7 +6,7 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { createIPhone, createMovingTruck, lidarPosition } from './scene-props';
-import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
+import { batchStatic } from './scene-geometry';
 import { studioInventory, allExistingIds, oldPlacements, studioLayouts, type LayoutId, type Placement } from '@/lib/studio-data';
 import styles from './studio.module.css';
 import { footprint, isStaged, placementIssue } from '@/lib/studio-placement';
@@ -24,12 +24,7 @@ type Transform={object:T.Object3D;from:T.Vector3;to:T.Vector3;fromYaw:number;toY
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 const ease=(n:number)=>1-Math.pow(1-clamp(n),3);
 const materialList=(o:T.Mesh)=>(Array.isArray(o.material)?o.material:[o.material]) as T.MeshStandardMaterial[];
-function batchStatic(root:T.Object3D){
- const parents:T.Object3D[]=[];root.traverse(o=>{if(o.children.length)parents.push(o);});
- for(const parent of parents){const buckets=new Map<T.Material,T.Mesh[]>();for(const o of [...parent.children]){if(!(o instanceof T.Mesh)||o.children.length||o.userData.wall||o.userData.upper||/lampshade|Pleated shade|Warm diffuser/i.test(o.name)||Array.isArray(o.material))continue;const bucket=buckets.get(o.material)??[];bucket.push(o);buckets.set(o.material,bucket);}
-  for(const [material,objects]of buckets){if(objects.length<3)continue;const geometries=objects.map(o=>{o.updateMatrix();const g=o.geometry.index?o.geometry.toNonIndexed():o.geometry.clone();return g.applyMatrix4(o.matrix);});const merged=mergeGeometries(geometries);geometries.forEach(g=>g.dispose());if(!merged)continue;const m=new T.Mesh(merged,material);m.name=material.name+' details';objects.forEach(o=>o.removeFromParent());parent.add(m);}
- }
-}
+
 function pointCloud(root:T.Object3D,budget:number){
  root.updateMatrixWorld(true);
  const a=new T.Vector3(),b=new T.Vector3(),c=new T.Vector3(),edge=new T.Vector3(),cross=new T.Vector3();
