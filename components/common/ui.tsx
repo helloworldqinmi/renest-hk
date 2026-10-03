@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/common/motion-link";
 import type { LucideIcon } from "lucide-react";
 import { ArrowRight } from "lucide-react";
 

@@ -113,6 +113,9 @@ html:lang(zh) button { letter-spacing: .015em; }
   --radius-image: 6px;
   --motion-fast: 160ms;
   --motion-normal: 240ms;
+  --motion-enter: 320ms;
+  --motion-scene: 480ms;
+  --ease-out: cubic-bezier(.22, 1, .36, 1);
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;

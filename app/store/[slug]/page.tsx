@@ -1,6 +1,7 @@
+import { ProductTransition } from '@/components/common/product-transition';
 import { LocalText } from '@/components/locale-provider';
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/common/motion-link";
 import { ArrowLeft, Check, PackageCheck, Ruler, Truck } from "lucide-react";
 import { notFound } from "next/navigation";
 import { findFoldingProduct, foldingProducts } from "@/lib/folding-products";
@@ -22,7 +23,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
       <Link href={from === "studio" ? "/demo" : "/recommendations"} className={styles.back}><ArrowLeft size={15} /> <LocalText>{from === "studio" ? "Back to your moving studio" : "Back to recommendations"}</LocalText></Link>
       <div className={styles.product}>
         <section className={styles.gallery}>
-          <div className={styles.mainImage}><Image src={product.gallery[0]} alt={product.name} fill sizes="(max-width: 850px) 100vw, 61vw" priority /></div>
+          <ProductTransition slug={product.slug}><div className={styles.mainImage}><Image src={product.gallery[0]} alt={product.name} fill sizes="(max-width: 850px) 100vw, 61vw" priority /></div></ProductTransition>
           {product.gallery.length > 1 ? <div className={styles.secondaryImage}><Image src={product.gallery[1]} alt={`${product.name} in its alternate configuration`} fill sizes="(max-width: 850px) 100vw, 31vw" /></div> : null}
         </section>
         <aside className={styles.details}>
@@ -37,7 +38,7 @@ export default async function ProductPage({ params, searchParams }: { params: Pr
           <div className={styles.features}><span><LocalText>{"PRODUCT DETAILS"}</LocalText></span>{product.features.map((feature) => <div key={feature}><Check size={13} /><LocalText>{feature}</LocalText></div>)}</div>
         </aside>
       </div>
-      <section className={styles.related}><div><span><LocalText>{"MORE FLEXIBLE PIECES"}</LocalText></span><h2><LocalText>{"You may also like."}</LocalText></h2></div><div className={styles.relatedGrid}>{related.map((item) => <Link href={`/store/${item.slug}${from==='studio'?'?from=studio':''}`} key={item.slug}><div><Image src={item.image} alt={item.name} fill sizes="(max-width: 650px) 90vw, 28vw" /></div><span><LocalText>{item.category}</LocalText></span><h3><LocalText>{item.name}</LocalText></h3><strong><LocalText>{"HK$"}</LocalText>{item.price.toLocaleString()}</strong></Link>)}</div></section>
+      <section className={styles.related}><div><span><LocalText>{"MORE FLEXIBLE PIECES"}</LocalText></span><h2><LocalText>{"You may also like."}</LocalText></h2></div><div className={styles.relatedGrid}>{related.map((item) => <Link href={`/store/${item.slug}${from==='studio'?'?from=studio':''}`} key={item.slug}><ProductTransition slug={item.slug}><div><Image src={item.image} alt={item.name} fill sizes="(max-width: 650px) 90vw, 28vw" /></div></ProductTransition><span><LocalText>{item.category}</LocalText></span><h3><LocalText>{item.name}</LocalText></h3><strong><LocalText>{"HK$"}</LocalText>{item.price.toLocaleString()}</strong></Link>)}</div></section>
     </main>
   );
 }

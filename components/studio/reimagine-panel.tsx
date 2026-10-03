@@ -4,7 +4,8 @@ import { useLocale } from '@/components/locale-provider';
 import { LivingQuestionnaire } from './living-questionnaire';
 import type { LivingBrief } from '@/lib/living-brief';
 import { ArrowUpRight, Check, Feather, LayoutTemplate, MessageSquare, Sparkles } from 'lucide-react';
-import { motion, useReducedMotion } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { habits, studioLayouts, type LayoutId } from '@/lib/studio-data';
 import styles from './reimagine.module.css';
 

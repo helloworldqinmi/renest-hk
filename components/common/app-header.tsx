@@ -1,7 +1,7 @@
 "use client";
 
 import { LanguageSwitch, useLocale } from "@/components/locale-provider";
-import Link from "next/link";
+import Link from "@/components/common/motion-link";
 import { BrandLogo } from "./brand-logo";
 import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
@@ -27,7 +27,7 @@ export function AppHeader() {
 
   return (
     <>
-      <header className={`app-header ${pathname === "/" ? "home-header" : ""}`}>
+      <header style={{ viewTransitionName: "site-header" }} className={`app-header ${pathname === "/" ? "home-header" : ""}`}>
         <Link href="/" className="brand" aria-label={t("ReNest HK home")}>
           <BrandLogo />
         </Link>

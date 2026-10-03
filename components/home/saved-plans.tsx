@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import Link from '@/components/common/motion-link';
 import {useEffect,useState} from 'react';
 import {useLocale} from '@/components/locale-provider';
 import {readPlanHistory,STUDIO_SESSION_KEY,studioLayouts,type SavedStudioPlan} from '@/lib/studio-data';

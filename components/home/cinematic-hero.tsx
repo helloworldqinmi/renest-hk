@@ -1,10 +1,10 @@
 'use client';
 import { LocalText, useLocale } from '@/components/locale-provider';
 import dynamic from 'next/dynamic';
-import Link from 'next/link';
+import Link from '@/components/common/motion-link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, ArrowDown, Pause, Play } from 'lucide-react';
-import { useReducedMotion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/use-reduced-motion';
 import type { HomeSceneProps } from '@/components/studio/home-scene';
 import styles from './cinematic-hero.module.css';
 const Scene=dynamic<HomeSceneProps>(()=>import('@/components/studio/home-scene').then(m=>m.HomeScene),{ssr:false,loading:()=> <div className={styles.sceneLoading}><LocalText>{"A familiar corner, coming into view…"}</LocalText></div>});

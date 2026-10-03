@@ -1,7 +1,7 @@
 import { LocalText } from '@/components/locale-provider';
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/common/motion-link';
 import { ArrowRight, ArrowUpRight, Leaf, House, Sparkles } from 'lucide-react';
 import { BrandLogo } from '@/components/common/brand-logo';
 import styles from './about.module.css';

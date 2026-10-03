@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import Link from 'next/link';
+import Link from '@/components/common/motion-link';
 import {Recycle,Check} from 'lucide-react';
 import {useLocale} from '@/components/locale-provider';
 import {studioInventory} from '@/lib/studio-data';

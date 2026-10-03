@@ -1,6 +1,7 @@
+import { ProductTransition } from '@/components/common/product-transition';
 import { LocalText } from '@/components/locale-provider';
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/common/motion-link";
 import { ArrowLeft, ArrowRight, Check, Sparkles } from "lucide-react";
 import { foldingProducts } from "@/lib/folding-products";
 import styles from "./recommendations.module.css";
@@ -16,8 +17,8 @@ export default async function RecommendationsPage({ searchParams }: Recommendati
   const returnToDemo = params.from === "demo" || params.from === "studio";
 
   return (
-    <main className={styles.page}>
-      {returnToDemo ? <Link href="/demo" className={styles.returnLink}><ArrowLeft size={15} /><LocalText>{" Back to my plan"}</LocalText></Link> : null}
+    <main key={params.kind ?? 'all'} className={styles.page}>
+      {returnToDemo ? <Link href="/demo" direction="back" className={styles.returnLink}><ArrowLeft size={15} /><LocalText>{" Back to my plan"}</LocalText></Link> : null}
       <header className={styles.hero}>
         <div><span><Sparkles size={14} /><LocalText>{" CURATED FOR YOUR NEW SPACE"}</LocalText></span><h1><LocalText>{"You may like this."}</LocalText></h1></div>
         <p><LocalText>{"Thoughtful additions for compact homes. Keep what works, and choose only the pieces that make everyday life easier."}</LocalText></p>
@@ -25,9 +26,9 @@ export default async function RecommendationsPage({ searchParams }: Recommendati
 
       <nav className="collection-filters" aria-label="Furniture collection"><Link href={`/recommendations?kind=all${returnToDemo?'&from=studio':''}`} aria-current={!params.kind||params.kind==='all'?'page':undefined}><LocalText>{"All furniture"}</LocalText></Link><Link href={`/recommendations?kind=new${returnToDemo?'&from=studio':''}`} aria-current={params.kind==='new'?'page':undefined}><LocalText>{"New folding furniture"}</LocalText></Link><Link href={`/recommendations?kind=secondhand${returnToDemo?'&from=studio':''}`} aria-current={params.kind==='secondhand'?'page':undefined}><LocalText>{"Second-hand furniture"}</LocalText></Link></nav><p className={styles.priceNote}><LocalText>{"Illustrative demo prices in HKD · delivery and installation excluded."}</LocalText></p>
       <section className={styles.featured}>
-        <Link href={`/store/${products[0].slug}${returnToDemo?'?from=studio':''}`} className={styles.featuredImage}>
+        <ProductTransition slug={products[0].slug}><Link href={`/store/${products[0].slug}${returnToDemo?'?from=studio':''}`} className={styles.featuredImage}>
           <Image src={products[0].image} alt={products[0].name} fill sizes="(max-width: 800px) 100vw, 62vw" priority />
-        </Link>
+        </Link></ProductTransition>
         <div className={styles.featuredCopy}>
           <span><LocalText>{products[0].badge}</LocalText></span><small><LocalText>{products[0].category}</LocalText></small>
           <h2><LocalText>{products[0].name}</LocalText></h2><p><LocalText>{products[0].description}</LocalText></p>
@@ -40,7 +41,7 @@ export default async function RecommendationsPage({ searchParams }: Recommendati
       <section className={styles.grid}>
         {products.slice(1).map((product) => (
           <Link href={`/store/${product.slug}${returnToDemo?'?from=studio':''}`} className={styles.card} key={product.slug}>
-            <div className={styles.cardImage}><Image src={product.image} alt={product.name} fill sizes="(max-width: 700px) 92vw, 31vw" />{product.badge ? <span><LocalText>{product.badge}</LocalText></span> : null}</div>
+            <ProductTransition slug={product.slug}><div className={styles.cardImage}><Image src={product.image} alt={product.name} fill sizes="(max-width: 700px) 92vw, 31vw" />{product.badge ? <span><LocalText>{product.badge}</LocalText></span> : null}</div></ProductTransition>
             <div className={styles.cardCopy}><small><LocalText>{product.category}</LocalText></small><h3><LocalText>{product.name}</LocalText></h3><p><LocalText>{product.fitNote}</LocalText></p><div><strong><LocalText>{"HK$"}</LocalText>{product.price.toLocaleString()}</strong><span><LocalText>{product.foldedDimensions}</LocalText></span></div></div>
           </Link>
         ))}

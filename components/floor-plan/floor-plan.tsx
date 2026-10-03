@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { motion } from 'framer-motion';
+import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { useId } from "react";
 import { Check, MoveUpRight, Plus, RefreshCw, ShoppingBag, X } from "lucide-react";
 import { furnitureInventory } from "@/lib/demo-data";

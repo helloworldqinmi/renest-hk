@@ -93,9 +93,9 @@
 
 /* A quiet workbench for direct furniture manipulation. */
 .diyBar{position:absolute;top:132px;left:auto;right:32px;display:flex;align-items:center;justify-content:space-between;gap:12px;z-index:2;max-width:460px}
-.diyEntry{display:flex;align-items:center;gap:12px;background:#f9fbf5e8;border:1px solid #ccd8c4;border-radius:14px;padding:13px 16px;color:#426044;box-shadow:0 4px 18px #34463206;text-align:left;transition:background .2s,transform .2s}
+.diyEntry{width:100%;margin:0 0 24px;display:flex;align-items:center;gap:12px;background:#f9fbf5e8;border:1px solid #ccd8c4;border-radius:14px;padding:13px 16px;color:#426044;box-shadow:0 4px 18px #34463206;text-align:left;transition:background .2s,transform .2s}
 .diyEntry:hover{background:#fff;transform:translateY(-2px)}
-.diyEntry span,.diyIdentity span{display:flex;flex-direction:column;gap:4px}.diyEntry b,.diyIdentity b{font-size:12px;font-weight:550;letter-spacing:.2px}.diyEntry small,.diyIdentity small{font-size:10px;color:#76856d;line-height:1.5}.diyEntry>svg:last-child{margin-left:12px}
+.diyEntry span,.diyIdentity span{display:flex;flex-direction:column;gap:4px}.diyEntry b,.diyIdentity b{font-size:12px;font-weight:550;letter-spacing:.2px}.diyEntry small,.diyIdentity small{font-size:10px;color:#76856d;line-height:1.5}.diyEntry>span{flex:1;min-width:0}.diyEntry>svg{flex-shrink:0}.diyEntry>svg:last-child{margin-left:auto}
 .diyBar[data-active=true]{top:112px;background:#f8faf4ef;border:1px solid #cfdac8;border-radius:14px;padding:12px 14px;max-width:none;box-shadow:0 5px 25px #30432d06}
 .diyIdentity{display:flex;align-items:center;gap:11px;color:#52734a}.diyIdentity>svg{flex-shrink:0}.diyCommands{display:flex;align-items:center;gap:5px}.diyCommands button{display:flex;align-items:center;justify-content:center;gap:6px;min-width:36px;min-height:36px;padding:8px;border:0;border-radius:8px;background:transparent;color:#53694a;font-size:11px}.diyCommands button:hover:not(:disabled){background:#e8eedf}.diyCommands button:disabled{opacity:.3;cursor:default}.diyCommands .diyDone{background:#526e49;color:#fff;padding-inline:13px;white-space:nowrap}.diyCommands .diyDone:hover{background:#405b39}
 .diyBar button:focus-visible,.scene canvas:focus-visible{outline:2px solid #557846;outline-offset:3px}
@@ -105,3 +105,44 @@
 @media(max-width:740px){.diyBar{top:auto;bottom:135px;left:14px;right:14px;max-width:none}.diyEntry{padding:10px 13px;border-radius:11px}.diyEntry small{font-size:9px}.reimagineWorkspace .stage[data-editing=true]{height:650px;min-height:650px}.diyBar[data-active=true]{top:101px;left:14px;right:14px}.stage[data-editing=true] .scene{top:167px;bottom:129px}.stage[data-editing=true] .sceneHeading h1{font-size:24px;max-width:260px}.stage[data-editing=true] .sceneActions{top:27px;bottom:auto}.stage[data-editing=true] .sceneActions button:first-child{display:none}.selectionControls{left:14px;right:14px;bottom:132px;justify-content:space-between}.selectionCopy{min-width:0}.dragStatus{left:18px;right:18px;bottom:94px;font-size:10px}.diyCommands button{min-height:38px;min-width:32px}.diyIdentity b{font-size:11px}.stage[data-editing=true] .toolbar{max-width:calc(100% - 20px)}.stage[data-editing=true] .toolbar button{padding:10px 7px}}
 @media(prefers-reduced-motion:reduce){.diyEntry{transition:none}}
 @media(prefers-reduced-motion:reduce){.detailDrawer[open]>:not(summary){animation:none}.detailDrawer summary,.button,.primary,.textButton,.sceneActions button,.toolbar button,.layoutOptions button{transition:none}.button:active,.primary:active,.sceneActions button:active,.toolbar button:active,.layoutOptions button:active{transform:none}.button:hover>svg:last-child,.primary:hover>svg:last-child,.next:hover>svg:last-child,.designResponse button:hover>svg:last-child{transform:none}}
+
+/* The canvas stays mounted; only the supporting controls arrive with each phase. */
+.workspace{transition:grid-template-columns var(--motion-scene) var(--ease-out)}
+@media(prefers-reduced-motion:no-preference){.sideFooter{animation:content-arrive var(--motion-enter) var(--ease-out) 40ms both}}
+@media(prefers-reduced-motion:reduce){.workspace{transition:none}}
+
+/* On touch screens, controls occupy their own rows instead of covering the room. */
+@media(max-width:740px){
+ .reimagineWorkspace .stage[data-editing=true]{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  grid-template-areas:"commands commands" "canvas canvas" "selection selection" "status status" "tools tools" "caption actions";
+  height:auto;min-height:0;gap:10px;padding:14px;
+ }
+ .stage[data-editing=true] .sceneHeading{display:none}
+ .stage[data-editing=true] .diyBar[data-active=true]{
+  grid-area:commands;position:static;inset:auto;max-width:none;min-width:0;gap:8px;
+ }
+ .stage[data-editing=true] .diyIdentity{min-width:0}
+ .stage[data-editing=true] .diyCommands{flex-shrink:0}
+ .stage[data-editing=true] .diyCommands button{min-width:40px;min-height:44px}
+ .stage[data-editing=true] .sceneSurface{
+  grid-area:canvas;position:relative;inset:auto;min-width:0;height:clamp(320px,48dvh,440px);
+ }
+ .stage[data-editing=true] .scene{inset:0}
+ .stage[data-editing=true] .selectionControls{
+  grid-area:selection;position:static;inset:auto;min-width:0;box-shadow:none;
+ }
+ .stage[data-editing=true] .selectionCopy b{overflow-wrap:anywhere}
+ .stage[data-editing=true] .selectionActions{flex-shrink:0}
+ .stage[data-editing=true] .selectionActions button{width:44px;height:44px}
+ .stage[data-editing=true] .dragStatus{grid-area:status;position:static;inset:auto;margin:0;min-height:30px}
+ .stage[data-editing=true] .toolbar{
+  grid-area:tools;position:static;inset:auto;transform:none;max-width:none;
+  flex-wrap:wrap;justify-content:center;white-space:normal;
+ }
+ .stage[data-editing=true] .toolbar button{min-height:44px}
+ .stage[data-editing=true] .sceneFooter{grid-area:caption;position:static;inset:auto;align-self:center}
+ .stage[data-editing=true] .sceneActions{grid-area:actions;position:static;inset:auto;flex-direction:row}
+ .stage[data-editing=true] .sceneActions button{width:44px;height:44px}
+}
