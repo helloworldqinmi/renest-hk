@@ -63,5 +63,7 @@ export function finishMaterial(material: T.MeshStandardMaterial, maps: ReturnTyp
   material.emissive.set('#ffd7a1'); material.emissiveIntensity = 0;
   material.userData.lampGlow = true;
  }
+ // Keep the slightly darker Blender welt visible after applying the site palette.
+ if (/tailored seam/.test(name)) material.color.multiplyScalar(.9);
  material.envMapIntensity = /metal|champagne|glass|steel/i.test(name) ? .8 : .42;
 }

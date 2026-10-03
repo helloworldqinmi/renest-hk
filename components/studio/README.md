@@ -28,7 +28,7 @@ The phone now shares one position and scale between ready and scan states. It tu
 
 The Reimagine stage gives the design brief a wider panel, one-click lifestyle prompts and editable priorities. Entering the stage eases into the orthographic floor plan; Generate returns to 3D and retains the complete packing, driving and unloading animation alongside simulated design progress. Camera transitions interpolate spherical orbit angles to avoid an abrupt azimuth snap at the top-view pole. The result keeps the original brief available for refinement. The experience remains explicitly simulated.
 
-Rendering uses shared, small procedural grain/weave/plaster surface maps, material-specific finishes, a neutral daylight key and fill, and lamp-positioned warm practicals at night. Floor plan mode smoothly raises the key light and reduces shadow contrast; it returns to daylight for legibility. Soft furniture contact shading follows each piece, stays clipped during scans, and is hidden on moving-truck copies. Mobile canvases cap pixel density and use 1024px shadow maps. Existing rounded furniture geometry is retained. No heavy screen-space postprocessing is required.
+Rendering uses shared, small procedural grain/weave/plaster surface maps, material-specific finishes, a neutral daylight key and fill, and lamp-positioned warm practicals at night. Floor plan mode smoothly raises the key light and reduces shadow contrast; it returns to daylight for legibility. Soft furniture contact shading follows each piece, stays clipped during scans, and is hidden on moving-truck copies. Mobile canvases cap pixel density and use 1024px shadow maps. Most original rounded furniture geometry is retained; the beds use the offline Blender refinement described below, while the sofa retains its original appearance. No heavy screen-space postprocessing is required.
 
 Impact gives the live room its own unobstructed framing, with an original-home reference card, live reuse/addition counts, a reuse highlight toggle and a slow, pausable room tour. Direct manipulation and switching to Floor plan stop the tour; reduced-motion settings disable it.
 
@@ -37,3 +37,8 @@ Scan timing is shared in `lib/scan-timeline.ts`: phone rotation completes before
 Homepage demo links explicitly start at the old-home opening. After Generate, the full truck sequence leads into a short room reveal: furniture lands, lighting rises and the camera settles before layout controls appear. Reduced motion bypasses the reveal delay, and Skip animation opens the result immediately. Existing-room photography is shown uncropped below the hero; no completed new-home layout is previewed there.
 
 The scanning phone now turns for 6% of the scan (about 0.6s) and remains outside the apartment boundary. Moving furniture uses dimension-fitted, non-overlapping cargo slots and lift/travel/lower paths. The truck follows a straight minimum-jerk drive with distance-based wheel rotation; its rear gate closes after loading and opens after stopping, before unloading. Scene readiness is keyed by mode to prevent the reveal completion race; results also provide an immediate skip and bounded timeout.
+
+The live V2 assets include Blender-refined bed upholstery with separate
+UV1 local-occlusion atlases. Rebuild them with `npm run build:refined-models`;
+see `docs/blender-refinement.md` for the pipeline, invariants, and measured size
+tradeoffs. The sofa keeps its original geometry and materials. Source models remain under `v2-home-models/models/`.

@@ -8,7 +8,8 @@
     "check:studio": "node scripts/check-studio.cjs",
     "build:scan-model": "bash scripts/build-old-home-scan.sh",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:refined-models": "node scripts/refine-models.mjs"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
@@ -22,6 +23,9 @@
   },
   "devDependencies": {
     "@gltf-transform/cli": "^4.5.0",
+    "@gltf-transform/core": "4.5.0",
+    "@gltf-transform/extensions": "4.5.0",
+    "@gltf-transform/functions": "4.5.0",
     "@types/node": "^22.10.2",
     "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
