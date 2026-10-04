@@ -87,6 +87,12 @@ for(const layout of data.studioLayouts){
   assert.equal(shot.from[1],interior.TOUR_CAMERA_HEIGHT,'Tour must use a consistent interior photography height');
   assert.equal(shot.target[1],shot.from[1],'Architecture verticals need a level camera');
   assert.ok(shot.fov >= 60 && shot.fov <= 70,'Keep a bounded wide interior lens');
+  if(shot.id==='dining'){
+   const tv=layout.placements.find(p=>p.id==='F03');
+   const dx=tv.x-x,dz=tv.z-z,tx=shot.target[0]-x,tz=shot.target[2]-z;
+   const facing=(dx*tx+dz*tz)/(Math.hypot(dx,dz)*Math.hypot(tx,tz));
+   assert.ok(facing<.5,`${layout.id}: the dining camera must keep the television away from the forward view throughout its drift`);
+  }
  }
 }
 const initialTour=interior.buildInteriorTour(data.studioLayouts[0].placements);
@@ -121,3 +127,36 @@ for(const room of ['living','dining','bedroom','study']){
  assert.equal(filmMotion.interiorFilmMotion(.7,room,true).scale,1,'Reduced motion keeps the full frame');
 }
 console.log('Film motion checks passed: continuous movement, stable framing, reduced motion.');
+
+// Quick planning must keep detailed constraints and survive saved-plan parsing.
+const insights=load(path.join(root,'lib/plan-insights.ts'));
+const quick=insights.buildQuickBrief(brief.defaultBrief,data.allExistingIds,{household:'2',priority:'work',budget:1000,drilling:'no'});
+const quickPlan=planner.planForProfile(quick,data.allExistingIds);
+assert.equal(quickPlan.recommended,'c');
+assert.equal(quick.profile.completed.length,0,'Quick defaults are not confirmed questionnaire answers');
+const quickSave=data.parseStudioPlan(JSON.stringify({version:2,phase:'results',selected:data.allExistingIds,habits:['reuse'],note:'',layout:'c',brief:quick}));
+assert.equal(quickSave.brief.profile.answers.workers,'2');
+assert.equal(quickSave.brief.profile.answers.deskRoom,'unknown');
+assert.equal(planner.planForProfile(quickSave.brief,data.allExistingIds).recommended,'c');
+const constrained={...tailored,profile:{...tailored.profile,furniture:{F13:'must'},answers:{...tailored.profile.answers,secondhand:'no',includesFees:'yes',serviceReserve:'400'}}};
+const constrainedQuick=insights.buildQuickBrief(constrained,data.allExistingIds,{household:'3',priority:'work',budget:1000,drilling:'no'});
+assert.equal(constrainedQuick.profile.furniture.F13,'must');
+assert.equal(constrainedQuick.profile.answers.secondhand,'no');
+assert.equal(planner.furnitureAllowance(constrainedQuick),600);
+assert.equal(constrainedQuick.profile.answers.diners,'3-4');
+assert.notEqual(planner.planForProfile(constrainedQuick,data.allExistingIds).recommended,'c');
+const zeroQuick=insights.buildQuickBrief(quick,data.allExistingIds,{household:'2',priority:'work',budget:0,drilling:'no'});
+assert.ok(planner.planForProfile(zeroQuick,data.allExistingIds).plans.every(p=>p.cost===0));
+const original=data.studioLayouts[0].placements;
+const outside=original.map(p=>p.id==='F01'?{...p,x:2,z:8}:p);
+const facts=insights.inspectPlan(quick,outside,data.allExistingIds);
+assert.equal(facts.reused.length,17);
+assert.equal(facts.staged.length,1);
+assert.ok(facts.left.some(p=>p.id==='F01'));
+assert.equal(insights.inspectPlan(quick,original.filter(p=>p.id==='F01'),['F01']).selectedReuse,100);
+assert.equal(insights.inspectPlan(quick,original.filter(p=>p.id==='F01'),['F01']).allReuse,6);
+const removal=insights.planDifference(original,original.filter(p=>p.origin!=='new'));
+assert.equal(removal.cost,-549);
+assert.equal(removal.removed.length,1);
+assert.equal(insights.planDifference(original,outside).moved.length,1);
+console.log('Decision checks passed: quick brief persistence, preserved constraints, budget changes, staged furniture, distinct reuse denominators and purchase deltas.');

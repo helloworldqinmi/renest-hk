@@ -51,13 +51,20 @@ export function buildInteriorTour(placements: Placement[]): TourShot[] {
         const front = ((x - focus.x) * Math.sin(angle) + (z - focus.z) * Math.cos(angle)) / Math.max(.1, distance);
         value += Math.max(0, .25 - front) * 12;
       }
-      // A wardrobe near the lens can fill half the frame even if the center ray is clear.
+      // Wide media screens sit below eye level but can still dominate the foreground.
+      // Penalize their full angular footprint, including the edge of the frame.
       for (const p of placements.filter(p => !isStaged(p))) {
         const item = studioInventory.find(item => item.id === p.id);
-        if (!item || item.dimensions[2] < 1.5) continue;
+        if (!item || item.dimensions[2] < 1.2 || p.id === focus?.id) continue;
         const dx = p.x - x, dz = p.z - z, d = Math.hypot(dx, dz);
         const facing = (dx * (target[0] - x) + dz * (target[2] - z)) / Math.max(.01, d * distance);
-        if (facing > .35 && d < 1.5) value += (1.5 - d) * 35;
+        const radius = Math.hypot(...item.dimensions.slice(0, 2)) / 2;
+        const edgeDistance = Math.max(.1, d - radius);
+        const angle = Math.acos(Math.max(-1, Math.min(1, facing)));
+        const angularRadius = Math.atan2(radius, d);
+        if (angle - angularRadius < Math.PI / 5 && d < distance && edgeDistance < 2) {
+          value += (2 - edgeDistance) * (item.type === 'tv' ? 90 : 35);
+        }
       }
       // Avoid looking at the back of a tall cabinet instead of the room's focus.
       for (let i = 1; i < 8; i++) {
