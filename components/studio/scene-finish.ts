@@ -1,7 +1,7 @@
 import * as T from 'three';
 
 /** Small shared surface maps: deterministic, subtle, and generated once per canvas. */
-export function createSurfaceMaps(anisotropy: number) {
+export function createSurfaceMaps(anisotropy: number, cinematic = false) {
  const size = 128;
  function texture(kind: 'grain' | 'weave' | 'plaster') {
   const data = new Uint8Array(size * size * 4);
@@ -9,7 +9,10 @@ export function createSurfaceMaps(anisotropy: number) {
   for (let y = 0; y < size; y++) for (let x = 0; x < size; x++) {
    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
    const noise = seed / 4294967296 - .5;
-   const signal = kind === 'grain'
+   const signal = cinematic ? (kind === 'grain'
+    ? Math.sin(y * Math.PI * 2 / 32 + Math.sin(x * Math.PI * 2 / size) * .65) * .14 + noise * .035
+    : kind === 'weave' ? (Math.cos(x * Math.PI / 8) + Math.cos(y * Math.PI / 8)) * .055 + noise * .035 : noise * .08)
+    : kind === 'grain'
     ? Math.sin(y * .75 + Math.sin(x * Math.PI * 2 / size) * .65) * .2 + noise * .12
     : kind === 'weave' ? (Math.cos(x * Math.PI / 2) + Math.cos(y * Math.PI / 2)) * .14 + noise * .16 : noise * .3;
    const value = Math.round(178 + signal * 80), i = (y * size + x) * 4;

@@ -113,7 +113,7 @@ for(const room of ['living','dining','bedroom','study']){
  for(let step=1;step<=600;step++){
   const current=filmMotion.interiorFilmMotion(step/600,room);
   assert.equal(current.origin,start.origin,'A single shot must keep its crop center');
-  assert.ok(current.scale>=1 && current.scale<=1.065,'Keep the full room readable throughout the move');
+  assert.ok(current.scale>=1 && current.scale<=1.035,'Keep the full room readable throughout the move');
   assert.ok((current.scale-previous.scale)*direction>=0,'Camera movement must not reverse');
   assert.ok(Math.abs(current.scale-previous.scale)<.001,'No mid-shot scale jump');
   previous=current;

@@ -47,7 +47,7 @@ export function InteriorScene(props: Props) {
     const camera = new T.PerspectiveCamera(58, 1, .045, 65);
     const geometry = new Set<T.BufferGeometry>(), materials = new Set<T.Material>(), textures = new Set<T.Texture>();
     function track(root: T.Object3D) { root.traverse(o => { if (o instanceof T.Mesh) { geometry.add(o.geometry); for (const m of Array.isArray(o.material) ? o.material : [o.material]) { materials.add(m); for (const v of Object.values(m)) if (v instanceof T.Texture) textures.add(v); } } }); }
-    const surfaces = createSurfaceMaps(Math.min(renderer.capabilities.getMaxAnisotropy(), 8));
+    const surfaces = createSurfaceMaps(Math.min(renderer.capabilities.getMaxAnisotropy(), 8), true);
     const pmrem = new T.PMREMGenerator(renderer), room = new RoomEnvironment();
     const environment = pmrem.fromScene(room, .04);
     scene.environment = environment.texture;
@@ -85,6 +85,7 @@ export function InteriorScene(props: Props) {
       scene.add(print); track(print);
     }
     const ceilingLights: T.RectAreaLight[] = [];
+    const bounceLights: T.RectAreaLight[] = [];
     const diffuser = new T.MeshStandardMaterial({ color: '#fff5df', roughness: .65, emissive: '#ffe7bc', emissiveIntensity: .35 });
     const hardware = new T.MeshStandardMaterial({ color: '#a68c67', metalness: .75, roughness: .35 });
     const fixture = new T.MeshStandardMaterial({ color: '#eee8da', roughness: .85 });
@@ -110,13 +111,17 @@ export function InteriorScene(props: Props) {
     // Soft bounced ceiling light belongs inside the shell, not above its roof.
     for (const [x, z] of [[1.7, 2.8], [6.2, 1.8], [6.9, 4.7]]) {
       const bounce = new T.RectAreaLight('#fff4e4', 1.5, 2, 1.8);
-      bounce.position.set(x, 2.48, z); bounce.lookAt(x, 0, z); scene.add(bounce);
+      bounce.position.set(x, 2.48, z); bounce.lookAt(x, 0, z); scene.add(bounce); bounceLights.push(bounce);
     }
     // The second render is a lightweight contact-shading pass, with denoising.
     const supportsHDR = renderer.extensions.has('EXT_color_buffer_float');
-    const composer = new EffectComposer(renderer, new T.WebGLRenderTarget(1, 1, { type: supportsHDR ? T.HalfFloatType : T.UnsignedByteType }));
+    // Canvas antialiasing does not apply to the composer's offscreen render target.
+    const composer = new EffectComposer(renderer, new T.WebGLRenderTarget(1, 1, {
+      type: supportsHDR ? T.HalfFloatType : T.UnsignedByteType,
+      samples: Math.min(mobile ? 2 : 4, renderer.capabilities.maxSamples),
+    }));
     const renderPass = new RenderPass(scene, camera), ao = new GTAOPass(scene, camera), output = new OutputPass(), fxaa = new ShaderPass(FXAAShader);
-    ao.blendIntensity = .8;
+    ao.blendIntensity = .55;
     ao.updateGtaoMaterial({ radius: .35, thickness: .7, samples: mobile ? 8 : 12, distanceFallOff: 1 });
     ao.updatePdMaterial({ radius: 4, samples: mobile ? 8 : 16 });
     ao.enabled = supportsHDR && !mobile;
@@ -165,8 +170,10 @@ export function InteriorScene(props: Props) {
           for (const material of list) {
             finishMaterial(material, surfaces, o.name);
             // A room-sized view needs quieter bump maps than a close product study.
-            material.bumpScale *= .6;
-            material.envMapIntensity = /metal|champagne|glass|steel/i.test(material.name) ? 1 : .65;
+            material.bumpScale *= .35;
+            // Keep oak reflections broad; the dark grain map otherwise lowers roughness.
+            if (/oak/i.test(material.name)) material.roughnessMap = null;
+            material.envMapIntensity = /metal|champagne|glass|steel/i.test(material.name) ? .85 : .55;
             if (material.userData.lampGlow) glowMaterials.push(material);
             if (/glazing|shower glass/i.test(material.name)) { material.transparent = true; material.opacity = .12; material.depthWrite = false; }
           }
@@ -218,12 +225,13 @@ export function InteriorScene(props: Props) {
       container!.dataset.visibleFurniture = plan.map(p => p.id).join(',');
       if (previousLight !== current.lighting) {
         previousLight = current.lighting; const evening = current.lighting === 'evening';
-        sun.color.set(evening ? '#ffd4a0' : '#fff1d9'); sun.intensity = evening ? 1 : 4;
-        ambient.intensity = evening ? .3 : .55; scene.environmentIntensity = evening ? .25 : .45;
-        windows.forEach(light => { light.color.set(evening ? '#a9bbdc' : '#eef3ff'); light.intensity = evening ? 2 : 6; });
-        practicals.forEach(light => { light.intensity = evening ? 3 : .3; });
-        ceilingLights.forEach(light => { light.intensity = evening ? 5 : 1.2; });
-        diffuser.emissiveIntensity = evening ? 1.6 : .35;
+        sun.color.set(evening ? '#b7c9e2' : '#fff1d9'); sun.intensity = evening ? .12 : 3.1;
+        ambient.intensity = evening ? .16 : .6; scene.environmentIntensity = evening ? .14 : .42;
+        windows.forEach(light => { light.color.set(evening ? '#a9bbdc' : '#eef3ff'); light.intensity = evening ? .65 : 4.8; });
+        practicals.forEach(light => { light.intensity = evening ? 2.4 : .3; });
+        ceilingLights.forEach(light => { light.intensity = evening ? 2.8 : 1.2; });
+        bounceLights.forEach(light => { light.intensity = evening ? .45 : 1.5; });
+        diffuser.emissiveIntensity = evening ? 1.2 : .35;
         glowMaterials.forEach(material => { material.emissiveIntensity = evening ? .8 : .06; });
         scene.background = new T.Color(evening ? '#7a899f' : '#dce4e6'); renderer.toneMappingExposure = evening ? 1.05 : .95;
         renderer.shadowMap.needsUpdate = true;

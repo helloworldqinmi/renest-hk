@@ -150,3 +150,66 @@
 .studio[data-phase=summary] .sideFooter>.interiorEntry{grid-column:1/-1;justify-content:flex-start;gap:14px;min-height:76px;padding:15px 18px;background:#263f30;border-color:#263f30;text-align:left}
 .interiorEntry>span:first-child{display:grid;place-items:center;width:35px;height:35px;border:1px solid #aec69b60;border-radius:50%;flex-shrink:0;color:#d3e1bc}.interiorEntry>span:nth-child(2){flex:1;min-width:0}.interiorEntry b{display:block;font-size:14px;font-weight:500;line-height:1.5}.interiorEntry small{display:block;font-size:9px;line-height:1.6;font-weight:400;color:#a8bb98;margin-top:3px}.interiorEntry>svg{flex-shrink:0}
 @media(max-width:740px){.studio[data-phase=summary] .sideFooter>.interiorEntry{margin-bottom:13px;min-height:78px;padding:14px 16px}.interiorEntry b{font-size:14px}.interiorEntry small{font-size:9px}}
+
+/* Closing steps: choose an arrangement, review its impact, then enter the film. */
+.studio:is([data-phase=results],[data-phase=summary]) .workspace{grid-template-columns:minmax(0,1fr) 420px}
+.studio:is([data-phase=results],[data-phase=summary]) .sidebar{min-width:0;background:#fff}
+.studio:is([data-phase=results],[data-phase=summary]) .sideContent{padding:24px;min-width:0}
+.studio:is([data-phase=results],[data-phase=summary]) .sideContent>:global(.back-step){width:auto;min-height:32px;margin:0 0 18px;padding:0;border:0;background:none;justify-content:flex-start;font-size:12px}
+.studio:is([data-phase=results],[data-phase=summary]) .sideEyebrow{margin-bottom:12px;letter-spacing:0}
+.studio:is([data-phase=results],[data-phase=summary]) .sidebar h2{font-size:28px;line-height:1.2;letter-spacing:0;margin-bottom:12px}
+.studio:is([data-phase=results],[data-phase=summary]) .description{font-size:12px;line-height:1.7;max-width:none;margin-bottom:20px;color:#69736d}
+.studio:is([data-phase=results],[data-phase=summary]) .sceneHeading{max-width:calc(100% - 180px)}
+.studio:is([data-phase=results],[data-phase=summary]) .sceneHeading h1{font-size:34px;letter-spacing:0;line-height:1.15}
+.studio[data-phase=results] .layoutOptions{margin:0;gap:10px}
+.studio[data-phase=results] .layoutOptions button>div{height:84px}
+.studio[data-phase=results] .layoutOptions small{font-size:10px}
+.studio[data-phase=results] .metrics{margin:20px 0;padding:16px 0}
+.studio[data-phase=results] .metrics strong{font-size:30px}
+.studio[data-phase=results] .metrics span{font-size:11px}
+.arrangementActions{display:flex;gap:10px;margin-bottom:20px}
+.arrangementActions button{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;min-width:0;min-height:42px;border:1px solid #dce2d7;border-radius:5px;background:#fff;color:#385744;font-size:12px}
+.arrangementActions button:hover{background:#eef2ed}
+.studio:is([data-phase=results],[data-phase=summary]) .detailDrawer{border-radius:0;border:0;border-block:1px solid #dce2d7;background:none;margin:18px 0 0;padding:0}
+.studio:is([data-phase=results],[data-phase=summary]) .detailDrawer summary{padding:16px 0}
+.studio[data-phase=summary] .scene{top:150px;bottom:125px}
+.studio[data-phase=summary] .impactHero{display:grid;grid-template-columns:88px minmax(0,1fr);gap:8px 18px;text-align:left;padding:0 0 20px;margin:0}
+.studio[data-phase=summary] .impactRing{width:88px;height:88px;margin:0;grid-row:1/3}
+.studio[data-phase=summary] .impactRing svg{width:100%;height:100%}
+.studio[data-phase=summary] .impactRing strong{font-size:28px}
+.studio[data-phase=summary] .impactHero h3{font-size:21px;line-height:1.2;letter-spacing:0;margin:8px 0 0}
+.studio[data-phase=summary] .impactHero p{font-size:11px;line-height:1.5;margin:0;color:#69736d}
+.studio[data-phase=summary] .impactRows{margin:0}
+.studio[data-phase=summary] .impactRows>div{padding:12px 0}
+.studio[data-phase=summary] .impactRows strong{font-size:26px;white-space:nowrap}
+.studio[data-phase=summary] .impactRows>div>span{font-size:12px}
+.studio[data-phase=summary] .impactRows small{font-size:10px}
+.studio:is([data-phase=results],[data-phase=summary]) .sideFooter{display:block;padding:16px 24px;background:#fff}
+.studio:is([data-phase=results],[data-phase=summary]) .sideFooter>.primary{min-height:48px;border-radius:5px;font-size:13px;margin:0}
+.studio:is([data-phase=results],[data-phase=summary]) .sideFooter>.demoNote{margin-top:10px;font-size:10px;line-height:1.5}
+.completionActions{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:10px}
+.completionActions button,.completionActions a{display:flex;align-items:center;gap:6px;min-height:36px;border:0;background:none;color:#5c6a61;font-size:11px;padding:0}
+.studio[data-phase=summary] :global(.move-value-grid){grid-template-columns:1fr}
+@media(max-width:1000px) and (min-width:741px){
+ .studio:is([data-phase=results],[data-phase=summary]) .workspace{grid-template-columns:minmax(0,1fr) 360px}
+ .studio:is([data-phase=results],[data-phase=summary]) .sceneHeading{max-width:calc(100% - 48px);top:80px;left:24px}
+ .studio:is([data-phase=results],[data-phase=summary]) .sceneHeading h1{font-size:28px}
+ .studio:is([data-phase=results],[data-phase=summary]) .toolbar{max-width:calc(100% - 24px);flex-wrap:wrap;justify-content:center;white-space:normal;width:max-content}
+}
+@media(max-width:740px){
+ .studio:is([data-phase=results],[data-phase=summary]) .workspace{display:flex;flex-direction:column;height:auto;min-height:0}
+ .studio:is([data-phase=results],[data-phase=summary]) .stage{order:0}
+ .studio:is([data-phase=results],[data-phase=summary]) .stage:not([data-editing=true]){height:460px;min-height:0}
+ .studio:is([data-phase=results],[data-phase=summary]) .sidebar{order:1;border-left:0;border-top:1px solid #dce2d7}
+ .studio:is([data-phase=results],[data-phase=summary]) .sceneHeading{left:20px;top:20px;max-width:calc(100% - 40px)}
+ .studio:is([data-phase=results],[data-phase=summary]) .sceneHeading h1{font-size:27px;max-width:320px}
+ .studio:is([data-phase=results],[data-phase=summary]) .sceneHeading p{display:none}
+ .studio:is([data-phase=results],[data-phase=summary]) .sceneActions{top:115px;right:16px}
+ .studio:is([data-phase=results],[data-phase=summary]) .stage:not([data-editing=true]) .scene{top:130px;bottom:100px}
+ .studio:is([data-phase=results],[data-phase=summary]) .toolbar{bottom:42px;flex-wrap:wrap;justify-content:center;width:calc(100% - 28px);white-space:normal}
+ .studio:is([data-phase=results],[data-phase=summary]) .toolbar button{padding:8px;font-size:10px}
+ .studio:is([data-phase=results],[data-phase=summary]) .sceneFooter{bottom:15px;left:20px;right:20px}
+ .studio:is([data-phase=results],[data-phase=summary]) .sceneFooter>span:last-child{display:none}
+ .studio:is([data-phase=results],[data-phase=summary]) .sideContent{padding:22px 20px}
+ .studio:is([data-phase=results],[data-phase=summary]) .sideFooter{position:static;padding:16px 20px}
+}
