@@ -12,7 +12,7 @@ import styles from './studio.module.css';
 import { footprint, isStaged, placementIssue } from '@/lib/studio-placement';
 import { stagingArea } from '@/lib/studio-workspace';
 import { cargoSlot, cargoScale, driveProgress, overheadTransfer, smoothMotion, tailgateOpen } from '@/lib/migration-motion';
-import { scanTimeline, revealedPointCount, furnitureCapture } from '@/lib/scan-timeline';
+import { scanTimeline, revealedPointCount, furnitureCapture, scanPointDensity } from '@/lib/scan-timeline';
 import {createSelectionHalo} from './selection-halo';
 import { createSurfaceMaps, finishMaterial } from './scene-finish';
 import { captureItemIndex } from './capture-mesh';
@@ -48,15 +48,19 @@ function pointCloud(root:T.Object3D,budget:number){
   if(area>0){surfaces.push({mesh:o,areas,area,weight,furniture});totalArea+=area*weight;}
  });
  const points:number[][]=[];let seed=42;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
- const keyLight=new T.Vector3(-.4,.85,.3).normalize();
+ const keyLight=new T.Vector3(-.4,.85,.3).normalize(),scanDarkLift=new T.Color('#abc3d0');
  for(const {mesh,areas,area,weight,furniture}of surfaces){
   const material=(Array.isArray(mesh.material)?mesh.material[0]:mesh.material) as T.MeshStandardMaterial;
   const color=material.color.clone();if(!furniture&&/plaster|concrete/i.test(material.name))color.set('#8dabb5');
+  // Acquisition colours must remain legible against the dark capture background.
+  // Black screens otherwise have valid samples that look like missing geometry.
+  const luminance=color.r*.2126+color.g*.7152+color.b*.0722;
+  if(luminance<.18)color.lerp(scanDarkLift,.62*(1-luminance/.18));
   const position=mesh.geometry.getAttribute('position'),index=mesh.geometry.index,count=Math.max(1,Math.round(budget*area*weight/totalArea));
   for(let n=0;n<count;n++){
    const sample=random()*area;let low=0,high=areas.length-1;while(low<high){const mid=(low+high)>>>1;if(areas[mid]<sample)low=mid+1;else high=mid;}
    const i=low*3;a.fromBufferAttribute(position,index?index.getX(i):i).applyMatrix4(mesh.matrixWorld);b.fromBufferAttribute(position,index?index.getX(i+1):i+1).applyMatrix4(mesh.matrixWorld);c.fromBufferAttribute(position,index?index.getX(i+2):i+2).applyMatrix4(mesh.matrixWorld);
-   const light=.58+.42*Math.abs(edge.subVectors(b,a).cross(cross.subVectors(c,a)).normalize().dot(keyLight));
+   const light=.52+.48*Math.max(0,edge.subVectors(b,a).cross(cross.subVectors(c,a)).normalize().dot(keyLight));
    const u=Math.sqrt(random()),v=random();a.multiplyScalar(1-u).addScaledVector(b,u*(1-v)).addScaledVector(c,u*v);points.push([a.x,a.y,a.z,color.r*light,color.g*light,color.b*light]);
   }
  }
@@ -214,7 +218,7 @@ export function HomeScene(props:HomeSceneProps){
   }
   async function ensureMode(){const key=live.current.mode==='product'?`product:${live.current.productId??'N01'}`:live.current.mode;if(modeKey===key)return;const fromMoving=modeKey==='move'&&key==='layout';if(fromMoving){arrivedAzimuth=Math.atan2(camera.position.x-controls.target.x,camera.position.z-controls.target.z);arrivedPolar=new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target)).phi;settledAfterMove=true;}else if(key==='move'){arrivedAzimuth=null;arrivedPolar=null;settledAfterMove=false;}const serial=++loadSerial;modeKey=key;mode=live.current.mode;ready=false;setLoaded(false);setError(false);
    try{const next=await load(key);if(disposed||serial!==loadSerial)return;const hadActiveRoot=!!activeRoot;for(const m of models.values())m.visible=false;for(const c of clouds.values())c.visible=false;for(const w of wires.values())w.visible=false;activeRoot=next;activeRoot.visible=true;wallCut();layoutKey='';selectionKey='';viewKey=live.current.view??'orbit';resize();if(mode==='layout'&&live.current.reveal&&!reduced)camera.zoom=.86;setView(!hadActiveRoot||(mode!=='move'&&mode!=='layout'));
-    if(mode==='old'||mode==='empty'){if(!clouds.has(key)){next.traverse(o=>{if(o.userData.wall){const w=o.userData.wall;o.scale.y=1;o.position.y=w.bottom+w.height/2;o.visible=true;}if(o.userData.upper)o.visible=true;});clouds.set(key,pointCloud(next,mobile?120000:260000));scene.add(clouds.get(key)!);const depth=createCaptureDepth(next);captureDepths.set(key,depth);scene.add(depth);allGeometry.add(depth.geometry);allMaterials.add(depth.material as T.Material);const topology=createSpatialTopology(next,mobile,true),w=topology.group,material=topology.material;material.clippingPlanes=[new T.Plane(new T.Vector3(-1,0,0),-4.55),new T.Plane(new T.Vector3(1,0,0),4.55)];allMaterials.add(material);w.traverse(o=>{if(o instanceof T.Mesh){allGeometry.add(o.geometry);allMaterials.add(o.material as T.Material);(o.material as T.MeshBasicMaterial).clippingPlanes=material.clippingPlanes;}});w.visible=false;scene.add(w);wires.set(key,w);container!.dataset.reconstructionTriangles=String(w.userData.triangles??0);wallCut();}}
+    if(mode==='old'||mode==='empty'){if(!clouds.has(key)){next.traverse(o=>{if(o.userData.wall){const w=o.userData.wall;o.scale.y=1;o.position.y=w.bottom+w.height/2;o.visible=true;}if(o.userData.upper)o.visible=true;});clouds.set(key,pointCloud(next,mobile?160000:400000));scene.add(clouds.get(key)!);const depth=createCaptureDepth(next);captureDepths.set(key,depth);scene.add(depth);allGeometry.add(depth.geometry);allMaterials.add(depth.material as T.Material);const topology=createSpatialTopology(next,mobile,true),w=topology.group,material=topology.material;material.clippingPlanes=[new T.Plane(new T.Vector3(-1,0,0),-4.55),new T.Plane(new T.Vector3(1,0,0),4.55)];allMaterials.add(material);w.traverse(o=>{if(o instanceof T.Mesh){allGeometry.add(o.geometry);allMaterials.add(o.material as T.Material);(o.material as T.MeshBasicMaterial).clippingPlanes=material.clippingPlanes;}});w.visible=false;scene.add(w);wires.set(key,w);container!.dataset.reconstructionTriangles=String(w.userData.triangles??0);wallCut();}}
     const captureNodes=[clouds.get(key),captureDepths.get(key),wires.get(key)].filter((node):node is T.Object3D=>!!node);const captureVisibility=captureNodes.map(node=>node.visible);captureNodes.forEach(node=>{node.visible=true;});
     if(renderer.extensions.has("KHR_parallel_shader_compile")) await renderer.compileAsync(scene,camera); else renderer.compile(scene,camera);captureNodes.forEach((node,index)=>{node.visible=captureVisibility[index];});if(live.current.readyToScan||live.current.scan!==undefined){phone.visible=true;if(renderer.extensions.has('KHR_parallel_shader_compile'))await renderer.compileAsync(deviceScene,camera);else renderer.compile(deviceScene,camera);phone.visible=false;}if(disposed||serial!==loadSerial)return;activeRoot.visible=!live.current.readyToScan&&live.current.scan===undefined;renderer.shadowMap.needsUpdate=true;renderFrame(camera);ready=true;revealStart=performance.now();setLoaded(true);live.current.onReady?.(mode);if(mode==='empty')void load('layout').catch(()=>{});
    }catch(e){if(!disposed&&serial===loadSerial){setError(true);console.error('Unable to load spatial model',e);}}
@@ -289,7 +293,7 @@ export function HomeScene(props:HomeSceneProps){
     if(cloud.visible){const positions=cloud.geometry.getAttribute('position');
      const sampleFront=timeline.beamX+1.15*smoothstep((progress-.34)/.06);
      const count=progress>=.06?revealedPointCount(positions.array,sampleFront):0;
-     cloud.geometry.setDrawRange(0,count);const pointMaterial=cloud.material as T.PointsMaterial;pointMaterial.opacity=timeline.pointOpacity;(pointMaterial.userData.captureSweep as {value:number}).value=sampleFront;(pointMaterial.userData.captureDensity as {value:number}).value=.06+.94*clamp((progress-.06)/.32);if(!pointMaterial.clippingPlanes)pointMaterial.clippingPlanes=[new T.Plane(new T.Vector3(1,0,0),4.55)];pointMaterial.clippingPlanes[0].constant=100;
+     cloud.geometry.setDrawRange(0,count);const pointMaterial=cloud.material as T.PointsMaterial;pointMaterial.opacity=timeline.pointOpacity;(pointMaterial.userData.captureSweep as {value:number}).value=sampleFront;(pointMaterial.userData.captureDensity as {value:number}).value=scanPointDensity(progress);if(!pointMaterial.clippingPlanes)pointMaterial.clippingPlanes=[new T.Plane(new T.Vector3(1,0,0),4.55)];pointMaterial.clippingPlanes[0].constant=100;
      container!.dataset.scanPointCount=String(count);if(scanning&&count!==lastPointCount&&now-lastSampleAnnouncement>120){lastPointCount=count;lastSampleAnnouncement=now;p.onScanSamples?.(count);}
      container!.dataset.scanPointMaxX=count?String(positions.getX(count-1)):'';
     }

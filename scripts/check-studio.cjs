@@ -176,3 +176,7 @@ console.log('Furniture extraction passed: large anchors first, monotonic reveal,
 assert.ok(spatial.scanCameraFrame(.24).orbit<-.1,'Turn toward the TV while the point cloud is still accumulating');
 assert.ok(spatial.scanCameraFrame(.24).pan>.5,'A short advance should overlap the turn instead of delaying it');
 assert.equal(spatial.scanCameraFrame(.48).orbit,-1.2,'Finish the interior turn before pulling back');
+
+assert.ok(scanMotion.scanPointDensity(.3)>scanMotion.scanPointDensity(.15)*4,'Point detail must visibly accumulate during the orbit');
+assert.equal(scanMotion.scanPointDensity(.4),1);
+let previousDensity=0;for(let i=0;i<=100;i++){const density=scanMotion.scanPointDensity(i/100);assert.ok(density>=previousDensity&&density<=1);previousDensity=density;}

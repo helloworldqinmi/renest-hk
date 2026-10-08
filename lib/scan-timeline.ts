@@ -44,3 +44,9 @@ export function furnitureCapture(progress: number, item: number) {
 export function identifiedFurniture(progress: number) {
  return EXTRACTION_ORDER.filter(item=>furnitureCapture(progress,item).surface>=1).length;
 }
+
+/** Accumulate detail throughout the camera sweep instead of filling early. */
+export function scanPointDensity(progress: number) {
+ const t=clamp((progress-.06)/.34);
+ return .025+.975*Math.pow(t,1.65);
+}
