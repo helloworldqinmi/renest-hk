@@ -14,6 +14,7 @@ import { batchStatic } from './scene-geometry';
 import { createSpatialTopology } from './spatial-effects';
 import { ENTRY_DURATION, spatialReveal, smootherstep } from '@/lib/spatial-experience';
 import { createRenderBudget, renderPixelRatio } from './render-budget';
+import { INTERIOR_JAMB } from '@/lib/interior-joinery';
 import styles from './interior-tour.module.css';
 
 type Props = { placements: Placement[]; shots: TourShot[]; clock: RefObject<number>; lighting: 'day' | 'evening'; reduced: boolean; structure?: boolean; paused?: boolean; onReady: () => void; onPause: () => void; onError: () => void; label: string };
@@ -186,7 +187,7 @@ export function InteriorScene(props: Props) {
         if (!/Door jamb|Door threshold|Window mullion|Window rail|Stone window sill/.test(name)) return;
         object.userData.stableJoinery = true;
         if (/Door jamb/.test(name)) {
-          object.geometry = new T.BoxGeometry(.04, 2.09, .18);
+          object.geometry = new T.BoxGeometry(INTERIOR_JAMB.width, INTERIOR_JAMB.height, INTERIOR_JAMB.depth);
           object.position.y = 1.065;
           if (object.parent) doorParents.add(object.parent);
         }

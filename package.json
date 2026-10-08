@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "check:studio": "node scripts/check-studio.cjs",
+    "check:studio": "node scripts/check-studio.cjs && node scripts/check-interior-joinery.mjs",
     "render:interior": "node scripts/render-interior.cjs",
     "build:scan-model": "bash scripts/build-old-home-scan.sh",
     "start": "next start",
