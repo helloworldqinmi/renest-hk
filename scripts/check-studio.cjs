@@ -87,6 +87,7 @@ for(const layout of data.studioLayouts){
   assert.equal(shot.from[1],interior.TOUR_CAMERA_HEIGHT,'Tour must use a consistent interior photography height');
   assert.equal(shot.target[1],shot.from[1],'Architecture verticals need a level camera');
   assert.ok(shot.fov >= 60 && shot.fov <= 70,'Keep a bounded wide interior lens');
+
  }
 }
 const initialTour=interior.buildInteriorTour(data.studioLayouts[0].placements);
@@ -113,7 +114,7 @@ for(const room of ['living','dining','bedroom','study']){
  for(let step=1;step<=600;step++){
   const current=filmMotion.interiorFilmMotion(step/600,room);
   assert.equal(current.origin,start.origin,'A single shot must keep its crop center');
-  assert.ok(current.scale>=1 && current.scale<=1.065,'Keep the full room readable throughout the move');
+  assert.ok(current.scale>=1 && current.scale<=1.035,'Keep the full room readable throughout the move');
   assert.ok((current.scale-previous.scale)*direction>=0,'Camera movement must not reverse');
   assert.ok(Math.abs(current.scale-previous.scale)<.001,'No mid-shot scale jump');
   previous=current;

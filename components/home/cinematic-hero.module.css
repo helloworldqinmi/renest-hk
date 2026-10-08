@@ -21,3 +21,26 @@
  .actions svg{transition:transform var(--motion-fast) var(--ease-out)}
 }
 @media(hover:hover) and (prefers-reduced-motion:no-preference){.actions a:first-child:hover svg{transform:translateX(3px)}.actions a:last-child:hover svg{transform:translateY(3px)}}
+
+/* Make the promise and the first action readable before the visual story. */
+.benefits{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}.benefits span{border:1px solid #78936b55;border-radius:20px;padding:6px 10px;color:#c8d4be;font-size:11px;line-height:1.5}.resume{pointer-events:auto;display:inline-flex;align-items:center;gap:8px;color:#dce7d1;font-size:12px;margin-top:16px;text-decoration:underline;text-underline-offset:4px}.copy p{font-size:15px;line-height:1.8;color:#c1ceb6}.note{font-size:11px;color:#b0bfa5;margin-top:17px}.actions a{font-size:12px}.openingLine{color:#b6c5ab;font-size:9px}
+@media(min-width:741px) and (max-width:1100px){.copy{padding-top:62px;max-width:490px}.copy h1{font-size:64px}.copy p{font-size:14px}}
+@media(max-width:740px){.hero{min-height:990px}.hero[data-locale^=zh]{min-height:930px}.hero .scene{inset:520px -4% 135px}.hero[data-locale^=zh] .scene{inset:455px -4% 130px}.copy p{font-size:14px}.actions{gap:15px}.actions a{font-size:11px}.benefits{gap:6px;margin-top:18px}.benefits span{font-size:10px;padding:5px 8px}.note{font-size:10px}.hero .fade{background:linear-gradient(180deg,#17271f 0%,#17271f 44%,transparent 59%,transparent 79%,#17271f 91%)}}
+@media(min-width:741px){.hero{min-height:760px}}
+
+/* Keep the closing line in flow: copy can grow with language and saved plans. */
+.hero{display:grid;grid-template-rows:1fr auto;height:auto;min-height:max(760px,calc(100dvh - 80px));max-height:none}
+.copy{padding-bottom:48px}
+.bottomLine{position:relative;bottom:auto;left:auto;right:auto;margin:0 max(48px,calc((100vw - 1370px)/2)) 30px}
+@media(min-width:741px) and (max-width:1100px){.bottomLine{margin-inline:32px}}
+@media(max-width:740px){
+ .hero,.hero[data-locale^=zh]{grid-template-rows:auto 350px auto;min-height:0}
+ .hero .copy,.hero[data-locale^=zh] .copy{grid-row:1;padding-bottom:24px}
+ .hero .scene,.hero[data-locale^=zh] .scene{position:relative;grid-row:2;inset:auto;min-width:0}
+ .hero .fade{display:none}
+ .scene::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,#17271f,transparent 22%,transparent 75%,#17271f)}
+ .bottomLine{grid-row:3;margin:0 24px 23px}
+ .sceneCaption{bottom:105px}
+ .actions{flex-wrap:wrap;row-gap:6px}
+}
+@media(min-width:741px){.hero .copy{width:max-content;max-width:calc(100% - 32px)}}

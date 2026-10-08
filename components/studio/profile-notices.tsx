@@ -18,9 +18,9 @@ const copy:Record<ProfileNotice,LocalCopy>={
  'budget-trimmed':['Optional additions were reduced to stay within your furniture allowance.','已减少可选添置，控制在你预留的家具预算内。','已減少可選添置，控制在你預留的傢俬預算內。'],
  secondhand:['Compatible second-hand pieces replace the corresponding new recommendations.','已用适配的二手家具替换对应新品推荐。','已用適配的二手傢俬替換對應新品推薦。'],
 };
-export function ProfileNotices({issues,changes=[]}:{issues:ProfileNotice[];changes?:ProfileNotice[]}){
+export function ProfileNotices({issues,changes=[],expanded=false}:{issues:ProfileNotice[];changes?:ProfileNotice[];expanded?:boolean}){
  const {tr}=useLocale();if(!issues.length&&!changes.length)return null;
  const important=issues.filter(v=>['beds','must-keep','workstations','dining','access','hobby-space'].includes(v));
  const others=issues.filter(v=>!important.includes(v));
- return <div className="profile-notices">{important.length>0&&<div className="profile-notices-warning"><b>{tr('Still needs your attention','这些需求仍需处理','這些需求仍需處理')}</b><ul>{important.map(v=><li key={v}>{tr(...copy[v])}</li>)}</ul></div>}{changes.length>0&&<ul className="profile-notices-changes">{changes.map(v=><li key={v}>{tr(...copy[v])}</li>)}</ul>}{others.length>0&&<details><summary>{tr('Planning notes','规划说明','規劃說明')} · {others.length}</summary><ul>{others.map(v=><li key={v}>{tr(...copy[v])}</li>)}</ul></details>}</div>;
+ return <div className="profile-notices">{important.length>0&&<div className="profile-notices-warning"><b>{tr('Still needs your attention','这些需求仍需处理','這些需求仍需處理')}</b><ul>{important.map(v=><li key={v}>{tr(...copy[v])}</li>)}</ul></div>}{changes.length>0&&<ul className="profile-notices-changes">{changes.map(v=><li key={v}>{tr(...copy[v])}</li>)}</ul>}{others.length>0&&<details open={expanded}><summary>{tr('Planning notes','规划说明','規劃說明')} · {others.length}</summary><ul>{others.map(v=><li key={v}>{tr(...copy[v])}</li>)}</ul></details>}</div>;
 }

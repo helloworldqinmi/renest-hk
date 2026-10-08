@@ -8,7 +8,7 @@ export function interiorFilmMotion(progress: number, room: string, reduced = fal
   };
   const pullBack = room === 'dining' || room === 'study';
   return {
-    scale: pullBack ? 1.065 - travel * .065 : 1 + travel * .065,
+    scale: 1 + (pullBack ? 1 - travel : travel) * .035,
     origin: origins[room] ?? '50% 60%',
   };
 }
