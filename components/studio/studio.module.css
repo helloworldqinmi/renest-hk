@@ -194,3 +194,7 @@
 .summaryHome{justify-self:end;display:flex;align-items:center;gap:7px;min-height:32px;color:var(--foreground-muted);font-size:11px;text-decoration:none}
 .summaryHome:hover{color:var(--foreground);text-decoration:underline;text-underline-offset:4px}
 @media(max-width:740px){.summaryActions{gap:12px}.summaryActions .interiorEntry{padding:18px 16px;gap:12px}.summaryActions .interiorEntry b{font-size:23px}}
+
+.sideNavigation{display:flex;align-items:center;gap:14px;width:100%;margin-bottom:20px}
+.sideNavigation :global(.back-step){flex:1;min-width:0;margin:0}
+.sideNavigation .summaryHome{min-height:44px;padding:0 12px;flex-shrink:0}
