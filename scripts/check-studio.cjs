@@ -163,3 +163,12 @@ assert.ok(renderBudget.renderPixelRatio(1920,1080,2,false)**2*1920*1080<=3500001
 assert.ok(renderBudget.renderPixelRatio(390,844,3,true)<=1.25,'Phones must cap excessive device density');
 
 let lastScanOrbit=0;for(let step=0;step<=200;step++){const orbit=spatial.scanCameraFrame(step/200).orbit;assert.ok(orbit<=lastScanOrbit+1e-9,'Scan camera must move in only one angular direction');lastScanOrbit=orbit;}
+
+// Extraction completes per object, in a stable large-to-small sequence.
+assert.equal(new Set(scanMotion.EXTRACTION_ORDER).size,18);
+assert.equal(scanMotion.identifiedFurniture(.59),0);
+assert.equal(scanMotion.identifiedFurniture(.95),18);
+assert.ok(scanMotion.furnitureCapture(.75,1).surface>scanMotion.furnitureCapture(.75,16).surface);
+for(const item of scanMotion.EXTRACTION_ORDER){let last=0;for(let i=0;i<=1000;i++){const frame=scanMotion.furnitureCapture(i/1000,item);assert.ok(frame.surface>=last);assert.ok(frame.emphasis>=frame.surface);last=frame.surface;}assert.equal(last,1);}
+assert.ok(scanMotion.identifiedFurniture(.8)>0&&scanMotion.identifiedFurniture(.8)<18);
+console.log('Furniture extraction passed: large anchors first, monotonic reveal, all 18 complete before the hold.');

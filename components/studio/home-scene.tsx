@@ -12,7 +12,7 @@ import styles from './studio.module.css';
 import { footprint, isStaged, placementIssue } from '@/lib/studio-placement';
 import { stagingArea } from '@/lib/studio-workspace';
 import { cargoSlot, cargoScale, driveProgress, overheadTransfer, smoothMotion, tailgateOpen } from '@/lib/migration-motion';
-import { scanTimeline, revealedPointCount } from '@/lib/scan-timeline';
+import { scanTimeline, revealedPointCount, furnitureCapture } from '@/lib/scan-timeline';
 import {createSelectionHalo} from './selection-halo';
 import { createSurfaceMaps, finishMaterial } from './scene-finish';
 import { captureItemIndex } from './capture-mesh';
@@ -142,11 +142,20 @@ export function HomeScene(props:HomeSceneProps){
    shadow.rotation.x=-Math.PI/2;shadow.position.y=.038;object.add(shadow);
    allMaterials.add(material);allGeometry.add(geometry);contactMaterials.add(material);
   }
+  const itemReveals=new Map<number,{plane:T.Plane;min:number;max:number}>();
   function prepare(raw:T.Group,key:string){
    raw.traverse(o=>{if(/Subtle wood grain|Throw stitched fold|Fine vertical oak fluting|Woven rug border/.test(o.name.replaceAll('_',' ')))o.visible=false;});
    batchStatic(raw);raw.position.copy(key.startsWith('product')||key==='vignette'?new T.Vector3():center);const clip=new T.Plane(new T.Vector3(-1,0,0),100);clips.set(key,clip);const items=new Map<string,T.Object3D>();
    raw.traverse(o=>{if(o.userData.selectable)items.set(o.userData.id,o);if(o instanceof T.Mesh){o.castShadow=!/Shade seam|Twig|Leaf|Woven rug border/.test(o.name.replaceAll('_',' '))&&!materialList(o).some(m=>/tailored seam|glazing|glass/i.test(m.name));o.receiveShadow=true;const mats=materialList(o).map(m=>{const copy=m.clone();finishMaterial(copy,surfaces,o.name);if(copy.userData.lampGlow)lampMaterials.add(copy);copy.clippingPlanes=[clip];copy.clipShadows=true;bases.set(copy,{color:copy.color.clone(),opacity:copy.opacity,transparent:copy.transparent,emissive:copy.emissive.clone(),emissiveIntensity:copy.emissiveIntensity});allMaterials.add(copy);return copy;});o.material=mats.length===1?mats[0]:mats;allGeometry.add(o.geometry);}});
    for(const object of items.values())addContactShadow(object,clip);
+   if(key==='old'){
+    raw.updateMatrixWorld(true);
+    for(const [id,object]of items){
+     const box=new T.Box3().setFromObject(object),plane=new T.Plane(new T.Vector3(-1,0,0),100);
+     itemReveals.set(captureItemIndex(id),{plane,min:box.min.x-.015,max:box.max.x+.015});
+     object.traverse(o=>{if(o instanceof T.Mesh)for(const material of materialList(o))material.clippingPlanes=[plane];});
+    }
+   }
    roots.set(key,items);raw.visible=false;scene.add(raw);models.set(key,raw);return raw;
   }
   async function load(key:string):Promise<T.Group>{
@@ -260,9 +269,14 @@ export function HomeScene(props:HomeSceneProps){
    if(transitions.length){for(const tr of transitions){const t=reduced?1:clamp((now-transitionStart-tr.delay)/1300),e=ease(t);tr.object.position.lerpVectors(tr.from,tr.to,e);tr.object.position.y+=reduced?0:Math.sin(Math.PI*t)*.42;tr.object.rotation.set(0,T.MathUtils.lerp(tr.fromYaw,tr.toYaw,e),0);tr.object.scale.setScalar(T.MathUtils.lerp(tr.fromScale,tr.show?1:.001,e));if(t===1&&!tr.show)tr.object.visible=false;}renderer.shadowMap.needsUpdate=true;if(!transitioning)transitions=[];}
    const scanning=p.scan!==undefined,scanTarget=p.scan??1;const awaiting=!!p.readyToScan;if(scanning&&!wasScanning){setView(true);controls.autoRotate=false;displayedScan=0;previousScanImmersion=0;pointer=null;}if(wasScanning&&!scanning&&mode==='old'&&!reduced){camera.position.copy(scanCamera.position);controls.target.copy(scanOverviewTarget);camera.lookAt(controls.target);controls.enableDamping=false;controls.update();controls.enableDamping=true;}if(awaiting&&!wasAwaiting)setView(true);wasScanning=scanning;wasAwaiting=awaiting;
    displayedScan=!scanning||reduced||scanTarget<displayedScan-.02?scanTarget:T.MathUtils.damp(displayedScan,scanTarget,18,dt);
-   const progress=scanning?displayedScan:1;const extractionMesh=mode==='old'&&scanning&&progress>=.4;const finalSurfaceX=mode==='old'&&scanning?-4.55+smoothstep((progress-.74)/.055)*9.2:100;
+   const progress=scanning?displayedScan:1;const extractionMesh=mode==='old'&&scanning&&progress>=.4;const finalSurfaceX=mode==='old'&&scanning?-4.55+smoothstep((progress-.85)/.12)*9.2:100;
    const timeline=scanTimeline(awaiting?0:progress);
-   container!.dataset.captureStage=timeline.stage;container!.dataset.captureTone=scanning&&progress<.725?'dark':'light';
+   for(const [item,reveal]of itemReveals){
+    const amount=furnitureCapture(progress,item).surface;
+    const x=mode==='old'&&scanning?T.MathUtils.lerp(reveal.min,reveal.max,amount):100;
+    if(reveal.plane.constant!==x){reveal.plane.constant=x;renderer.shadowMap.needsUpdate=true;}
+   }
+   container!.dataset.captureStage=timeline.stage;container!.dataset.captureTone=scanning&&progress<.59?'dark':'light';
    const scanView=scanCameraFrame(mode==='old'&&scanning?progress:0,reduced);
    container!.dataset.scanView=scanView.immersion>.7?'interior':'overview';
    container!.style.setProperty('--capture-progress',`${Math.round(progress*100)}%`);
@@ -282,10 +296,14 @@ export function HomeScene(props:HomeSceneProps){
    // Only acquired samples are visible. Whole-room context and unscanned creases
    // used to reveal scattered cups/plant outlines ahead of the sensor.
    for(const [name,depth]of captureDepths)depth.visible=name===k&&scanning&&!timeline.wireActive&&!timeline.surfaceActive;
-   for(const [name,w]of wires){w.visible=name===k&&(extractionMesh||scanning&&(timeline.wireActive||mode==='old'&&progress>=.4));if(w.visible)w.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.MeshBasicMaterial;material.opacity=mode==='old'?smoothstep((progress-.4)/.055):timeline.wireOpacity/.72;if(material.userData.captureDensity)material.userData.captureDensity.value=smoothstep((progress-.4)/.26);if(material.userData.captureFusion)material.userData.captureFusion.value=smoothstep((progress-.64)/.24);if(material.userData.captureExtraction)material.userData.captureExtraction.value=mode==='old'&&scanning?.32*smoothstep((progress-.42)/.24)+.55*smoothstep((progress-.68)/.055):0;if(material.userData.captureSelected)material.userData.captureSelected.value=captureItemIndex(p.selectedId??undefined);if(extractionMesh&&material.userData.captureKept){for(let item=1;item<=18;item++)material.userData.captureKept.value[item]=Number(!p.selectedIds||p.selectedIds.includes('F'+String(item).padStart(2,'0')));}material.clippingPlanes![0].constant=timeline.meshX;material.clippingPlanes![1].constant=mode==='old'&&scanning?-finalSurfaceX:-timeline.surfaceX;}});}
+   for(const [name,w]of wires){w.visible=name===k&&(extractionMesh||scanning&&(timeline.wireActive||mode==='old'&&progress>=.4));if(w.visible)w.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.MeshBasicMaterial;material.opacity=mode==='old'?smoothstep((progress-.4)/.055):timeline.wireOpacity/.72;if(material.userData.captureDensity)material.userData.captureDensity.value=smoothstep((progress-.4)/.26);if(material.userData.captureFusion)material.userData.captureFusion.value=smoothstep((progress-.78)/.19);if(material.userData.captureExtraction)material.userData.captureExtraction.value=mode==='old'&&scanning?1:0;if(material.userData.captureSelected)material.userData.captureSelected.value=captureItemIndex(p.selectedId??undefined);if(extractionMesh&&material.userData.captureKept){for(let item=1;item<=18;item++)material.userData.captureKept.value[item]=Number(!p.selectedIds||p.selectedIds.includes('F'+String(item).padStart(2,'0')));}if(material.userData.captureReveal){
+     const reveal=material.userData.captureReveal.value as Float32Array,emphasis=material.userData.captureEmphasis.value as Float32Array;
+     reveal.fill(-100);emphasis.fill(0);
+     if(mode==='old'&&scanning){reveal[0]=finalSurfaceX;for(const [item,state]of itemReveals){reveal[item]=state.plane.constant;emphasis[item]=furnitureCapture(progress,item).emphasis;}}
+    }material.clippingPlanes![0].constant=timeline.meshX;material.clippingPlanes![1].constant=mode==='old'&&scanning?100:-timeline.surfaceX;}});}
    const clip=clips.get(k),clipX=scanning?(mode==='old'?finalSurfaceX:timeline.surfaceX):100;
    if(clip&&clip.constant!==clipX){clip.constant=clipX;renderer.shadowMap.needsUpdate=true;}
-   const solidVisible=!awaiting&&(!scanning||(mode==='old'?progress>.74:timeline.surfaceActive));
+   const solidVisible=!awaiting&&(!scanning||(mode==='old'?progress>.635:timeline.surfaceActive));
    if(activeRoot.visible!==solidVisible)renderer.shadowMap.needsUpdate=true;
    activeRoot.visible=solidVisible;
    ground.visible=!awaiting&&(!scanning||(mode==='old'?progress>.86:timeline.surfaceActive));
@@ -347,7 +365,7 @@ export function HomeScene(props:HomeSceneProps){
     }if(now-lastMoveShadow>1000/15){lastMoveShadow=now;renderer.shadowMap.needsUpdate=true;}
    }
 
-   const detected=mode==='old'&&!awaiting&&(!!p.detectedFurniture&&!scanning||scanning&&progress>.74);
+   const detected=mode==='old'&&!awaiting&&(!!p.detectedFurniture&&!scanning||scanning&&progress>.635);
    extractionBlend=mode!=='old'?0:reduced?(detected?1:0):T.MathUtils.damp(extractionBlend,detected?1:0,7,dt);
    const gallery=detected&&!!p.furnitureOnly,previousGallery=galleryBlend;
    galleryBlend=mode!=='old'?0:reduced?(gallery?1:0):T.MathUtils.damp(galleryBlend,gallery?1:0,8,dt);
@@ -364,7 +382,7 @@ export function HomeScene(props:HomeSceneProps){
    // Plan mode is a softly lit architectural study; evening keeps cool fill and warm practicals.
    const night=lightBlend*(1-planBlend);
    background.copy(p.cinematic?heroBackground:dayBackground);if(!p.cinematic)background.lerp(nightBackground,night);
-   if(scanning)background.copy(captureBackground).lerp(dayBackground,smoothstep((progress-.69)/.07));
+   if(scanning)background.copy(captureBackground).lerp(dayBackground,smoothstep((progress-.54)/.1));
    renderer.setClearColor(background,scanning?1:0);if(ground.material instanceof T.MeshStandardMaterial)ground.material.color.copy(background);
    sun.color.copy(daySun).lerp(nightSun,night);sun.intensity=T.MathUtils.lerp(2.15,.78,night)*(1-planBlend*.16);
    sun.position.set(T.MathUtils.lerp(-3,-.8,planBlend),T.MathUtils.lerp(14,19,planBlend),T.MathUtils.lerp(4,1.2,planBlend));

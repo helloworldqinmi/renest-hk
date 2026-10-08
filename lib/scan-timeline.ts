@@ -33,3 +33,14 @@ export function revealedPointCount(positions: ArrayLike<number>, sweepX: number)
  }
  return low;
 }
+
+// Large anchors lead, followed by supporting pieces in short overlapping beats.
+export const EXTRACTION_ORDER = [1,9,10,13,14,3,4,2,15,17,18,11,12,5,6,7,8,16];
+export function furnitureCapture(progress: number, item: number) {
+ const rank=EXTRACTION_ORDER.indexOf(item);
+ const start=rank<0?.85:.59+rank*.014;
+ return { emphasis: smooth((progress-start)/.035), surface: smooth((progress-start-.045)/.075) };
+}
+export function identifiedFurniture(progress: number) {
+ return EXTRACTION_ORDER.filter(item=>furnitureCapture(progress,item).surface>=1).length;
+}
