@@ -16,7 +16,7 @@ export function spatialReveal(seconds: number, reduced = false) {
 /** Survey → eye-level acquisition → model overview. Separate from the entry reveal. */
 export function scanCameraFrame(progress: number, reduced = false) {
   const p = clamp01(progress);
-  const immersion = reduced ? 0 : smootherstep((p - .1) / .18) * (1 - smootherstep((p - .48) / .2));
-  const orbit = reduced ? 0 : -1.2 * smootherstep((p - .3) / .3);
-  return { immersion, orbit: orbit || 0, pan: smootherstep((p - .25) / .22), returning: p > .4 };
+  const immersion = reduced ? 0 : smootherstep((p - .1) / .14) * (1 - smootherstep((p - .48) / .2));
+  const orbit = reduced ? 0 : -1.2 * smootherstep((p - .16) / .32);
+  return { immersion, orbit: orbit || 0, pan: smootherstep((p - .13) / .17), returning: p > .4 };
 }

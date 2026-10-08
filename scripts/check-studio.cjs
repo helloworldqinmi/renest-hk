@@ -172,3 +172,7 @@ assert.ok(scanMotion.furnitureCapture(.75,1).surface>scanMotion.furnitureCapture
 for(const item of scanMotion.EXTRACTION_ORDER){let last=0;for(let i=0;i<=1000;i++){const frame=scanMotion.furnitureCapture(i/1000,item);assert.ok(frame.surface>=last);assert.ok(frame.emphasis>=frame.surface);last=frame.surface;}assert.equal(last,1);}
 assert.ok(scanMotion.identifiedFurniture(.8)>0&&scanMotion.identifiedFurniture(.8)<18);
 console.log('Furniture extraction passed: large anchors first, monotonic reveal, all 18 complete before the hold.');
+
+assert.ok(spatial.scanCameraFrame(.24).orbit<-.1,'Turn toward the TV while the point cloud is still accumulating');
+assert.ok(spatial.scanCameraFrame(.24).pan>.5,'A short advance should overlap the turn instead of delaying it');
+assert.equal(spatial.scanCameraFrame(.48).orbit,-1.2,'Finish the interior turn before pulling back');
