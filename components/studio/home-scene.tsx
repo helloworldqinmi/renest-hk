@@ -28,6 +28,9 @@ export type HomeSceneProps={stagingLabel?:string;onDragFeedback?:(feedback:DragF
 type Transform={object:T.Object3D;from:T.Vector3;to:T.Vector3;fromYaw:number;toYaw:number;fromScale:number;show:boolean;delay:number};
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
 const ease=(n:number)=>1-Math.pow(1-clamp(n),3);
+const REVIEW_CAMERA: [number,number,number]=[9.2,11.3,13.5];
+const REVIEW_YAW=Math.atan2(REVIEW_CAMERA[0],REVIEW_CAMERA[2]);
+const REVIEW_ELEVATION_RATIO=(REVIEW_CAMERA[1]-.35)/Math.hypot(REVIEW_CAMERA[0],REVIEW_CAMERA[2]);
 const materialList=(o:T.Mesh)=>(Array.isArray(o.material)?o.material:[o.material]) as T.MeshStandardMaterial[];
 
 function pointCloud(root:T.Object3D,budget:number){
@@ -121,7 +124,7 @@ export function HomeScene(props:HomeSceneProps){
   const detectedGreen=new T.Color('#719c76'),selectionGlow=new T.Color('#fff5de');
   const center=new T.Vector3(-4.3,0,-2.9);
   function renderFrame(viewCamera:T.Camera){renderer.render(scene,viewCamera);let calls=renderer.info.render.calls;if(phone.visible){renderer.autoClear=false;renderer.clearDepth();renderer.render(deviceScene,viewCamera);calls+=renderer.info.render.calls;renderer.autoClear=true;}return calls;}
-  let moveShot='',arrivedAzimuth:number|null=null,arrivedPolar:number|null=null,settledAfterMove=false;
+  let moveShot='',settledAfterMove=false;
   const moveCameraOffset=new T.Vector3(),moveCargoPosition=new T.Vector3(),moveDestination=new T.Vector3();
   let lastMoveShadow=0;
   let migration:{truck:T.Group;oldWrap:T.Group;newWrap:T.Group;flights:{id:string;source:T.Object3D;carry:T.Object3D;start:T.Vector3;cargo:T.Vector3;cargoScale:number;oldYaw:number}[]}|null=null;
@@ -186,10 +189,8 @@ export function HomeScene(props:HomeSceneProps){
    const diy3d=live.current.editable&&live.current.diyView==='3d';const top=!diy3d&&(live.current.editable||live.current.view==='top');controls.enableDamping=false;controls.update();controls.enableDamping=true;
    // Keep world-up invariant. Changing camera.up after OrbitControls construction causes roll.
    camera.up.set(0,1,0);controls.minPolarAngle=0;controls.enableRotate=!top&&!live.current.editable;controls.mouseButtons.LEFT=top?T.MOUSE.PAN:T.MOUSE.ROTATE;controls.touches.ONE=top?T.TOUCH.PAN:T.TOUCH.ROTATE;
-   const to=new T.Vector3(...(top?[0,20,.001]:mode==='vignette'?[3.6,2.8,5.1]:mode==='product'?[2.5,2.1,3.1]:[9.2,11.3,13.5]) as [number,number,number]),target=new T.Vector3(0,mode==='vignette'?.6:mode==='product'?.45:.35,mode==='vignette'?.35:0);
+   const to=new T.Vector3(...(top?[0,20,.001]:mode==='vignette'?[3.6,2.8,5.1]:mode==='product'?[2.5,2.1,3.1]:REVIEW_CAMERA) as [number,number,number]),target=new T.Vector3(0,mode==='vignette'?.6:mode==='product'?.45:.35,mode==='vignette'?.35:0);
    if(live.current.editable){target.set(-.1,.35,2.3);if(diy3d)to.set(9.1,11.65,15.8);else to.set(-.1,20,2.301);}
-   // Ease the arrival diagonal about 14 degrees toward the front for the layout review.
-   if(mode==='layout'&&arrivedAzimuth!==null&&!top&&!live.current.editable){const radius=to.length();to.setFromSphericalCoords(radius,arrivedPolar??.9,arrivedAzimuth).add(target);}
    if(mode==='move'){target.set((live.current.migrationProgress??0)>=.66?2.8:-2.8,.25,.45);to.copy(target).add(new T.Vector3(7,8,10));}
    if(instant||reduced){cameraTween=null;camera.position.copy(to);controls.target.copy(target);camera.zoom=1;camera.lookAt(target);controls.update();camera.updateProjectionMatrix();}
    else {
@@ -217,7 +218,7 @@ export function HomeScene(props:HomeSceneProps){
    let index=0;for(const [id,o]of items){const target=targets.get(id);if(target){if(live.current.editable||landed){o.position.set(target.x,0,target.z);o.rotation.set(0,target.rotation*Math.PI/180,0);o.scale.setScalar(1);o.visible=true;continue;}if(first||!o.visible){const from=oldPlacements.find(p=>p.id===id);o.position.set(from?.x??target.x,0,from?.z??target.z);o.rotation.set(0,(from?.rotation??target.rotation)*Math.PI/180,0);o.scale.setScalar(.03);}const yaw=target.rotation*Math.PI/180;const delta=Math.atan2(Math.sin(yaw-o.rotation.y),Math.cos(yaw-o.rotation.y));transitions.push({object:o,from:o.position.clone(),to:new T.Vector3(target.x,0,target.z),fromYaw:o.rotation.y,toYaw:o.rotation.y+delta,fromScale:o.scale.x,show:true,delay:reduced?0:index++*38});o.visible=true;}else if(live.current.editable){o.visible=false;}else if(o.visible)transitions.push({object:o,from:o.position.clone(),to:o.position.clone().add(new T.Vector3(0,.3,0)),fromYaw:o.rotation.y,toYaw:o.rotation.y,fromScale:o.scale.x,show:false,delay:0});}
    if(landed)settledAfterMove=false;transitionStart=now;transitionEnd=now+(reduced||landed?1:2100);renderer.shadowMap.needsUpdate=true;selectionKey='';
   }
-  async function ensureMode(){const key=live.current.mode==='product'?`product:${live.current.productId??'N01'}`:live.current.mode;if(modeKey===key)return;const fromMoving=modeKey==='move'&&key==='layout';if(fromMoving){arrivedAzimuth=Math.atan2(camera.position.x-controls.target.x,camera.position.z-controls.target.z)+.24;arrivedPolar=Math.max(.85,new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target)).phi-.08);settledAfterMove=true;}else if(key==='move'){arrivedAzimuth=null;arrivedPolar=null;settledAfterMove=false;}const serial=++loadSerial;modeKey=key;mode=live.current.mode;ready=false;setLoaded(false);setError(false);
+  async function ensureMode(){const key=live.current.mode==='product'?`product:${live.current.productId??'N01'}`:live.current.mode;if(modeKey===key)return;const fromMoving=modeKey==='move'&&key==='layout';if(fromMoving){settledAfterMove=true;}else if(key==='move'){settledAfterMove=false;}const serial=++loadSerial;modeKey=key;mode=live.current.mode;ready=false;setLoaded(false);setError(false);
    try{const next=await load(key);if(disposed||serial!==loadSerial)return;const hadActiveRoot=!!activeRoot;for(const m of models.values())m.visible=false;for(const c of clouds.values())c.visible=false;for(const w of wires.values())w.visible=false;activeRoot=next;activeRoot.visible=true;wallCut();layoutKey='';selectionKey='';viewKey=live.current.view??'orbit';resize();if(mode==='layout'&&live.current.reveal&&!reduced)camera.zoom=.86;setView(!hadActiveRoot||(mode!=='move'&&mode!=='layout'));
     if(mode==='old'||mode==='empty'){if(!clouds.has(key)){next.traverse(o=>{if(o.userData.wall){const w=o.userData.wall;o.scale.y=1;o.position.y=w.bottom+w.height/2;o.visible=true;}if(o.userData.upper)o.visible=true;});clouds.set(key,pointCloud(next,mobile?160000:400000));scene.add(clouds.get(key)!);const depth=createCaptureDepth(next);captureDepths.set(key,depth);scene.add(depth);allGeometry.add(depth.geometry);allMaterials.add(depth.material as T.Material);const topology=createSpatialTopology(next,mobile,true),w=topology.group,material=topology.material;material.clippingPlanes=[new T.Plane(new T.Vector3(-1,0,0),-4.55),new T.Plane(new T.Vector3(1,0,0),4.55)];allMaterials.add(material);w.traverse(o=>{if(o instanceof T.Mesh){allGeometry.add(o.geometry);allMaterials.add(o.material as T.Material);(o.material as T.MeshBasicMaterial).clippingPlanes=material.clippingPlanes;}});w.visible=false;scene.add(w);wires.set(key,w);container!.dataset.reconstructionTriangles=String(w.userData.triangles??0);wallCut();}}
     const captureNodes=[clouds.get(key),captureDepths.get(key),wires.get(key)].filter((node):node is T.Object3D=>!!node);const captureVisibility=captureNodes.map(node=>node.visible);captureNodes.forEach(node=>{node.visible=true;});
@@ -343,10 +344,9 @@ export function HomeScene(props:HomeSceneProps){
     controls.enabled=false;controls.enableDamping=false;
     const arrivalArc=smoothMotion(clamp((progress-.665)/.31));
     controls.target.set(T.MathUtils.lerp(focusX,truck.position.x,aerial*.7),.25,T.MathUtils.lerp(shot==='loading'?.45:.2,2.25,aerial));
-    // The final reveal lands on the opposite diagonal, lower and closer to the home.
-    // Both sides meet the map almost vertically; only the arrival develops this orbit.
-    const orbit=shot==='loading'?T.MathUtils.lerp(.52,.72,clamp(progress/.355)):T.MathUtils.lerp(.72,-.92,arrivalArc);
-    const radius=shot==='loading'?12:T.MathUtils.lerp(12,10,arrivalArc),elevation=shot==='loading'?9:T.MathUtils.lerp(9,5.6,arrivalArc);
+    // Land at the default review orientation without a corrective turn afterward.
+    const orbit=shot==='loading'?T.MathUtils.lerp(.52,.72,clamp(progress/.355)):T.MathUtils.lerp(.72,REVIEW_YAW,arrivalArc);
+    const radius=shot==='loading'?12:T.MathUtils.lerp(12,10,arrivalArc),elevation=shot==='loading'?9:T.MathUtils.lerp(9,10*REVIEW_ELEVATION_RATIO,arrivalArc);
     moveCameraOffset.set(Math.sin(orbit)*radius*(1-aerial*.93),T.MathUtils.lerp(elevation,16,aerial),Math.cos(orbit)*radius*(1-aerial*.93));
     camera.position.copy(controls.target).add(moveCameraOffset);
     const retreat=smoothMotion(clamp((progress-.295)/.085));const moveZoom=shot==='loading'?T.MathUtils.lerp(1,.22,retreat):T.MathUtils.lerp(.26,1.06,arriving);
