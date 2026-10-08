@@ -33,6 +33,21 @@ export function createCaptureMesh(root: T.Object3D, mobile: boolean) {
     const position=geometry.getAttribute('position'), count=position.count;
     triangles+=count/3;
     const barycentric=new Float32Array(count*3), ranks=new Float32Array(count), colors=new Float32Array(count*3), items=new Float32Array(count).fill(item);
+    const cutTargets=new Float32Array(count*2),wall=object.userData.wall;
+    let keep=1;
+    for(let parent:T.Object3D|null=object;parent;parent=parent.parent)if(parent.userData.upper&&!parent.userData.rear)keep=0;
+    const cutMatrix=new T.Matrix4(),point=new T.Vector3();
+    if(wall){
+      const height=Math.max(0,Math.min(wall.height,wall.cutHeight-wall.bottom));
+      const cutPosition=object.position.clone();cutPosition.y=wall.bottom+height/2;
+      const cutScale=object.scale.clone();cutScale.y=height/wall.height;
+      cutMatrix.compose(cutPosition,object.quaternion,cutScale);
+      if(object.parent)cutMatrix.premultiply(object.parent.matrixWorld);
+      cutMatrix.multiply(object.matrixWorld.clone().invert());
+      if(height===0)keep=0;
+    }
+    for(let i=0;i<count;i++){point.fromBufferAttribute(position,i);if(wall)point.applyMatrix4(cutMatrix);cutTargets[i*2]=point.y;cutTargets[i*2+1]=keep;}
+    geometry.setAttribute('captureCut',new T.BufferAttribute(cutTargets,2));
     const tint=source.color?.clone()??new T.Color('#9cb6b2');
     for(let i=0;i<count;i+=3){
       const rank=random(),shade=.82+random()*.18;
@@ -51,24 +66,26 @@ export function createCaptureMesh(root: T.Object3D, mobile: boolean) {
   const material=new T.MeshBasicMaterial({color:'#ffffff',transparent:true,opacity:1,depthWrite:true,toneMapped:false});
   material.userData.captureDensity=density;material.userData.captureFusion=fusion;
   material.userData.captureExtraction=extraction;material.userData.captureSelected=selected;
+  const cut={value:0};material.userData.captureCut=cut;
   const reveal={value:new Float32Array(19).fill(-100)},emphasis={value:new Float32Array(19)};
   material.userData.captureReveal=reveal;material.userData.captureEmphasis=emphasis;
   material.userData.captureKept=kept;
   material.onBeforeCompile=shader=>{
-    shader.uniforms.uCaptureReveal=reveal;shader.uniforms.uCaptureEmphasis=emphasis;
+    shader.uniforms.uCaptureCut=cut;shader.uniforms.uCaptureReveal=reveal;shader.uniforms.uCaptureEmphasis=emphasis;
     shader.uniforms.uCaptureDensity=density;shader.uniforms.uCaptureFusion=fusion;shader.uniforms.uCaptureExtraction=extraction;shader.uniforms.uCaptureSelected=selected;shader.uniforms.uCaptureKept=kept;
     shader.vertexShader='attribute vec3 captureBarycentric; attribute float captureRank; attribute vec3 captureColor; varying vec3 vCaptureBarycentric; varying float vCaptureRank; varying vec3 vCaptureColor;\n'+shader.vertexShader;
     shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvCaptureBarycentric=captureBarycentric;vCaptureRank=captureRank;vCaptureColor=captureColor;');
-    shader.vertexShader='attribute float captureItem;varying float vCaptureItem;varying float vCaptureX;\n'+shader.vertexShader;
-    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvCaptureItem=captureItem;vCaptureX=position.x;');
+    shader.vertexShader='uniform float uCaptureCut;attribute vec2 captureCut;varying float vCaptureKeep;attribute float captureItem;varying float vCaptureItem;varying float vCaptureX;\n'+shader.vertexShader;
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvCaptureItem=captureItem;vCaptureX=position.x;transformed.y=mix(position.y,captureCut.x,uCaptureCut);vCaptureKeep=mix(1.0,captureCut.y,uCaptureCut);');
     shader.fragmentShader='uniform float uCaptureDensity; uniform float uCaptureFusion; varying vec3 vCaptureBarycentric; varying float vCaptureRank; varying vec3 vCaptureColor;\n'+shader.fragmentShader;
-    shader.fragmentShader='uniform float uCaptureReveal[19];uniform float uCaptureEmphasis[19];varying float vCaptureX;uniform float uCaptureExtraction;uniform float uCaptureSelected;uniform float uCaptureKept[19];varying float vCaptureItem;\n'+shader.fragmentShader;
+    shader.fragmentShader='varying float vCaptureKeep;uniform float uCaptureReveal[19];uniform float uCaptureEmphasis[19];varying float vCaptureX;uniform float uCaptureExtraction;uniform float uCaptureSelected;uniform float uCaptureKept[19];varying float vCaptureItem;\n'+shader.fragmentShader;
     shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
       int itemIndex=int(clamp(vCaptureItem,0.0,18.0));
       if(vCaptureX<uCaptureReveal[itemIndex])discard;
       float assembled=smoothstep(vCaptureRank*0.94,vCaptureRank*0.94+0.06,uCaptureDensity);
       if(assembled<0.001)discard;
-      diffuseColor.a*=assembled;
+      diffuseColor.a*=assembled*vCaptureKeep;
+      if(diffuseColor.a<0.002)discard;
       vec3 width=max(fwidth(vCaptureBarycentric),vec3(0.00001));
       vec3 coverage=smoothstep(vec3(0.0),width*1.1,vCaptureBarycentric);
       float edge=1.0-min(coverage.x,min(coverage.y,coverage.z));
@@ -88,7 +105,7 @@ export function createCaptureMesh(root: T.Object3D, mobile: boolean) {
       diffuseColor.rgb=mix(diffuseColor.rgb,mix(extractionSurface,extractionEdge,edge*(0.24+movable*0.62)),uCaptureExtraction*uCaptureEmphasis[itemIndex]);
     `);
   };
-  material.customProgramCacheKey=()=> 'renest-dense-capture-v2';
+  material.customProgramCacheKey=()=> 'renest-dense-capture-v3';
   const group=new T.Group(),mesh=new T.Mesh(geometry,material);mesh.userData.denseCapture=true;group.add(mesh);
   group.userData.triangles=triangles;group.name='Progressive dense triangle reconstruction';
   return {group,material,faceMaterial:undefined,dispose(){geometry.dispose();material.dispose();}};

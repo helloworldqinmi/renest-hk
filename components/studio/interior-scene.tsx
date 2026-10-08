@@ -140,7 +140,8 @@ export function InteriorScene(props: Props) {
     const observer = new ResizeObserver(resize); observer.observe(container); resize();
     const loader = new GLTFLoader();
     let topology: ReturnType<typeof createSpatialTopology> | undefined;
-    const revealUniform = { value: 1 };
+    const revealPlane = new T.Plane(new T.Vector3(0, -1, 0), 100);
+    renderer.localClippingEnabled = true;
     const grid = new T.GridHelper(12, 24, '#88c8d3', '#3b697b');
     grid.position.set(4.2, .025, 3); scene.add(grid);
     const gridMaterial = grid.material as T.LineBasicMaterial; gridMaterial.transparent = true; gridMaterial.depthWrite = false;
@@ -265,18 +266,9 @@ export function InteriorScene(props: Props) {
       const prepared = new Set<T.MeshStandardMaterial>();
       root.traverse(o => { if (o instanceof T.Mesh) for (const material of (Array.isArray(o.material) ? o.material : [o.material]) as T.MeshStandardMaterial[]) {
         if (prepared.has(material)) continue; prepared.add(material);
-        material.onBeforeCompile = shader => {
-          shader.uniforms.uSpatialReveal = revealUniform;
-          shader.fragmentShader = 'uniform float uSpatialReveal;\n' + shader.fragmentShader;
-          shader.fragmentShader = shader.fragmentShader.replace('#include <alphatest_fragment>', `
-            #include <alphatest_fragment>
-            if (uSpatialReveal < .999) {
-              float screenDoor = fract(sin(dot(floor(gl_FragCoord.xy), vec2(12.9898, 78.233))) * 43758.5453);
-              if (screenDoor > uSpatialReveal) discard;
-            }
-          `);
-        };
-        material.customProgramCacheKey = () => 'renest-spatial-reveal-v1';
+        // Continuous solid surfaces replace the framework without screen-door noise.
+        material.clippingPlanes = [revealPlane];
+
       } });
       topology = createSpatialTopology(root, mobile); scene.add(topology.group);
       // Placements are immutable for this player instance. Merge across nested
@@ -363,7 +355,7 @@ export function InteriorScene(props: Props) {
       camera.fov = mobile ? Math.min(91, 2 * Math.atan(Math.tan(T.MathUtils.degToRad(lens / 2)) / Math.max(.72, camera.aspect)) * 180 / Math.PI) : lens;
       camera.setViewOffset(container!.clientWidth, container!.clientHeight, 0, container!.clientHeight * shot.shift * (entering ? reveal.travel : 1), container!.clientWidth, container!.clientHeight);
       camera.lookAt(target); camera.rotateY(yaw); camera.rotateX(pitch);
-      revealUniform.value = entering ? reveal.surface : 1;
+      revealPlane.constant = entering ? -.1 + reveal.surface * 3.4 : 100;
       ceiling.visible = !entering || reveal.travel > .985;
       decor.visible = !entering || reveal.surface >= .999;
       exterior.visible = !entering || reveal.surface > .85;

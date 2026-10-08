@@ -175,3 +175,22 @@
 .stage:has(.scene[data-capture-tone=dark]) .sceneHeading h1{color:#e6eef0;transition:none}
 .stage:has(.scene[data-capture-tone=dark]) .sceneHeading>span,.stage:has(.scene[data-capture-tone=dark]) .sceneHeading p{color:#b7c8d2;transition:none}
 .stage:has(.scene[data-capture-tone=light]) .sceneHeading h1{color:var(--foreground);transition:none}
+
+/* Completion: one immersive invitation, a quiet document panel, then navigation. */
+.summaryActions{grid-column:1/-1;display:grid;gap:16px;width:100%;min-width:0}
+.summaryActions .interiorEntry{display:flex;align-items:center;gap:16px;width:100%;min-height:86px;padding:20px 22px;margin:0;background:#172b32;color:#f5f2e9;border:1px solid #172b32;border-radius:6px;text-align:left;transition:background .2s,border-color .2s}
+.summaryActions .interiorEntry:hover{background:#223b43;border-color:#405a60}
+.summaryActions .interiorEntry>span:first-child{width:40px;height:40px;border-color:#aec8cd66;color:#d9e7e5}
+.summaryActions .interiorEntry b{font-family:var(--font-editorial),Georgia,serif;font-size:24px;line-height:1.1;font-weight:400;letter-spacing:-.35px}
+.summaryActions .interiorEntry small{color:#b2c4c7;font-size:10px;margin-top:7px}
+.planActions{border:1px solid var(--border);border-radius:6px;background:var(--surface);overflow:hidden}
+.reportEntry{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:14px 18px;border:0;background:transparent;color:var(--studio-ink);text-align:left;font-size:12px;font-weight:500}
+.reportEntry>svg:last-child{margin-left:auto;flex-shrink:0}
+.reportEntry:hover{background:var(--surface-subtle)}
+.summaryActions .completionActions{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:0;padding:0;border-top:1px solid var(--border)}
+.summaryActions .completionActions button{display:flex;align-items:center;justify-content:center;gap:9px;min-height:44px;margin:0;padding:10px 12px;border:0;border-radius:0;background:transparent;color:var(--foreground-muted);font-size:11px;line-height:1.4}
+.summaryActions .completionActions button+button{border-left:1px solid var(--border)}
+.summaryActions .completionActions button:hover{background:var(--surface-subtle);color:var(--foreground)}
+.summaryHome{justify-self:end;display:flex;align-items:center;gap:7px;min-height:32px;color:var(--foreground-muted);font-size:11px;text-decoration:none}
+.summaryHome:hover{color:var(--foreground);text-decoration:underline;text-underline-offset:4px}
+@media(max-width:740px){.summaryActions{gap:12px}.summaryActions .interiorEntry{padding:18px 16px;gap:12px}.summaryActions .interiorEntry b{font-size:23px}}
