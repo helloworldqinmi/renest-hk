@@ -287,15 +287,16 @@ export function HomeScene(props:HomeSceneProps){
    for(const [name,cloud]of clouds){
     cloud.visible=name===k&&scanning;
     if(cloud.visible){const positions=cloud.geometry.getAttribute('position');
-     const count=progress>=.06?revealedPointCount(positions.array,timeline.beamX):0;
-     cloud.geometry.setDrawRange(0,count);const pointMaterial=cloud.material as T.PointsMaterial;pointMaterial.opacity=timeline.pointOpacity;(pointMaterial.userData.captureDensity as {value:number}).value=.06+.94*clamp((progress-.06)/.32);if(!pointMaterial.clippingPlanes)pointMaterial.clippingPlanes=[new T.Plane(new T.Vector3(1,0,0),4.55)];pointMaterial.clippingPlanes[0].constant=100;
+     const sampleFront=timeline.beamX+1.15*smoothstep((progress-.34)/.06);
+     const count=progress>=.06?revealedPointCount(positions.array,sampleFront):0;
+     cloud.geometry.setDrawRange(0,count);const pointMaterial=cloud.material as T.PointsMaterial;pointMaterial.opacity=timeline.pointOpacity;(pointMaterial.userData.captureSweep as {value:number}).value=sampleFront;(pointMaterial.userData.captureDensity as {value:number}).value=.06+.94*clamp((progress-.06)/.32);if(!pointMaterial.clippingPlanes)pointMaterial.clippingPlanes=[new T.Plane(new T.Vector3(1,0,0),4.55)];pointMaterial.clippingPlanes[0].constant=100;
      container!.dataset.scanPointCount=String(count);if(scanning&&count!==lastPointCount&&now-lastSampleAnnouncement>120){lastPointCount=count;lastSampleAnnouncement=now;p.onScanSamples?.(count);}
      container!.dataset.scanPointMaxX=count?String(positions.getX(count-1)):'';
     }
    }
    // Only acquired samples are visible. Whole-room context and unscanned creases
    // used to reveal scattered cups/plant outlines ahead of the sensor.
-   for(const [name,depth]of captureDepths)depth.visible=name===k&&scanning&&!timeline.wireActive&&!timeline.surfaceActive;
+   for(const [name,depth]of captureDepths)depth.visible=name===k&&scanning&&timeline.pointOpacity>0;
    for(const [name,w]of wires){w.visible=name===k&&(extractionMesh||scanning&&(timeline.wireActive||mode==='old'&&progress>=.4));if(w.visible)w.traverse(o=>{if(o instanceof T.Mesh){const material=o.material as T.MeshBasicMaterial;material.opacity=mode==='old'?smoothstep((progress-.4)/.055):timeline.wireOpacity/.72;if(material.userData.captureDensity)material.userData.captureDensity.value=smoothstep((progress-.4)/.26);if(material.userData.captureFusion)material.userData.captureFusion.value=smoothstep((progress-.78)/.19);if(material.userData.captureExtraction)material.userData.captureExtraction.value=mode==='old'&&scanning?1:0;if(material.userData.captureSelected)material.userData.captureSelected.value=captureItemIndex(p.selectedId??undefined);if(extractionMesh&&material.userData.captureKept){for(let item=1;item<=18;item++)material.userData.captureKept.value[item]=Number(!p.selectedIds||p.selectedIds.includes('F'+String(item).padStart(2,'0')));}if(material.userData.captureReveal){
      const reveal=material.userData.captureReveal.value as Float32Array,emphasis=material.userData.captureEmphasis.value as Float32Array;
      reveal.fill(-100);emphasis.fill(0);

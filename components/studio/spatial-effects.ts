@@ -35,23 +35,26 @@ export function scanPointMaterial() {
   // Three's perspective detector expects an exact -1 matrix entry; lens blending
   // invalidates that check and previously shrank world-size dots below one pixel.
   const material = new T.PointsMaterial({ color: '#ffffff', vertexColors: true, size: 2.6, transparent: true, opacity: 1, alphaTest: .04, sizeAttenuation: false, depthWrite: true, toneMapped: false });
-  const density={value:1};material.userData.captureDensity=density;
+  const density={value:1},sweep={value:100};material.userData.captureDensity=density;material.userData.captureSweep=sweep;
   material.onBeforeCompile = shader => {
-    shader.uniforms.uCaptureDensity=density;
-    shader.vertexShader='attribute float captureRank; varying float vCaptureRank;\n'+shader.vertexShader;
-    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvCaptureRank=captureRank;');
-    shader.fragmentShader='uniform float uCaptureDensity; varying float vCaptureRank;\n'+shader.fragmentShader;
+    shader.uniforms.uCaptureDensity=density;shader.uniforms.uCaptureSweep=sweep;
+    shader.vertexShader='attribute float captureRank; varying float vCaptureRank; varying float vCaptureX;\n'+shader.vertexShader;
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\nvCaptureRank=captureRank;vCaptureX=position.x;');
+    shader.fragmentShader='uniform float uCaptureDensity; uniform float uCaptureSweep; varying float vCaptureRank; varying float vCaptureX;\n'+shader.fragmentShader;
     shader.fragmentShader = shader.fragmentShader.replace('#include <color_fragment>', `
       #include <color_fragment>
       float acquired=smoothstep(vCaptureRank*0.96,vCaptureRank*0.96+0.04,uCaptureDensity);
       if(acquired<0.001)discard;
-      diffuseColor.a*=acquired;
+      // A planar cabinet face shares X coordinates. Give its samples a soft,
+      // staggered acquisition edge instead of revealing the entire plane at once.
+      float arrival=smoothstep(vCaptureRank*0.45,vCaptureRank*0.45+0.65,uCaptureSweep-vCaptureX);
+      diffuseColor.a*=acquired*arrival;
       float r = length(gl_PointCoord - vec2(0.5));
       if (r > 0.5) discard;
       diffuseColor.a *= 1.0 - smoothstep(0.4, 0.5, r);
     `);
   };
-  material.customProgramCacheKey = () => 'renest-surface-point-v3';
+  material.customProgramCacheKey = () => 'renest-surface-point-v4';
   return material;
 }
 
