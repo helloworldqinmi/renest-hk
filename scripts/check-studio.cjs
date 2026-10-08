@@ -121,3 +121,44 @@ for(const room of ['living','dining','bedroom','study']){
  assert.equal(filmMotion.interiorFilmMotion(.7,room,true).scale,1,'Reduced motion keeps the full frame');
 }
 console.log('Film motion checks passed: continuous movement, stable framing, reduced motion.');
+
+const scanMotion=load(path.join(root,'lib/scan-timeline.ts'));
+for(let step=0;step<=70;step++)assert.equal(scanMotion.scanTimeline(step/100).surfaceActive,false,'Physical surfaces must stay hidden during acquisition and meshing');
+assert.equal(scanMotion.scanTimeline(.35).stage,'points');
+assert.ok(scanMotion.scanTimeline(.35).pointOpacity>.8);
+assert.equal(scanMotion.scanTimeline(.65).stage,'mesh');
+assert.equal(scanMotion.scanTimeline(.77).wireActive,true);
+assert.equal(scanMotion.scanTimeline(.77).beamActive,false);
+assert.equal(scanMotion.scanTimeline(1).surfaceX,scanMotion.scanTimeline(1).beamX);
+assert.equal(scanMotion.scanTimeline(1).pointOpacity,0);
+assert.equal(scanMotion.scanTimeline(1).wireOpacity,0);
+const spatial=load(path.join(root,'lib/spatial-experience.ts'));
+assert.equal(spatial.scanCameraFrame(0).immersion,0);
+assert.equal(spatial.scanCameraFrame(.35).immersion,1);
+assert.equal(spatial.scanCameraFrame(1).immersion,0);
+assert.equal(spatial.scanCameraFrame(.5,true).immersion,0);
+for(let step=0;step<=100;step++)assert.ok(Number.isFinite(spatial.scanCameraFrame(step/100).immersion));
+assert.equal(spatial.spatialReveal(spatial.ENTRY_DURATION).surface,1);
+assert.equal(spatial.spatialReveal(spatial.ENTRY_DURATION).travel,1);
+assert.equal(spatial.spatialReveal(0,true).wire,0);
+const renderBudget=load(path.join(root,'components/studio/render-budget.ts'));
+let ratio=1.6;
+const budget=renderBudget.createRenderBudget({getPixelRatio:()=>ratio,setPixelRatio:value=>{ratio=value;}},false);
+for(let step=0;step<=95;step++)budget(step*34,true);
+assert.ok(ratio<1.6,'Sustained slow frames must reduce pixel density');
+const reducedRatio=ratio;
+for(let step=96;step<300;step++)budget(step*34,false);
+assert.equal(ratio,reducedRatio,'A static scene must not trigger resolution changes');
+console.log('Spatial experience checks passed: point/mesh/surface order, camera return, reduced motion and adaptive rendering.');
+
+assert.equal(scanMotion.scanTimeline(.65).meshX,4.6499999999999995);
+assert.ok(scanMotion.scanTimeline(.65).wireOpacity>.6);
+assert.ok(scanMotion.scanTimeline(.95).surfaceActive);
+assert.ok(Math.abs(spatial.scanCameraFrame(.7).orbit)>.8);
+assert.equal(spatial.scanCameraFrame(1).orbit,-1.2,'Keep the extraction viewpoint instead of rotating back');
+
+assert.ok(renderBudget.renderPixelRatio(3840,2160,2,false)>=1,'Large monitors must retain at least one rendered pixel per CSS pixel');
+assert.ok(renderBudget.renderPixelRatio(1920,1080,2,false)**2*1920*1080<=3500001,'High-DPI desktop rendering respects the sharpness budget');
+assert.ok(renderBudget.renderPixelRatio(390,844,3,true)<=1.25,'Phones must cap excessive device density');
+
+let lastScanOrbit=0;for(let step=0;step<=200;step++){const orbit=spatial.scanCameraFrame(step/200).orbit;assert.ok(orbit<=lastScanOrbit+1e-9,'Scan camera must move in only one angular direction');lastScanOrbit=orbit;}

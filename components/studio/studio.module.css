@@ -150,3 +150,28 @@
 .studio[data-phase=summary] .sideFooter>.interiorEntry{grid-column:1/-1;justify-content:flex-start;gap:14px;min-height:76px;padding:15px 18px;background:#263f30;border-color:#263f30;text-align:left}
 .interiorEntry>span:first-child{display:grid;place-items:center;width:35px;height:35px;border:1px solid #aec69b60;border-radius:50%;flex-shrink:0;color:#d3e1bc}.interiorEntry>span:nth-child(2){flex:1;min-width:0}.interiorEntry b{display:block;font-size:14px;font-weight:500;line-height:1.5}.interiorEntry small{display:block;font-size:9px;line-height:1.6;font-weight:400;color:#a8bb98;margin-top:3px}.interiorEntry>svg{flex-shrink:0}
 @media(max-width:740px){.studio[data-phase=summary] .sideFooter>.interiorEntry{margin-bottom:13px;min-height:78px;padding:14px 16px}.interiorEntry b{font-size:14px}.interiorEntry small{font-size:9px}}
+
+/* First-person acquisition is a camera mode, not another coloured overlay. */
+.scanHud{position:absolute;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding:0 20px 96px;opacity:0;transition:opacity .5s;color:#dce7ee;background:linear-gradient(0deg,#071d2970,transparent 26%,transparent 80%,#071d2930)}
+.scene[data-scan-view=interior] .scanHud{opacity:1}
+.scanHud>span{font:9px var(--font-geist-mono),monospace;letter-spacing:1.6px;text-shadow:0 1px 8px #001c25}
+.scanReticle{position:absolute;left:30%;right:30%;top:30%;bottom:32%;background:linear-gradient(#c3d4df,#c3d4df) left top/24px 1px no-repeat,linear-gradient(#c3d4df,#c3d4df) left top/1px 24px no-repeat,linear-gradient(#c3d4df,#c3d4df) right top/24px 1px no-repeat,linear-gradient(#c3d4df,#c3d4df) right top/1px 24px no-repeat,linear-gradient(#c3d4df,#c3d4df) left bottom/24px 1px no-repeat,linear-gradient(#c3d4df,#c3d4df) left bottom/1px 24px no-repeat,linear-gradient(#c3d4df,#c3d4df) right bottom/24px 1px no-repeat,linear-gradient(#c3d4df,#c3d4df) right bottom/1px 24px no-repeat;opacity:.65}
+.scanHudProgress{width:145px;height:2px;background:#ffffff25;margin-top:15px}.scanHudProgress i{display:block;width:var(--capture-progress,0);height:100%;background:#c3d4df;box-shadow:0 0 10px #b4c8d6}
+@media(max-width:740px){.scanHud{padding-bottom:58px}.scanHud>span{font-size:7px;letter-spacing:.5px}.scanReticle{left:23%;right:23%;top:28%;bottom:29%}}
+@media(prefers-reduced-motion:reduce){.scanHud{transition:none}}
+.stage:has(.scene[data-scan-view=interior]) .sceneHeading{opacity:0;transform:translateY(-8px);pointer-events:none}
+.stage:has(.scene[data-scan-view=interior]) .scanStatus{opacity:0;pointer-events:none}
+.sceneHeading{transition:opacity .4s,transform .4s}
+.stage:has([data-testid=migration-map]) .sceneHeading,.stage:has([data-testid=migration-map]) .canvasCaption{opacity:0;pointer-events:none}
+.scanStages{display:flex;align-items:center;gap:22px;font:9px var(--font-geist-mono),monospace;text-shadow:0 1px 10px #001c25}.scanStages>b{font-weight:400;color:#9faeba;opacity:.5;padding-bottom:7px;border-bottom:1px solid transparent}.scene[data-capture-stage=points] .scanStages>b:first-child,.scene[data-capture-stage=mesh] .scanStages>b:nth-child(2),.scene[data-capture-stage=surfaces] .scanStages>b:last-child{opacity:1;color:#e1eaf0;border-color:#afc5d5}.scanReticle>i{position:absolute;left:50%;top:50%;width:8px;height:8px;border:1px solid #c3d4df;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 8px #c3d4df12}.scanReticle>span{position:absolute;left:0;right:0;bottom:-32px;text-align:center;font:10px var(--font-geist-sans),sans-serif;letter-spacing:.3px;color:#e2eaf0;text-shadow:0 1px 12px #001c25}
+@media(max-width:740px){.scanStages{gap:13px;font-size:7px}.scanReticle>span{font-size:9px;bottom:-27px}}
+.journeyTransition{position:absolute;inset:0;z-index:5;pointer-events:none;overflow:hidden}
+.stage:has([data-testid=migration-map]) .sceneActions{z-index:7}
+.movePause{position:absolute;top:24px;right:24px;z-index:8;display:grid;place-items:center;width:38px;height:38px;background:#f7fbf1d9;color:#35594b;border:1px solid #86a49260;border-radius:5px;cursor:pointer}.movePause:hover{background:#fff}.movePause:focus-visible{outline:2px solid #35594b;outline-offset:3px}
+@media(max-width:740px){.movePause{top:20px;right:20px;width:34px;height:34px}}
+.stage:has(.scene[data-capture-stage=points]) .sceneHeading h1,.stage:has(.scene[data-capture-stage=mesh]) .sceneHeading h1{color:#e0f0e8}
+.stage:has(.scene[data-capture-stage=points]) .sceneHeading>span,.stage:has(.scene[data-capture-stage=mesh]) .sceneHeading>span,.stage:has(.scene[data-capture-stage=points]) .sceneHeading p,.stage:has(.scene[data-capture-stage=mesh]) .sceneHeading p{color:#afbdc8}
+/* The title contrast follows the canvas immediately, including device alignment. */
+.stage:has(.scene[data-capture-tone=dark]) .sceneHeading h1{color:#e6eef0;transition:none}
+.stage:has(.scene[data-capture-tone=dark]) .sceneHeading>span,.stage:has(.scene[data-capture-tone=dark]) .sceneHeading p{color:#b7c8d2;transition:none}
+.stage:has(.scene[data-capture-tone=light]) .sceneHeading h1{color:var(--foreground);transition:none}

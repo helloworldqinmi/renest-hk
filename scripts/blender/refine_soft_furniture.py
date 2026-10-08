@@ -176,7 +176,7 @@ def build(asset_id, output, size):
     for obj in meshes:
         if any(word in obj.name.lower() for word in ('cushion', 'pillow', 'duvet', 'mattress', 'rounded arm', 'soft back')):
             low, high = soften(obj)
-            if 'cushion' in obj.name.lower() or 'pillow' in obj.name.lower():
+            if asset_id != 'F01' and ('cushion' in obj.name.lower() or 'pillow' in obj.name.lower()):
                 seams.append(piping(obj, low, high))
     meshes += seams
     bake_occlusion(meshes, asset_id, size)
@@ -189,7 +189,7 @@ def build(asset_id, output, size):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--assets', nargs='+', choices=['F09', 'F13'], default=['F09', 'F13'])
+    parser.add_argument('--assets', nargs='+', choices=['F01', 'F09', 'F13'], default=['F01', 'F09', 'F13'])
     parser.add_argument('--size', type=int, default=1024)
     args = parser.parse_args(sys.argv[sys.argv.index('--') + 1:] if '--' in sys.argv else [])
     args.output.mkdir(parents=True, exist_ok=True)

@@ -72,13 +72,13 @@ export function buildInteriorTour(placements: Placement[]): TourShot[] {
     }
     clear.sort((a, b) => score(a) - score(b));
     const [x, z] = clear[0];
-    const drift = [[.24, 0], [-.24, 0], [0, .24], [0, -.24]].find(([dx, dz]) =>
+    const drift = [[.48, 0], [-.48, 0], [0, .48], [0, -.48], [.24, 0], [-.24, 0], [0, .24], [0, -.24]].find(([dx, dz]) =>
       Array.from({ length: 6 }, (_, i) => i / 5).every(t => inRoom(x + dx * t, z + dz * t) && cameraPositionClear(x + dx * t, z + dz * t, placements)),
     ) ?? [0, 0];
     const title = room.id === 'study'
       ? placements.some(p => p.id === 'F13' && inRoom(p.x, p.z)) ? ['The second bedroom', '属于自己的小房间', '屬於自己的小房間'] as TourCopy : ['Your home office', '在家专注的角落', '在家專注的角落'] as TourCopy
       : room.title;
-    return [{ id: room.id, title, detail: room.detail, from: [x, TOUR_CAMERA_HEIGHT, z], to: [x + drift[0], TOUR_CAMERA_HEIGHT, z + drift[1]], target, fov: room.id === 'living' ? 66 : room.id === 'dining' ? 70 : 68, shift: room.id === 'dining' ? .035 : room.id === 'study' ? .09 : .14 }];
+    return [{ id: room.id, title, detail: room.detail, from: [x, TOUR_CAMERA_HEIGHT, z], to: [x + drift[0], TOUR_CAMERA_HEIGHT, z + drift[1]], target, fov: room.id === 'living' ? 62 : room.id === 'dining' ? 66 : 64, shift: room.id === 'dining' ? .035 : room.id === 'study' ? .09 : .14 }];
   });
 }
 

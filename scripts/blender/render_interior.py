@@ -28,7 +28,7 @@ output = Path(options.jobs).parent
 jobs = json.loads(Path(options.jobs).read_text())
 
 def render_version(shot, lighting):
-    return 32 if lighting == 'evening' else 33 if shot['id'] == 'bedroom' else 31
+    return 35
 
 def coordinate(p): return Vector((p[0], -p[2], p[1]))
 def aim(obj, point): obj.rotation_euler = (Vector(point) - obj.location).to_track_quat('-Z', 'Y').to_euler()
@@ -74,16 +74,39 @@ def build(job):
         for child in descendants(obj): child.hide_render = id not in wanted
         if id in wanted:
             p = wanted[id]; obj.location = (p['x'], -p['z'], 0); obj.rotation_mode = 'XYZ'; obj.rotation_euler = (0,0,math.radians(p['rotation']))
+    bpy.context.view_layer.update()
     for obj in bpy.context.scene.objects:
-        if any(word in obj.name for word in ['Door swing clearance','Subtle wood grain','Throw stitched fold','Fine vertical oak fluting']): obj.hide_render = True
+        name = obj.name.replace('_', ' ')
+        if any(word in name for word in ['Door swing clearance','Subtle wood grain','Throw stitched fold','Fine vertical oak fluting']): obj.hide_render = True
+        position = obj.matrix_world.translation
+        if any(word in name for word in ['Door jamb', 'Door threshold']) and abs(position.y + 6.15) < .16 and position.x < 1.25: obj.hide_render = True
         if 'Pale glazing' in obj.name: obj.hide_render = False
     prepare_surfaces()
+    door_oak=mat('Entrance smoked oak',(.223,.133,.072)); door_trim=mat('Entrance dark frame',(.089,.061,.04)); door_brass=mat('Entrance brass',(.467,.328,.147),.78)
+    cube('Closed entrance door',(.73,-6.15,1.075),(.86,.07,2.11),door_oak)
+    for x in [.285,1.175]: cube('Entrance frame',(x,-6.055,1.08),(.06,.05,2.16),door_trim)
+    cube('Entrance header',(.73,-6.055,2.14),(.95,.05,.06),door_trim)
+    cube('Entrance handle plate',(1.03,-6.105,1.02),(.04,.018,.2),door_brass)
+    cube('Entrance lever',(.985,-6.073,1.055),(.13,.06,.025),door_brass)
+    cube('Entrance threshold',(.73,-6.15,.0275),(.86,.12,.025),door_brass)
+    # The same three mountain layers as the live tour, on both window-facing sides.
+    for layer,color in enumerate([(.51,.62,.63),(.365,.49,.474),(.216,.342,.279)]):
+        hill_material=mat(f'Mountain layer {layer}',color)
+        for side in [-1,1]:
+            depth=-23+layer*4 if side<0 else 30-layer*4
+            vertices=[(-34,-depth,-8)]
+            for i in range(29):
+                vertices.append((-34+i*2.8,-depth,1.5+layer*.4+math.sin(i*.63+layer*1.9)*1.35+math.sin(i*1.31)*.45))
+            vertices.append((45,-depth,-8))
+            mesh=bpy.data.meshes.new('Mountain silhouette'); mesh.from_pydata(vertices,[],[tuple(range(len(vertices)))]); mesh.update()
+            hill=bpy.data.objects.new('Mountain outlook',mesh); bpy.context.collection.objects.link(hill); hill.data.materials.append(hill_material)
+            hill.visible_shadow=False
     frame_oak=mat('Print oak frame',(.27,.2,.13)); paper=mat('Print paper',(.86,.81,.71)); sage=mat('Print sage',(.26,.31,.24)); sand=mat('Print sand',(.55,.42,.28))
-    for x in [1.05,1.64]:
+    for x in [1.38]:
         cube('Framed print',(x,-1.48,1.68),(.46,.035,.62),frame_oak)
         cube('Print paper',(x,-1.50,1.68),(.42,.006,.58),paper)
-        cube('Abstract sage',(x-.035,-1.505,1.59),(.24,.003,.25),sage)
-        bpy.ops.mesh.primitive_cylinder_add(vertices=48,radius=.115,depth=.003,location=(x+.035,-1.506,1.785),rotation=(math.pi/2,0,0)); bpy.context.object.data.materials.append(sand)
+        cube('Quiet horizon',(x,-1.505,1.58),(.28,.003,.035),sage)
+        cube('Landscape',(x,-1.506,1.642),(.28,.003,.09),sand)
     plaster = mat('Film ceiling plaster', (.78,.76,.7)); cube('Continuous ceiling',(4.2,-3.075,2.59),(8.4,6.15,.06),plaster)
     brass = mat('Fixture brushed brass',(.42,.32,.18),.7); shade = mat('Pendant warm ivory',(.78,.73,.62))
     diffuser = mat('Opal diffuser',(.95,.9,.78)); dp = diffuser.node_tree.nodes.get('Principled BSDF'); dp.inputs['Emission Color'].default_value = (1,.77,.48,1)
@@ -112,9 +135,14 @@ def build(job):
     scene.cycles.max_bounces=12; scene.cycles.diffuse_bounces=8; scene.cycles.glossy_bounces=4; scene.cycles.transparent_max_bounces=8
     try:
         prefs = bpy.context.preferences.addons['cycles'].preferences
-        prefs.compute_device_type = 'METAL'; prefs.get_devices()
-        for device in prefs.devices: device.use = device.type == 'METAL'
-        if not options.cpu and any(d.type == 'METAL' for d in prefs.devices): scene.cycles.device = 'GPU'
+        for backend in ['OPTIX', 'CUDA', 'METAL', 'HIP']:
+            try:
+                prefs.compute_device_type = backend; prefs.get_devices()
+                if any(d.type == backend for d in prefs.devices):
+                    for device in prefs.devices: device.use = device.type == backend
+                    if not options.cpu: scene.cycles.device = 'GPU'
+                    break
+            except (TypeError, RuntimeError): continue
     except (TypeError, RuntimeError): pass
     scene.render.resolution_x=options.width; scene.render.resolution_y=options.width//2; scene.render.resolution_percentage=100
     scene.render.image_settings.file_format='JPEG'; scene.render.image_settings.quality=92

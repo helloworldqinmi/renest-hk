@@ -1,47 +1,46 @@
 {
-  "workflow": "Blender 4.5 LTS / CPU Cycles / 1024px local AO / UV1",
+  "workflow": "Blender 4.5 LTS / CPU Cycles / 1024px AO bake, 512px delivery / UV1",
   "furniture": [
+    "F01",
     "F09",
     "F13"
   ],
-  "preservedFurniture": [
-    "F01"
-  ],
+  "preservedFurniture": [],
   "files": [
     {
       "file": "old-home.glb",
       "beforeBytes": 5795060,
-      "afterBytes": 2295724
+      "afterBytes": 2321940
     },
     {
       "file": "new-home-a.glb",
       "beforeBytes": 6099576,
-      "afterBytes": 2339124
+      "afterBytes": 2365336
     },
     {
       "file": "new-home-b.glb",
       "beforeBytes": 5911484,
-      "afterBytes": 2304984
+      "afterBytes": 2331200
     },
     {
       "file": "new-home-c.glb",
       "beforeBytes": 6066148,
-      "afterBytes": 2334096
+      "afterBytes": 2360312
     },
     {
       "file": "furniture/F01.glb",
       "beforeBytes": 239536,
-      "afterBytes": 54400
+      "afterBytes": 555304
     },
     {
       "file": "furniture/F09.glb",
       "beforeBytes": 269236,
-      "afterBytes": 645616
+      "afterBytes": 408232
     },
     {
       "file": "furniture/F13.glb",
       "beforeBytes": 268980,
-      "afterBytes": 670900
+      "afterBytes": 421628
     }
   ]
 }

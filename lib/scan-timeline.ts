@@ -1,19 +1,25 @@
 const clamp = (value: number) => Math.max(0, Math.min(1, value));
 const smooth = (value: number) => { const t = clamp(value); return t * t * (3 - 2 * t); };
+export const SCAN_DURATION = 18000;
 
-/** One spatial sweep drives the phone, sensor rays, points and reconstructed shell. */
+/** Acquisition finishes before meshing; physical materials only appear at the end. */
 export function scanTimeline(progress: number) {
- const turn = smooth(progress / .06);
- const sweep = smooth((progress - .06) / .86);
- // A small spatial lead lets points resolve into surfaces behind the sensor.
- const surface = clamp(sweep - .065 * (1 - smooth((progress - .92) / .06)));
+ const p = clamp(progress);
+ const turn = smooth(p / .06);
+ const sweep = smooth((p - .06) / .28);
+ const mesh = smooth((p - .4) / .2);
+ const surface = smooth((p - .7) / .18);
  return {
   turn, sweep,
-  beamActive: progress >= .06 && progress < .98,
-  surfaceActive: progress > .06 && surface > 0,
+  beamActive: p >= .06 && p < .35,
+  wireActive: p >= .4 && p < .9,
+  surfaceActive: p > .7 && surface > 0,
   beamX: -4.55 + sweep * 9.2,
+  meshX: -4.55 + mesh * 9.2,
   surfaceX: -4.55 + surface * 9.2,
-  pointOpacity: .8 * (1 - smooth((progress - .9) / .08)),
+  pointOpacity: .95 * (1 - smooth((p - .4) / .26)),
+  wireOpacity: .72 * smooth((p - .4) / .055) * (1 - smooth((p - .86) / .04)),
+  stage: p < .06 ? 'align' : p < .4 ? 'points' : p < .7 ? 'mesh' : 'surfaces',
  };
 }
 

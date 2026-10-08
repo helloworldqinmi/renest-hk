@@ -7,19 +7,20 @@ import { spawnSync } from 'node:child_process';
 import assert from 'node:assert/strict';
 import { NodeIO } from '@gltf-transform/core';
 import { ALL_EXTENSIONS } from '@gltf-transform/extensions';
-import { copyToDocument, dedup, getBounds, prune, unpartition, weld } from '@gltf-transform/functions';
+import { copyToDocument, dedup, getBounds, prune, unpartition, weld, textureCompress } from '@gltf-transform/functions';
+import sharp from 'sharp';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source = path.join(root, 'v2-home-models/models');
 const destination = path.join(root, 'public/models/v2');
-// Keep the original sofa's clean silhouette and materials.
-const ids = ['F09', 'F13'];
-const preservedIds = ['F01'];
+// Refine upholstery while preserving the original clean silhouettes.
+const ids = ['F01', 'F09', 'F13'];
+const preservedIds = [];
 const staging = await mkdtemp(path.join(tmpdir(), 'renest-refinement-'));
 const bakedIndex = process.argv.indexOf('--baked');
 const baked = bakedIndex < 0 ? staging : path.resolve(process.argv[bakedIndex + 1]);
 if (bakedIndex < 0) {
-  const candidates = [process.env.BLENDER_BIN, '/Applications/Blender 4.5 LTS.app/Contents/MacOS/Blender', '/Applications/Blender.app/Contents/MacOS/Blender'].filter(Boolean);
+  const candidates = [process.env.BLENDER_BIN, path.join(root,'output/tools/blender-4.5.0-windows-x64/blender.exe'), 'C:/Program Files/Blender Foundation/Blender 4.5/blender.exe', '/Applications/Blender 4.5 LTS.app/Contents/MacOS/Blender', '/Applications/Blender.app/Contents/MacOS/Blender'].filter(Boolean);
   let blender = 'blender';
   for (const candidate of candidates) {
     try { await access(candidate); blender = candidate; break; } catch { /* Try the next installed location. */ }
@@ -60,7 +61,7 @@ for (const id of ids) {
   }
 }
 const files = ['old-home.glb', 'new-home-a.glb', 'new-home-b.glb', 'new-home-c.glb', ...[...preservedIds, ...ids].map(id => `furniture/${id}.glb`)];
-const report = { workflow: 'Blender 4.5 LTS / CPU Cycles / 1024px local AO / UV1', furniture: ids, preservedFurniture: preservedIds, files: [] };
+const report = { workflow: 'Blender 4.5 LTS / CPU Cycles / 1024px AO bake, 512px delivery / UV1', furniture: ids, preservedFurniture: preservedIds, files: [] };
 for (const file of files) {
   const original = await io.read(path.join(source, file));
   const beforeMetadata = metadata(original);
@@ -77,7 +78,7 @@ for (const file of files) {
     copied.dispose();
   }
   // Do not flatten: furniture roots, folding pivots and wall-cut extras drive the UI.
-  await document.transform(weld(), dedup(), prune({ keepAttributes: true, keepExtras: true }), unpartition());
+  await document.transform(weld(), dedup(), prune({ keepAttributes: true, keepExtras: true }), unpartition(), textureCompress({ encoder: sharp, targetFormat: 'png', resize: [512, 512] }));
   const staged = path.join(staging, 'ready', file);
   await mkdir(path.dirname(staged), { recursive: true });
   await io.write(staged, document);

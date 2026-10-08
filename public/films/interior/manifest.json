@@ -1,1 +1,65 @@
-[]
+[
+  {
+    "key": "F01:2.6400:2.5500:-90.0000|F02:1.6800:2.5500:90.0000|F03:0.3300:2.5300:90.0000|F04:2.0700:5.0300:0.0000|F05:1.7400:4.4000:0.0000|F06:2.3700:4.4000:0.0000|F07:1.7400:5.6500:180.0000|F08:2.3700:5.6500:180.0000|F09:5.9600:1.6900:0.0000|F10:7.9600:1.4500:-90.0000|F11:4.9000:0.8500:0.0000|F12:7.0400:0.8500:0.0000|F13:7.2500:4.8900:0.0000|F14:8.0700:4.0200:-90.0000|F15:5.8300:5.3200:90.0000|F16:6.3600:5.3200:-90.0000|F17:0.3700:5.3500:90.0000|F18:2.6400:3.9500:0.0000|N01:0.4300:4.1800:90.0000",
+    "frames": {
+      "living": {
+        "day": "/films/interior/a-living-day.jpg?v=35",
+        "evening": "/films/interior/a-living-evening.jpg?v=35"
+      },
+      "dining": {
+        "day": "/films/interior/a-dining-day.jpg?v=35",
+        "evening": "/films/interior/a-dining-evening.jpg?v=35"
+      },
+      "bedroom": {
+        "day": "/films/interior/a-bedroom-day.jpg?v=35",
+        "evening": "/films/interior/a-bedroom-evening.jpg?v=35"
+      },
+      "study": {
+        "day": "/films/interior/a-study-day.jpg?v=35",
+        "evening": "/films/interior/a-study-evening.jpg?v=35"
+      }
+    }
+  },
+  {
+    "key": "F01:1.7700:2.0200:0.0000|F03:1.7700:3.7700:180.0000|F05:1.6600:4.5400:0.0000|F06:2.2800:4.5400:0.0000|F07:1.6600:5.7800:180.0000|F08:2.2800:5.7800:180.0000|F09:5.9600:1.6900:0.0000|F10:7.9600:1.4500:-90.0000|F11:4.9000:0.8500:0.0000|F12:7.0400:0.8500:0.0000|F13:7.2500:4.8900:0.0000|F14:8.0700:4.0200:-90.0000|F15:5.8300:5.3200:90.0000|F16:6.3600:5.3200:-90.0000|F17:0.3700:5.3500:90.0000|F18:0.4300:2.0600:0.0000|N02:1.9700:5.1800:0.0000|N04:3.1200:5.4000:-90.0000",
+    "frames": {
+      "living": {
+        "day": "/films/interior/b-living-day.jpg?v=35",
+        "evening": "/films/interior/b-living-evening.jpg?v=35"
+      },
+      "dining": {
+        "day": "/films/interior/b-dining-day.jpg?v=35",
+        "evening": "/films/interior/b-dining-evening.jpg?v=35"
+      },
+      "bedroom": {
+        "day": "/films/interior/b-bedroom-day.jpg?v=35",
+        "evening": "/films/interior/b-bedroom-evening.jpg?v=35"
+      },
+      "study": {
+        "day": "/films/interior/b-study-day.jpg?v=35",
+        "evening": "/films/interior/b-study-evening.jpg?v=35"
+      }
+    }
+  },
+  {
+    "key": "F01:0.7500:2.6500:90.0000|F02:1.7500:2.6500:90.0000|F03:2.9600:2.6500:-90.0000|F04:2.1500:5.2000:0.0000|F05:1.8200:4.5800:0.0000|F06:2.4900:4.5800:0.0000|F09:5.9600:1.6900:0.0000|F10:7.9600:1.4500:-90.0000|F11:4.9000:0.8500:0.0000|F12:7.0400:0.8500:0.0000|F14:8.0700:4.0200:-90.0000|F15:7.1200:4.1500:0.0000|F16:7.1200:4.7200:180.0000|F17:0.3700:5.3500:90.0000|F18:0.4200:4.0400:0.0000|N03:5.8800:5.3800:90.0000|N04:6.4500:5.3800:-90.0000",
+    "frames": {
+      "living": {
+        "day": "/films/interior/c-living-day.jpg?v=35",
+        "evening": "/films/interior/c-living-evening.jpg?v=35"
+      },
+      "dining": {
+        "day": "/films/interior/c-dining-day.jpg?v=35",
+        "evening": "/films/interior/c-dining-evening.jpg?v=35"
+      },
+      "bedroom": {
+        "day": "/films/interior/c-bedroom-day.jpg?v=35",
+        "evening": "/films/interior/c-bedroom-evening.jpg?v=35"
+      },
+      "study": {
+        "day": "/films/interior/c-study-day.jpg?v=35",
+        "evening": "/films/interior/c-study-evening.jpg?v=35"
+      }
+    }
+  }
+]

@@ -1,4 +1,4 @@
-.experience{position:absolute;inset:0;background:#e9e9e2;overflow:hidden}
+.experience{position:absolute;inset:0;background:#fafaf7;overflow:hidden}
 .canvas{position:absolute;inset:0}.canvas canvas{display:block;width:100%;height:100%}.canvas[hidden]{display:none}
 .caption{position:absolute;bottom:65px;left:38px;right:38px;pointer-events:none;text-align:center;color:#526c5e}
 .caption span{font:9px var(--font-geist-mono),monospace;letter-spacing:1.8px}

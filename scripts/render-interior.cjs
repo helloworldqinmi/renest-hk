@@ -16,5 +16,8 @@ const output = path.join(root, 'public/films/interior'); fs.mkdirSync(output, {r
 const jobs = studioLayouts.map(layout => ({id:layout.id, key:interiorPlanKey(layout.placements), placements:layout.placements, shots:buildInteriorTour(layout.placements)}));
 const jobFile = path.join(output, 'jobs.json'); fs.writeFileSync(jobFile, JSON.stringify(jobs, null, 2));
 const args = process.argv.slice(2);
-const result = spawnSync(process.env.BLENDER_BIN || '/Applications/Blender.app/Contents/MacOS/Blender', ['-b','-t','8','--python-exit-code','1','-P',path.join(root,'scripts/blender/render_interior.py'),'--','--jobs',jobFile,...args], {stdio:'inherit'});
+const candidates = [process.env.BLENDER_BIN, path.join(root,'output/tools/blender-4.5.0-windows-x64/blender.exe'), 'C:/Program Files/Blender Foundation/Blender 4.5/blender.exe', '/Applications/Blender.app/Contents/MacOS/Blender'].filter(Boolean);
+const blender = candidates.find(file => fs.existsSync(file)) || 'blender';
+const result = spawnSync(blender, ['-b','-t','8','--python-exit-code','1','-P',path.join(root,'scripts/blender/render_interior.py'),'--','--jobs',jobFile,...args], {stdio:'inherit'});
+if (result.error) console.error(result.error.message);
 process.exit(result.status ?? 1);

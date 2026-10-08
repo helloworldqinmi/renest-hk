@@ -1,9 +1,8 @@
 # Blender refinement for the live studio
 
-The deployed V2 models use Blender-refined upholstery for F09 (double bed) and
-F13 (single bed). F01 (sofa) deliberately keeps its original geometry and materials:
-its clean, soft silhouette is preferred over the added piping and heavier contact
-shading. Only lossless vertex/resource deduplication applies to the sofa.
+The deployed V2 models use Blender-refined upholstery for F01 (sofa), F09 (double bed)
+and F13 (single bed). The sofa keeps its clean silhouette without added piping;
+relaxed upholstery and local contact shading add depth without bulky seams.
 The original models under
 `v2-home-models/models/` remain the source of truth for placement, dimensions,
 architecture and interaction metadata.
@@ -14,9 +13,10 @@ architecture and interaction metadata.
 npm run build:refined-models
 ```
 
-The command locates Blender 4.5 LTS on macOS, then Blender.app, then `blender` on
-PATH. Set `BLENDER_BIN` to an absolute executable path to use another installation.
-It uses six CPU threads, Cycles, a fixed sampling seed and 1024px occlusion atlases.
+The command locates project-local portable Blender on Windows, common installations
+on Windows and macOS, then `blender` on PATH. Set `BLENDER_BIN` to an absolute
+executable path to use another installation. It uses six CPU threads, Cycles, a fixed
+sampling seed and 1024px occlusion atlases, delivered as 512px PNGs for smaller downloads.
 No model downloads or external addons are required.
 
 1. Blender welds split vertices, relaxes and subdivides soft parts, preserving
@@ -38,7 +38,7 @@ to `node scripts/refine-models.mjs`; that directory must contain the two bed exp
 ## Runtime
 
 The homepage and studio keep their existing asset URLs, camera controls and
-placement logic. The 0.8-strength AO maps accompany moving furniture rather than
+placement logic. The runtime 0.55-strength AO maps accompany moving furniture rather than
 painting room shadows onto it. Millimetre-scale piping does not cast realtime
 shadows, avoiding aliasing at mobile shadow-map resolutions. The site's material
 palette still applies; tailored seams receive a subtle darker finish.
@@ -51,6 +51,6 @@ is rendered before relying on manual shadow updates.
 Complete room downloads shrink through geometry deduplication, while individual
 refined furniture assets grow because they contain additional geometry and an
 embedded AO atlas. The actual size comparison is in `model-refinement.json`.
-This is a limited refinement of two beds, not a complete
+This is a focused refinement of a sofa and two beds, not a complete
 photorealistic remodel. The original estimated footprint metadata is preserved;
 Blender refinement does not make those measurements survey-accurate.

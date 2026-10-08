@@ -30,20 +30,20 @@ def finish(material):
     if 'oak' in name:
         mapping = nodes.new('ShaderNodeVectorMath'); mapping.operation = 'MULTIPLY'
         axis = int(material.get('film_grain_axis',0))
-        mapping.inputs[1].default_value = tuple(1.2 if i == axis else 38 for i in range(3))
+        mapping.inputs[1].default_value = tuple(1.2 if i == axis else 20 for i in range(3))
         links.new(coords.outputs['Generated'], mapping.inputs[0])
         grain = noise(nodes, 3.2, 3); grain.noise_dimensions = '4D'
         info=nodes.new('ShaderNodeObjectInfo'); seed=nodes.new('ShaderNodeMath'); seed.operation='MULTIPLY'; seed.inputs[1].default_value=11
         links.new(info.outputs['Random'],seed.inputs[0]); links.new(seed.outputs[0],grain.inputs['W'])
         links.new(mapping.outputs[0], grain.inputs['Vector'])
         if 'board' in name:
-            colors = ramp(nodes, (.38,.29,.19), (.57,.47,.33))
+            colors = ramp(nodes, (.44,.34,.23), (.58,.47,.33))
         else:
-            colors = ramp(nodes, (.23,.145,.074), (.41,.29,.16))
+            colors = ramp(nodes, (.34,.235,.14), (.46,.34,.22))
         links.new(grain.outputs['Fac'], colors.inputs[0]); links.new(colors.outputs[0], p.inputs['Base Color'])
-        rough = ramp(nodes, (.38,.38,.38), (.56,.56,.56))
+        rough = ramp(nodes, (.45,.45,.45), (.59,.59,.59))
         links.new(grain.outputs['Fac'], rough.inputs[0]); links.new(rough.outputs[0], p.inputs['Roughness'])
-        bump = nodes.new('ShaderNodeBump'); bump.inputs['Distance'].default_value = .0008; bump.inputs['Strength'].default_value = .23
+        bump = nodes.new('ShaderNodeBump'); bump.inputs['Distance'].default_value = .0004; bump.inputs['Strength'].default_value = .2
         links.new(grain.outputs['Fac'], bump.inputs['Height']); links.new(bump.outputs[0], p.inputs['Normal'])
         p.inputs['Coat Weight'].default_value = .12; p.inputs['Coat Roughness'].default_value = .34
     elif any(s in name for s in ['linen','cotton','wool','woven']):

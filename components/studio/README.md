@@ -32,21 +32,21 @@ Rendering uses shared, small procedural grain/weave/plaster surface maps, materi
 
 Impact gives the live room its own unobstructed framing, with an original-home reference card, live reuse/addition counts, a reuse highlight toggle and a slow, pausable room tour. Direct manipulation and switching to Floor plan stop the tour; reduced-motion settings disable it.
 
-Scan timing is shared in `lib/scan-timeline.ts`: phone rotation completes before acquisition starts; the sensor, spatially sorted point cutoff and a narrow triangular reconstruction band follow the same world-X frontier. Solid surfaces follow immediately behind it and finish before the scan ends. Point samples are distributed over triangle surface area (about 65k desktop / 28k mobile), rather than selected vertices. The sample counter reports the actual displayed simulated points.
+Scan timing is shared in `lib/scan-timeline.ts`: an 18-second sequence gives device alignment, increasing surface samples, progressive triangle reconstruction and finished materials distinct reading time. The phone travels outside the room before acquisition. Samples retain actual material colours; the counter reports acquired simulated samples.
 
 Homepage demo links explicitly start at the old-home opening. After Generate, the full truck sequence leads into a short room reveal: furniture lands, lighting rises and the camera settles before layout controls appear. Reduced motion bypasses the reveal delay, and Skip animation opens the result immediately. Existing-room photography is shown uncropped below the hero; no completed new-home layout is previewed there.
 
-The scanning phone now turns for 6% of the scan (about 0.6s) and remains outside the apartment boundary. Moving furniture uses dimension-fitted, non-overlapping cargo slots and lift/travel/lower paths. The truck follows a straight minimum-jerk drive with distance-based wheel rotation; its rear gate closes after loading and opens after stopping, before unloading. Scene readiness is keyed by mode to prevent the reveal completion race; results also provide an immediate skip and bounded timeout.
+The scanning phone now turns for 6% of the scan (about 1s) and remains outside the apartment boundary. Moving furniture uses dimension-fitted, non-overlapping cargo slots and lift/travel/lower paths. The truck follows a straight minimum-jerk drive with distance-based wheel rotation; its rear gate closes after loading and opens after stopping, before unloading. Scene readiness is keyed by mode to prevent the reveal completion race; results also provide an immediate skip and bounded timeout.
 
 The live V2 assets include Blender-refined bed upholstery with separate
 UV1 local-occlusion atlases. Rebuild them with `npm run build:refined-models`;
 see `docs/blender-refinement.md` for the pipeline, invariants, and measured size
-tradeoffs. The sofa keeps its original geometry and materials. Source models remain under `v2-home-models/models/`.
+tradeoffs. The sofa also uses refined upholstery and a baked local AO atlas. Source models remain under `v2-home-models/models/`.
 
-### Interior film rendering
+### Interior tour
 
-The film has an independent Three.js lighting setup, wide, level architectural cameras, room-specific lens shifts, ceiling fixtures, a dining pendant and contact shading. The Cycles scene adds procedural oak grain, fabric microstructure, thin reflective glazing and soft folds in the duvet and throw. Captions sit outside the picture; the image keeps a 2:1 composition on both wide and portrait screens.
+The default tour is live Three.js with collision-checked room paths, a topology-to-room entrance, smooth day/evening lighting and drag-to-look controls. The entrance has a closed oak door; windows overlook layered mountain scenery. Matching offline Cycles frames remain an optional Photo view, with DIY edits always live. Reduced motion bypasses travel.
 
-`npm run render:interior -- --samples 96 --width 1600 --skip-existing` renders the three curated layouts with Blender Cycles (Metal when available). Set `BLENDER_BIN` for a different installed Blender executable, or pass `--cpu`. `--layout a` and `--room living` narrow a preview run. The renderer uses the same placements and camera decisions as the live player and writes day/evening JPEGs under `public/films/interior`. It publishes a manifest only for complete, matching render sets. Per-frame signatures make interrupted jobs resumable and prevent an old camera shot from being advertised as a new render.
+Scanning uses 260k desktop / 120k mobile material-coloured samples. Fixed pixel dots gradually increase in density; no room or furniture outlines appear before acquisition. Fine triangles assemble through precomputed geometry and shader uniforms, with silver-blue antialiased edges and a gradual fusion into material colours. A depth-only pass keeps back surfaces out of the point cloud.
 
-The player uses offline frames only when every furniture ID, position and rotation matches. DIY edits automatically use the live room. **Look around** pauses the film and opens that same arrangement for interactive viewing. Each six-second room chapter has one continuous move with a fixed composition center and a maximum 6.5% image crop, keeping the room readable throughout. Cycles stills alternate visible push-ins and pull-backs between rooms, updated at display refresh rate; these are editorial image moves, not newly rendered 3D camera paths. Reduced-motion playback keeps the uncropped still. Furniture purchase and reuse figures return in the closing card.
+Moving follows the truck into an overhead map transition and down into unloading. The bundled Hong Kong coastline and OSRM road route require no runtime map network request.
