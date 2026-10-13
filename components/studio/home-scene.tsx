@@ -233,7 +233,10 @@ export function HomeScene(props:HomeSceneProps){
   function floorPoint(e:PointerEvent){aim(e);return raycaster.ray.intersectPlane(new T.Plane(new T.Vector3(0,1,0),0),new T.Vector3());}
   function pick(e:PointerEvent){if(!activeRoot)return null;aim(e);for(const hit of raycaster.intersectObject(activeRoot,true)){if(hit.object.userData.contactShadow)continue;let visible=true;for(let o:T.Object3D|null=hit.object;o;o=o.parent)if(!o.visible&&!(o===activeRoot&&live.current.detectedFurniture&&!live.current.furnitureOnly))visible=false;if(!visible)continue;let object:T.Object3D|null=hit.object;while(object&&!object.userData.selectable)object=object.parent;if(object)return object;}return null;}
   function candidate(){const p=live.current.placements?.find(p=>p.id===dragged?.userData.id);return p&&dragged?{...p,x:dragged.position.x,z:dragged.position.z}:null;}
-  function updateDrop(){const p=candidate();if(!p||!dragged)return;const issue=placementIssue(p,live.current.placements??[],true),size=footprint(p);dropPreview.visible=true;dropPreview.scale.set(size.w+.06,size.d+.06,1);dropPreview.position.copy(dragged.getWorldPosition(new T.Vector3()));dropPreview.position.y=.04;dropMaterial.color.set(issue?'#bc7157':'#76966d');if(selectedBox){dragged.updateWorldMatrix(true,true);selectedBox.box.setFromObject(dragged);(selectedBox.material as T.LineBasicMaterial).color.copy(dropMaterial.color);}feedback({id:p.id,state:issue?'blocked':isStaged(p)?'staged':'moving'});}
+  function updateDrop(){
+   // Pointer moves mutate Three objects without changing React props or feedback state.
+   previousRender='';
+   const p=candidate();if(!p||!dragged)return;const issue=placementIssue(p,live.current.placements??[],true),size=footprint(p);dropPreview.visible=true;dropPreview.scale.set(size.w+.06,size.d+.06,1);dropPreview.position.copy(dragged.getWorldPosition(new T.Vector3()));dropPreview.position.y=.04;dropMaterial.color.set(issue?'#bc7157':'#76966d');if(selectedBox){dragged.updateWorldMatrix(true,true);selectedBox.box.setFromObject(dragged);(selectedBox.material as T.LineBasicMaterial).color.copy(dropMaterial.color);}feedback({id:p.id,state:issue?'blocked':isStaged(p)?'staged':'moving'});}
   const down=(e:PointerEvent)=>{
    if(dragPointer!==null)return;
    pointer=[e.clientX,e.clientY];productUserOrbit=true;live.current.onInteract?.();
@@ -253,7 +256,7 @@ export function HomeScene(props:HomeSceneProps){
    if((cancel||!valid)&&dragStart)object.position.copy(dragStart);
    dragged=null;dragStart=null;dragPointer=null;pointer=null;dropPreview.visible=false;feedback(null);renderer.domElement.style.cursor=live.current.editable?'grab':'';
    if(pointerId!==null&&renderer.domElement.hasPointerCapture(pointerId))renderer.domElement.releasePointerCapture(pointerId);
-   renderer.shadowMap.needsUpdate=true;selection();if(!cancel&&p&&changed)live.current.onMove?.(p.id,p.x,p.z);return true;
+   previousRender='';renderer.shadowMap.needsUpdate=true;selection();if(!cancel&&valid&&p&&changed)live.current.onMove?.(p.id,p.x,p.z);return true;
   }
   const cancel=(e:PointerEvent)=>{if(e.pointerId===dragPointer)finishDrag(true);};
   const escape=(e:KeyboardEvent)=>{if(e.key==='Escape'&&dragged){e.preventDefault();finishDrag(true);}};

@@ -6,9 +6,9 @@ ReNest HK is an interactive hackathon prototype for furniture reuse and spatial 
 
 ## Deployment
 
-The project uses **Vercel** and is deployed at **[https://cyberironman.com](https://cyberironman.com)**.
+The project uses **Vercel** and is deployed at **[https://renest-hk.vercel.app/](https://renest-hk.vercel.app/)**.
 
-Import this repository into Vercel with the **Next.js** preset and the repository root as the project directory. Install with `npm install` and build with `npm run build`. Connect `cyberironman.com` under the project's **Settings → Domains**, following the DNS records supplied by Vercel. Domain ownership, DNS and deployment access are managed in the Vercel project. Use a preview deployment to review changes before production. No API keys or database are required for this demo.
+Import this repository into Vercel with the **Next.js** preset and the repository root as the project directory. Install with `npm install` and build with `npm run build`. The current public project URL is `https://renest-hk.vercel.app/`. Deployment access is managed in the Vercel project. Use a preview deployment to review changes before production. No API keys or database are required for this demo.
 
 ## Run locally
 

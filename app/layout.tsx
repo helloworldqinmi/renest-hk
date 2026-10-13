@@ -14,7 +14,7 @@ const editorial = localFont({ src: [
 ], variable: "--font-editorial", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.cyberironman.com"),
+  metadataBase: new URL("https://renest-hk.vercel.app"),
   title: "ReNest — The Moving Studio",
   description: "Scan your old home and new home. ReNest helps you reuse existing furniture, optimize compact spaces, and buy only what actually fits.",
   alternates: { canonical: "/" },
