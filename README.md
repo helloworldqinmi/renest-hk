@@ -1,6 +1,6 @@
 # ReNest HK
 
-### Move what matters. Fit what works.
+*Move what matters. Fit what works.*
 
 ReNest HK is a furniture reuse and spatial planning prototype for compact Hong Kong homes. It connects the decisions people make before a move: what to keep, how it fits in the next home, what to buy, and what to pass on.
 
@@ -23,7 +23,9 @@ For a logistics evaluation, the prototype demonstrates how furniture identity, e
 1. **[Open the interactive demo](https://renest-hk.vercel.app/).** Start with the old-home capture, select furniture, and choose the example new-home floor plan.
 2. **Set the household brief.** Use quick preferences or the optional detailed questionnaire; compare three arrangements with different reuse, dining and workspace priorities.
 3. **Test an actual edit.** Switch to Floor plan, move or rotate a piece, and inspect the updated arrangement, cost and report. Save the arrangement and reopen it from the homepage.
-4. **Inspect the implementation.** Run the checks below and consult the [architecture](docs/architecture.md), [capability boundaries](docs/product-scope.md) and [repository audit](docs/repository-audit.md).
+4. **Review the handover.** Open the report and download the moving CSV. Check that furniture destinations and purchase estimates reflect the selected arrangement.
+
+The [review guide](docs/review-guide.md) provides the expected results and a repeatable walkthrough. A desktop browser is recommended for the full 3D editing experience.
 
 ## What the prototype implements
 
@@ -41,9 +43,11 @@ For a logistics evaluation, the prototype demonstrates how furniture identity, e
 
 ## Run locally
 
-Requirements: **Node.js 20.9 or later**, npm, and a modern browser with WebGL support. No API keys, database, account or Blender installation are required to run the application.
+Recommended environment: **Node.js 24**, npm, Git, and a modern browser with WebGL support. The Node.js version is specified in `.nvmrc`; the package requires at least Node.js 20.9. No API keys, database, account or Blender installation are required to run the application.
 
 ```bash
+git clone https://github.com/helloworldqinmi/renest-hk.git
+cd renest-hk
 npm ci
 npm run dev
 ```
@@ -78,11 +82,12 @@ npm run build
 | `npm run build:refined-models` | Rebuild refined deployment models; requires Blender. |
 | `npm run render:interior` | Render optional interior photographs; requires Blender. |
 
-The former `next lint` command has been removed because it is unavailable in the installed Next.js version. A separate ESLint configuration is not currently included.
+The [verification workflow](.github/workflows/verify.yml) runs a clean installation, these checks, a runtime dependency audit and a production build on pushes to `main` and pull requests. It requires no application secrets. See the [public review record](docs/public-review.md) for the dated verification results and remaining development-tool advisories. Type checking is included; a separate lint suite is not configured.
 
 ## Repository map
 
 ```text
+.github/workflows/           Automated verification for commits and pull requests
 app/                         Routes, layouts, page styles and local fonts
 components/                  Shared UI, homepage and current moving studio
 lib/                         Planning, geometry, persistence and localisation
@@ -111,6 +116,8 @@ The repository is configured as a standard Next.js project and the documented de
 
 ## Further reading
 
+- [Review guide](docs/review-guide.md) — walkthrough, expected results and recovery guidance.
+- [Public review record](docs/public-review.md) — validation evidence and remaining handover items.
 - [Delivery package](deliverables/README.md) — optional downloadable presentation assets and integrity checks.
 - [Architecture](docs/architecture.md) — module ownership, data flow and asset pipeline.
 - [Product scope](docs/product-scope.md) — implemented behaviour, simulations and roadmap.
@@ -118,6 +125,6 @@ The repository is configured as a standard Next.js project and the documented de
 - [Naming conventions](docs/naming-conventions.md) — file responsibilities, naming rules and compatibility exceptions.
 - [Studio implementation](components/studio/README.md) — rendering and interaction notes.
 - [Model source guide](assets/home-models/README.md) — source geometry, viewer and regeneration.
-- [Third-party notices](docs/third-party-notices.md) — bundled licences.
+- [Third-party notices](docs/third-party-notices.md) — bundled licences and project licensing status.
 
 This repository is a hackathon prototype prepared for technical evaluation. It does not claim a production carrier integration, measured operational savings or an implemented community pilot.

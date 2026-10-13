@@ -6,7 +6,7 @@ Use names that describe a file's responsibility and make related files easy to f
 
 | Category | Convention | Example |
 | --- | --- | --- |
-| TypeScript and React modules | Lowercase `kebab-case`; use the feature or responsibility. | `demo-state-provider.tsx`, `motion-tokens.ts` |
+| TypeScript and React modules | Lowercase `kebab-case`; use the feature or responsibility. | `locale-provider.tsx`, `motion-tokens.ts` |
 | Component styles | Match the component stem when the styles belong to one feature. | `reimagine-panel.tsx` and `reimagine-panel.module.css` |
 | Shared UI | Name a collection of basic controls explicitly. | `ui-primitives.tsx` |
 | Hooks | Prefix with `use-`. | `use-studio-history.ts` |
@@ -22,7 +22,7 @@ Keep `.ts`, `.tsx`, `.mjs` and `.cjs` aligned with the actual parser/module syst
 
 | Previous path | Current path | Reason |
 | --- | --- | --- |
-| `components/state-provider.tsx` | `components/demo-state-provider.tsx` | Identifies the demo state instead of implying all application state. |
+| `components/state-provider.tsx` | Renamed, then removed in the public review | The follow-up usage audit found no consumers of its legacy context. Current studio persistence is independent. |
 | `components/common/ui.tsx` | `components/common/ui-primitives.tsx` | Describes the shared buttons, labels, metrics and modal export. |
 | `types/index.ts` | `types/demo-planning.ts` | Names the reference planning model explicitly; current studio types remain in `lib/studio-data.ts`. |
 | `lib/motion.ts` | `lib/motion-tokens.ts` | Identifies shared timing and easing constants. |

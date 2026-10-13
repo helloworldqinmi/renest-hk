@@ -4,6 +4,7 @@
 # Next.js build output
 /.next
 /out
+/next-env.d.ts
 
 # Scratch renders, recordings, downloaded tools, and historical editing work.
 # Reviewed deliverables belong in /deliverables; authored sources in /assets.

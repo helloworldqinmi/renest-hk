@@ -33,6 +33,8 @@ No live LiDAR, generative AI, marketplace posting, payment, account system, carr
 
 Plans preserve supported versioned profile fields, placements and input metadata. Invalid or missing stored data is handled by the application. Browser storage belongs to the current origin and browser; clearing browser data removes these records. A different deployment URL or device has a separate store.
 
+Older builds also wrote a `renest-demo` localStorage entry through a retired context provider. Current pages do not consume that legacy entry; the provider has been removed. Existing entries are left untouched.
+
 Uploaded room images and scan files are not sent to an application reconstruction service or included in saved plans. Only the selected input method and filename are retained. Users must reselect a source file to preview its contents after revisiting. Downloaded CSV and PNG files are actual exports; the printable report can be saved as PDF through the browser.
 
 ## Evaluation priorities

@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "./motion.css";
 import { LocaleProvider } from "@/components/locale-provider";
-import { DemoProvider } from "@/components/demo-state-provider";
 import { AppHeader } from "@/components/common/app-header";
 
 const sans = localFont({ src: "./fonts/geist-sans.woff2", variable: "--font-geist-sans", display: "swap" });
@@ -16,11 +15,11 @@ const editorial = localFont({ src: [
 export const metadata: Metadata = {
   metadataBase: new URL("https://renest-hk.vercel.app"),
   title: "ReNest — The Moving Studio",
-  description: "Scan your old home and new home. ReNest helps you reuse existing furniture, optimize compact spaces, and buy only what actually fits.",
+  description: "Explore furniture reuse, compare 3D layouts and prepare a moving plan for compact Hong Kong homes. An interactive prototype with a bundled example apartment.",
   alternates: { canonical: "/" },
   openGraph: {
     title: "ReNest — The Moving Studio",
-    description: "Scan your old home and new home. ReNest helps you reuse existing furniture, optimize compact spaces, and buy only what actually fits.",
+    description: "Explore furniture reuse, compare 3D layouts and prepare a moving plan for compact Hong Kong homes. An interactive prototype with a bundled example apartment.",
     url: "/",
     siteName: "ReNest",
     type: "website",
@@ -32,10 +31,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="en" data-scroll-behavior="smooth" className={`${sans.variable} ${mono.variable} ${editorial.variable}`}>
       <body>
-        <LocaleProvider><DemoProvider>
+        <LocaleProvider>
           <AppHeader />
           {children}
-        </DemoProvider></LocaleProvider>
+        </LocaleProvider>
       </body>
     </html>
   );
