@@ -6,7 +6,7 @@ ReNest HK is a furniture reuse and spatial planning prototype for compact Hong K
 
 The result is an interactive moving plan: compare furnished layouts, adjust individual pieces, review purchasing and reuse decisions, and export a practical handover report.
 
-**[Open the demo](https://renest-hk.vercel.app/)** · **[Watch the film](deliverables/demo-film/renest-hk-demo-v1.11.1-1080p60.mp4)** · **[Delivery package](deliverables/README.md)** · **[Technical architecture](docs/architecture.md)**
+**[Open the interactive demo](https://renest-hk.vercel.app/)** · **[Technical architecture](docs/architecture.md)** · **[Product scope](docs/product-scope.md)**
 
 ![ReNest sample apartment and furniture layout](public/models/v2/previews/new-home-a.png)
 
@@ -20,13 +20,10 @@ For a logistics evaluation, the prototype demonstrates how furniture identity, e
 
 ## Review in five minutes
 
-1. **Watch the 3:43 film.** The [English demo film](deliverables/demo-film/renest-hk-demo-v1.11.1-1080p60.mp4) is supplied at 1920 × 1080, 60 fps, with [English subtitles](deliverables/demo-film/renest-hk-demo-v1.11.1-en.srt).
-2. **Open the interactive demo.** Start with the old-home capture, select furniture, and choose the example new-home floor plan.
-3. **Set the household brief.** Use quick preferences or the optional detailed questionnaire; compare three arrangements with different reuse, dining and workspace priorities.
-4. **Test an actual edit.** Switch to Floor plan, move or rotate a piece, and inspect the updated arrangement, cost and report. Save the arrangement and reopen it from the homepage.
-5. **Inspect the implementation.** Run the checks below and consult the [architecture](docs/architecture.md), [capability boundaries](docs/product-scope.md) and [repository audit](docs/repository-audit.md).
-
-The film includes product storytelling and proposed service scenarios. The capability table below describes what the submitted application implements.
+1. **[Open the interactive demo](https://renest-hk.vercel.app/).** Start with the old-home capture, select furniture, and choose the example new-home floor plan.
+2. **Set the household brief.** Use quick preferences or the optional detailed questionnaire; compare three arrangements with different reuse, dining and workspace priorities.
+3. **Test an actual edit.** Switch to Floor plan, move or rotate a piece, and inspect the updated arrangement, cost and report. Save the arrangement and reopen it from the homepage.
+4. **Inspect the implementation.** Run the checks below and consult the [architecture](docs/architecture.md), [capability boundaries](docs/product-scope.md) and [repository audit](docs/repository-audit.md).
 
 ## What the prototype implements
 
@@ -114,7 +111,7 @@ The repository is configured as a standard Next.js project and the documented de
 
 ## Further reading
 
-- [Delivery package](deliverables/README.md) — film, presentation clips and integrity checks.
+- [Delivery package](deliverables/README.md) — optional downloadable presentation assets and integrity checks.
 - [Architecture](docs/architecture.md) — module ownership, data flow and asset pipeline.
 - [Product scope](docs/product-scope.md) — implemented behaviour, simulations and roadmap.
 - [Repository audit](docs/repository-audit.md) — naming decisions, removed legacy code and Git ignore policy.

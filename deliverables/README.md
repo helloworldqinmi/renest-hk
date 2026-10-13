@@ -2,14 +2,18 @@
 
 This directory contains the selected presentation assets for review. File names and delivery documentation are in English. Media are kept outside `public/` so the website does not ship the presentation package as runtime content.
 
-## Main film
+## Main film — download for local playback
 
-- [Demo film — v1.11.1, 1080p60](demo-film/renest-hk-demo-v1.11.1-1080p60.mp4)
-- [English subtitles](demo-film/renest-hk-demo-v1.11.1-en.srt)
+- [Download MP4 — v1.11.1, 1080p60, 74.1 MiB](demo-film/renest-hk-demo-v1.11.1-1080p60.mp4?raw=true)
+- [Download English subtitles](demo-film/renest-hk-demo-v1.11.1-en.srt?raw=true)
 - [Release notes](demo-film/release-notes.md)
 - [Original production verification](demo-film/verification.json)
 
-Duration: **3 minutes 43 seconds**. Resolution: **1920 × 1080**, **60 fps**. The film has English narration. Use a local media player if a repository preview does not play the MP4.
+Duration: **3 minutes 43 seconds**. Resolution: **1920 × 1080**, **60 fps**. The film has English narration.
+
+GitHub's file page does not preview this large MP4. Download it and open it in a local media player. If a link opens the file page instead, use **Download raw file** (the download icon beside **Raw**). A local clone also includes the film at the path above. Access to a private repository is required to download its files.
+
+For a browser-based review without downloading media, [open the interactive application](https://renest-hk.vercel.app/).
 
 The selected film is the v1.11.1 polished export identified by the existing presentation notes and production checksum. Its bytes are unchanged. Earlier cuts, silent picture masters and intermediate renders remain in the ignored local production workspace; they are not alternative submission files.
 
