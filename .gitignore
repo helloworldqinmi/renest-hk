@@ -5,9 +5,19 @@
 /.next
 /out
 
-# local tooling artifacts
+# Scratch renders, recordings, downloaded tools, and historical editing work.
+# Reviewed deliverables belong in /deliverables; authored sources in /assets.
+# Never place the only copy of an accepted deliverable in /output.
 /.playwright-cli
 /output
+
+# Python tooling cache
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local deployment configuration
+.vercel/
 
 # local environment files
 .env*

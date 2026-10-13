@@ -169,7 +169,7 @@ def bake_occlusion(meshes, asset_id, size):
 
 def build(asset_id, output, size):
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    bpy.ops.import_scene.gltf(filepath=str(ROOT / 'v2-home-models/models/furniture' / f'{asset_id}.glb'))
+    bpy.ops.import_scene.gltf(filepath=str(ROOT / 'assets/home-models/models/furniture' / f'{asset_id}.glb'))
     root = next(obj for obj in bpy.context.scene.objects if obj.get('id') == asset_id)
     meshes = [obj for obj in root.children_recursive if obj.type == 'MESH']
     seams = []

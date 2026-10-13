@@ -11,7 +11,7 @@ import { copyToDocument, dedup, getBounds, prune, unpartition, weld, textureComp
 import sharp from 'sharp';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const source = path.join(root, 'v2-home-models/models');
+const source = path.join(root, 'assets/home-models/models');
 const destination = path.join(root, 'public/models/v2');
 // Refine upholstery while preserving the original clean silhouettes.
 const ids = ['F01', 'F09', 'F13'];

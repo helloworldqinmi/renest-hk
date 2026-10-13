@@ -4,7 +4,7 @@ The deployed V2 models use Blender-refined upholstery for F01 (sofa), F09 (doubl
 and F13 (single bed). The sofa keeps its clean silhouette without added piping;
 relaxed upholstery and local contact shading add depth without bulky seams.
 The original models under
-`v2-home-models/models/` remain the source of truth for placement, dimensions,
+`assets/home-models/models/` remain the source of truth for placement, dimensions,
 architecture and interaction metadata.
 
 ## Rebuild

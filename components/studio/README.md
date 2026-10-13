@@ -12,7 +12,7 @@ The current flow includes a detailed living brief, English/Simplified/Traditiona
 
 `renest-spatial-history-v1` keeps the latest 20 saved versions on the current browser/origin, exposed by the homepage archive. Optional v2 save fields retain the living brief, per-layout edits and home source without breaking older saves. Resale estimates and editable pending posts are local demo drafts (`renest-resale-drafts`), never automatic marketplace publications. `npm run check:studio` validates geometry and storage compatibility.
 
-The `/demo` route is the canonical moving flow. Older `/scan-old`, `/inventory`, `/scan-new`, `/preferences`, `/optimize`, `/move-plan`, and `/impact` bookmarks redirect here. `/shop` redirects to the existing product collection. The original models and generation source remain in `v2-home-models/`.
+The `/demo` route is the canonical moving flow. Older `/scan-old`, `/inventory`, `/scan-new`, `/preferences`, `/optimize`, `/move-plan`, and `/impact` bookmarks redirect here. `/shop` redirects to the existing product collection. The original models and generation source remain in `assets/home-models/`.
 
 The stages are old-home capture, furniture selection, new-home capture / unfinished shell, preferences, AI-style design brief / truck migration, three arrangements, and visual impact. LiDAR capture and arrangement generation are explicitly demo simulations. Preferences rank three supplied arrangements; selected furniture genuinely controls the rendered objects.
 
@@ -34,7 +34,7 @@ The phone now shares one position and scale between ready and scan states. It tu
 
 The Reimagine stage gives the design brief a wider panel, one-click lifestyle prompts and editable priorities. Entering the stage eases into the orthographic floor plan; Generate returns to 3D and retains the complete packing, driving and unloading animation alongside simulated design progress. Camera transitions interpolate spherical orbit angles to avoid an abrupt azimuth snap at the top-view pole. The result keeps the original brief available for refinement. The experience remains explicitly simulated.
 
-Rendering uses shared, small procedural grain/weave/plaster surface maps, material-specific finishes, a neutral daylight key and fill, and lamp-positioned warm practicals at night. Floor plan mode smoothly raises the key light and reduces shadow contrast; it returns to daylight for legibility. Soft furniture contact shading follows each piece, stays clipped during scans, and is hidden on moving-truck copies. Mobile canvases cap pixel density and use 1024px shadow maps. Most original rounded furniture geometry is retained; the beds use the offline Blender refinement described below, while the sofa retains its original appearance. No heavy screen-space postprocessing is required.
+Rendering uses shared, small procedural grain/weave/plaster surface maps, material-specific finishes, a neutral daylight key and fill, and lamp-positioned warm practicals at night. Floor plan mode smoothly raises the key light and reduces shadow contrast; it returns to daylight for legibility. Soft furniture contact shading follows each piece, stays clipped during scans, and is hidden on moving-truck copies. Mobile canvases cap pixel density and use 1024px shadow maps. Most original rounded furniture geometry is retained; the sofa and beds use the offline Blender refinement described below. No heavy screen-space postprocessing is required.
 
 Impact gives the live room its own unobstructed framing, with an original-home reference card, live reuse/addition counts, a reuse highlight toggle and a slow, pausable room tour. Direct manipulation and switching to Floor plan stop the tour; reduced-motion settings disable it.
 
@@ -47,7 +47,7 @@ The scanning phone now turns for 6% of the scan (about 1s) and remains outside t
 The live V2 assets include Blender-refined bed upholstery with separate
 UV1 local-occlusion atlases. Rebuild them with `npm run build:refined-models`;
 see `docs/blender-refinement.md` for the pipeline, invariants, and measured size
-tradeoffs. The sofa also uses refined upholstery and a baked local AO atlas. Source models remain under `v2-home-models/models/`.
+tradeoffs. The sofa also uses refined upholstery and a baked local AO atlas. Source models remain under `assets/home-models/models/`.
 
 ### Interior tour
 

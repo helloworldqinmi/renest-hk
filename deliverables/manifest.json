@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "project": "ReNest HK",
+  "filmVersion": "1.11.1",
+  "artifacts": [
+    {
+      "path": "deliverables/demo-film/renest-hk-demo-v1.11.1-1080p60.mp4",
+      "role": "main-film",
+      "bytes": 77730588,
+      "sha256": "01fe75ac8ce2a7c85045ec87a61ad380ecf428937d58e0086ea7ef7e14b639a0"
+    },
+    {
+      "path": "deliverables/demo-film/renest-hk-demo-v1.11.1-en.srt",
+      "role": "subtitles",
+      "bytes": 5225,
+      "sha256": "e94ebf1a5ae5525c6e266fbc88cd213b6b98b3a846603fa1b0672ea39203b654"
+    },
+    {
+      "path": "deliverables/demo-film/verification.json",
+      "role": "production-record",
+      "bytes": 729,
+      "sha256": "d521c545f4c707d7b1f58d98771c15af5bba281bb8782107d988336ea2381912"
+    },
+    {
+      "path": "deliverables/presentation-clips/01-furniture-scan.mp4",
+      "role": "presentation-clip",
+      "bytes": 32028834,
+      "sha256": "d88eccda3509c7230dbd98647992455847beb62c97a3ac9dd817c6048041dd84"
+    },
+    {
+      "path": "deliverables/presentation-clips/02-floor-plan-to-3d.mp4",
+      "role": "presentation-clip",
+      "bytes": 5343868,
+      "sha256": "c09eeb2fd3fd228fe8eabf197d8c308576b2f023a2bf881baff3f0be92cb0d8f"
+    },
+    {
+      "path": "deliverables/presentation-clips/03-layout-comparison.mp4",
+      "role": "presentation-clip",
+      "bytes": 1566545,
+      "sha256": "d86f0564568271d9f711fd4726a5830ccaebfce31e51075b3905162435481282"
+    },
+    {
+      "path": "deliverables/presentation-clips/04-layout-editing.mp4",
+      "role": "presentation-clip",
+      "bytes": 1432396,
+      "sha256": "59cf965506f8e0c6946a1e1e5378365c7201e46b14f7569ceb3f0253ab29e1ad"
+    },
+    {
+      "path": "deliverables/presentation-clips/05-folding-furniture.mp4",
+      "role": "presentation-clip",
+      "bytes": 611602,
+      "sha256": "72d2c1f09d0c6116a58aaa84cc255225293af8e8f654214622510ebf56582a9c"
+    },
+    {
+      "path": "deliverables/presentation-clips/edit-manifest.json",
+      "role": "production-record",
+      "bytes": 1419,
+      "sha256": "1f9394f2abd3de10d55014c129225838cf0cfef836f2df14630b2db3fd029d86"
+    },
+    {
+      "path": "deliverables/presentation-clips/verification.json",
+      "role": "production-record",
+      "bytes": 1324,
+      "sha256": "58aeac539d0b95e0ccc385d2efe80e31369ba89178d006b5cc917915e8e8e7c6"
+    }
+  ]
+}

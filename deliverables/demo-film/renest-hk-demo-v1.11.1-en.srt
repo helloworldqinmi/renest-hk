@@ -1,0 +1,251 @@
+1
+00:00:00,450 --> 00:00:04,371
+Moving home should be easier, more sustainable, and more affordable.
+
+2
+00:00:04,614 --> 00:00:08,352
+With ReNest, start with what you already own and plan the next chapter
+
+3
+00:00:08,352 --> 00:00:09,274
+before you pack.
+
+4
+00:00:12,400 --> 00:00:16,352
+In Hong Kong's Northern Metropolis, around half a million additional
+
+5
+00:00:16,352 --> 00:00:17,524
+homes are planned.
+
+6
+00:00:17,767 --> 00:00:21,731
+Behind that scale are individual moves: deciding what fits, what
+
+7
+00:00:21,731 --> 00:00:25,248
+needs replacing, and how to make a smaller space work harder.
+
+8
+00:00:27,400 --> 00:00:30,607
+First, scan your old home with a LiDAR-equipped iPhone.
+
+9
+00:00:30,850 --> 00:00:34,457
+Use an existing scanning app to capture the room and furniture as
+
+10
+00:00:34,457 --> 00:00:35,926
+a three-dimensional model.
+
+11
+00:00:36,171 --> 00:00:40,100
+Watch points become a mesh, surfaces appear, and individual pieces
+
+12
+00:00:40,100 --> 00:00:41,010
+are identified.
+
+13
+00:00:45,300 --> 00:00:49,590
+Second, choose the furniture you want to keep, and confirm its dimensions.
+
+14
+00:00:51,400 --> 00:00:55,483
+Next, upload the new home's floor plan, or choose a built-in Northern
+
+15
+00:00:55,483 --> 00:00:59,390
+Metropolis example. Preview the space before arranging anything.
+
+16
+00:00:59,600 --> 00:01:03,450
+Watch the floor plan become a three-dimensional space, with walls,
+
+17
+00:01:03,612 --> 00:01:04,938
+doors and windows.
+
+18
+00:01:05,181 --> 00:01:07,602
+Check the room before placing any furniture.
+
+19
+00:01:09,400 --> 00:01:11,821
+Now, plan for the people who will live here.
+
+20
+00:01:12,064 --> 00:01:14,664
+This couple has a three-thousand-dollar budget.
+
+21
+00:01:14,910 --> 00:01:18,850
+They want to keep their sofa, work from home, host friends, and
+
+22
+00:01:18,850 --> 00:01:21,045
+welcome a parent who uses a wheelchair.
+
+23
+00:01:21,290 --> 00:01:24,933
+Add these needs in the questionnaire, with options for pets or instruments
+
+24
+00:01:24,933 --> 00:01:25,390
+too.
+
+25
+00:01:29,300 --> 00:01:31,912
+AI arranges their existing furniture first.
+
+26
+00:01:32,155 --> 00:01:35,838
+The sofa goes against the wall, opening up the centre of the room.
+
+27
+00:01:36,900 --> 00:01:39,786
+Their existing desk anchors a dedicated work corner.
+
+28
+00:01:41,900 --> 00:01:44,214
+A clear route supports their parent's visit.
+
+29
+00:01:44,457 --> 00:01:47,743
+Review wheelchair clearances and turning space before approving
+
+30
+00:01:47,743 --> 00:01:48,426
+the plan.
+
+31
+00:01:49,300 --> 00:01:50,376
+What is still missing?
+
+32
+00:01:50,619 --> 00:01:53,505
+A supportive chair and a table that folds away.
+
+33
+00:01:54,300 --> 00:01:58,038
+Next, compare second-hand and new furniture that fits the remaining
+
+34
+00:01:58,038 --> 00:01:59,257
+space and budget.
+
+35
+00:01:59,500 --> 00:02:02,433
+Example sources include Xianyu and Taobao.
+
+36
+00:02:04,400 --> 00:02:08,138
+For second-hand furniture, AI would compare seller distance and
+
+37
+00:02:08,138 --> 00:02:11,190
+delivery fees, alongside size and condition.
+
+38
+00:02:11,433 --> 00:02:13,236
+Check the total delivered cost.
+
+39
+00:02:14,300 --> 00:02:16,590
+Preview the selected table inside the room.
+
+40
+00:02:18,300 --> 00:02:19,971
+Open and fold the table.
+
+41
+00:02:20,214 --> 00:02:21,886
+See how the space changes.
+
+42
+00:02:22,300 --> 00:02:24,186
+Then explore the product details.
+
+43
+00:02:25,300 --> 00:02:29,038
+After their selection, AI updates the whole layout and checks the
+
+44
+00:02:29,038 --> 00:02:29,852
+routes again.
+
+45
+00:02:32,400 --> 00:02:35,964
+Compare arrangements, then choose the one that fits their life.
+
+46
+00:02:36,300 --> 00:02:40,621
+You can also adjust the plan yourself: select, drag, reposition,
+
+47
+00:02:40,621 --> 00:02:41,590
+and confirm.
+
+48
+00:02:46,300 --> 00:02:48,733
+Export a moving report for the next steps.
+
+49
+00:02:51,300 --> 00:02:55,062
+For furniture they leave behind, prepare editable resale drafts
+
+50
+00:02:55,062 --> 00:02:56,233
+for another household.
+
+51
+00:02:57,300 --> 00:03:00,471
+Partner models connect reuse with space-saving furniture.
+
+52
+00:03:00,714 --> 00:03:03,659
+Planned referrals and commissions support the service.
+
+53
+00:03:04,300 --> 00:03:05,448
+The sofa stays.
+
+54
+00:03:05,690 --> 00:03:07,195
+The workspace is ready.
+
+55
+00:03:07,440 --> 00:03:11,207
+The table opens for guests, and the purchase plan is within budget.
+
+56
+00:03:12,300 --> 00:03:14,543
+Sixteen of eighteen pieces stay in use.
+
+57
+00:03:16,300 --> 00:03:19,776
+A neighbourhood pilot would test completed plans, seller visits
+
+58
+00:03:19,776 --> 00:03:20,710
+and purchases.
+
+59
+00:03:21,300 --> 00:03:23,198
+Your room files stay on your device.
+
+60
+00:03:23,440 --> 00:03:26,714
+You'd choose whether to share them with AI, and check the furniture
+
+61
+00:03:26,714 --> 00:03:28,136
+details before buying.
+
+62
+00:03:38,100 --> 00:03:40,317
+ReNest. An easier move.
+
+63
+00:03:40,562 --> 00:03:42,650
+Less waste. More value.

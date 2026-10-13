@@ -1,102 +1,125 @@
 # ReNest HK
 
-**Move what matters. Fit what works.**
+### Move what matters. Fit what works.
 
-ReNest HK is an interactive hackathon prototype for furniture reuse and spatial planning in compact Hong Kong homes. The current Three.js demo uses a 44 m² / 474 ft² old home, a 45 m² / 484 ft² new home and 18 existing furniture groups.
+ReNest HK is a furniture reuse and spatial planning prototype for compact Hong Kong homes. It connects the decisions people make before a move: what to keep, how it fits in the next home, what to buy, and what to pass on.
 
-## Deployment
+The result is an interactive moving plan: compare furnished layouts, adjust individual pieces, review purchasing and reuse decisions, and export a practical handover report.
 
-The project uses **Vercel** and is deployed at **[https://renest-hk.vercel.app/](https://renest-hk.vercel.app/)**.
+**[Open the demo](https://renest-hk.vercel.app/)** · **[Watch the film](deliverables/demo-film/renest-hk-demo-v1.11.1-1080p60.mp4)** · **[Delivery package](deliverables/README.md)** · **[Technical architecture](docs/architecture.md)**
 
-Import this repository into Vercel with the **Next.js** preset and the repository root as the project directory. Install with `npm install` and build with `npm run build`. The current public project URL is `https://renest-hk.vercel.app/`. Deployment access is managed in the Vercel project. Use a preview deployment to review changes before production. No API keys or database are required for this demo.
+![ReNest sample apartment and furniture layout](public/models/v2/previews/new-home-a.png)
+
+*Illustrative apartment model from the bundled demo dataset. Layouts and furniture choices can be explored in the application.*
+
+## Why it matters
+
+A move starts before a shipment is booked. Households need to understand what is worth moving, what will fit, and which items need a different destination. ReNest brings those decisions into one visual workflow.
+
+For a logistics evaluation, the prototype demonstrates how furniture identity, estimated dimensions, destination decisions and packing notes could inform a future moving-service handover. The present export is a user-reviewed report and CSV; carrier booking, freight quotation and FedEx API integration are future work.
+
+## Review in five minutes
+
+1. **Watch the 3:43 film.** The [English demo film](deliverables/demo-film/renest-hk-demo-v1.11.1-1080p60.mp4) is supplied at 1920 × 1080, 60 fps, with [English subtitles](deliverables/demo-film/renest-hk-demo-v1.11.1-en.srt).
+2. **Open the interactive demo.** Start with the old-home capture, select furniture, and choose the example new-home floor plan.
+3. **Set the household brief.** Use quick preferences or the optional detailed questionnaire; compare three arrangements with different reuse, dining and workspace priorities.
+4. **Test an actual edit.** Switch to Floor plan, move or rotate a piece, and inspect the updated arrangement, cost and report. Save the arrangement and reopen it from the homepage.
+5. **Inspect the implementation.** Run the checks below and consult the [architecture](docs/architecture.md), [capability boundaries](docs/product-scope.md) and [repository audit](docs/repository-audit.md).
+
+The film includes product storytelling and proposed service scenarios. The capability table below describes what the submitted application implements.
+
+## What the prototype implements
+
+| Capability | Implementation in this repository |
+| --- | --- |
+| Furniture inventory | 18 existing furniture groups with stable identifiers, estimated dimensions and keep/leave decisions. |
+| Spatial planning | Three curated arrangements, ranked and adapted using deterministic household, budget and purchasing rules. |
+| Interactive editing | Shared 2D/3D furniture placement, drag/nudge/rotate controls, and basic boundary, wall and footprint checks. |
+| Decision support | Layout comparison, purchase estimates, furniture reuse counts and unmet-needs notices. |
+| Moving handover | Downloadable CSV, PNG views and a printable report with furniture destinations and packing information. |
+| Continuity | Versioned browser storage, up to 20 saved arrangements, and restoration of supported older saves. |
+| Localisation | English, Simplified Chinese and Traditional Chinese, locally hosted fonts and reduced-motion support. |
+
+**Demonstration boundaries.** Scanning and floor-plan reconstruction are simulated with bundled geometry. Uploaded files are validated or previewed locally; they do not reconstruct a home. Planning uses local rules and supplied layouts, with no live generative AI service. Catalogue prices and resale estimates are demo data. Resale drafts require manual publication. Door-swing clearance, accessibility, surveyed dimensions and real-world delivery feasibility require further validation.
 
 ## Run locally
 
+Requirements: **Node.js 20.9 or later**, npm, and a modern browser with WebGL support. No API keys, database, account or Blender installation are required to run the application.
+
 ```bash
-npm install
+npm ci
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open [localhost:3000](http://localhost:3000). The main planning workflow is `/demo`.
 
-Production verification:
+For a production build:
 
 ```bash
 npm run build
 npm start
 ```
 
-Type-check with `npx tsc --noEmit`. Run `npm run check:studio` for save compatibility, history retention and layout collision checks. If the environment restricts Turbopack worker ports, use `npm run build -- --webpack` or `npm run dev -- --webpack`. Read the installed Next.js guides in `node_modules/next/dist/docs/` before editing framework code.
+If local restrictions prevent Turbopack worker ports from opening, use `npm run dev -- --webpack` or `npm run build -- --webpack`.
 
-## Demo flow
+## Engineering and verification
 
-New-home selection displays a furniture-free 2D blueprint rather than the completed room. The three original SVG examples are generated by `node scripts/generate-plan-previews.cjs`; only plan 01 is enabled for the demo. Its wall coordinates match the existing 3D model. Generation traces the wall lines, raises the walls in sequence and tilts the camera before revealing the reconstructed room. Plans 02–03 are reference previews only. These original diagrams are illustrative, not official estate floor plans.
+The application uses **Next.js 16 / React 19 / TypeScript** for routing and interaction, **Three.js** for spatial rendering, and **Tailwind CSS / CSS Modules / Framer Motion** for the interface. Exact dependency versions are recorded in `package-lock.json`.
 
-1. Simulate an old-home scan and select which of 18 furniture groups to keep.
-2. Choose one of two new-home inputs: **floor plan → 3D** (the Northern Metropolis plan library or a local image upload), or **use my own scan** (phone-scan demonstration or local GLB/RoomPlan JSON selection). Library item 01 is the original floor plan used for the existing demo apartment and all three arrangements. The library contains three original furniture-free illustrative plans; only the first is enabled for the demo. None is an official development drawing. Floor-plan conversion and scan import are explicitly simulated: uploaded files are validated/previewed locally, but do not generate geometry or replace the sample home. No live LiDAR sensor or reconstruction service is connected.
-3. Build a full-screen **living profile** using selectable tags. Five core topics cover people/beds, budget/purchasing, work/dining, accessibility, and priorities/must-keep furniture. Four optional branches add hobbies/storage, pets, renovation permissions and style/materials. Conditional questions only appear when relevant, and an editable brief card precedes generation. Answers and the current topic survive navigation, refresh and saved-plan restoration.
-4. Compare three distinct arrangements: family/reuse retains two beds and the dining set; gathering removes the coffee table and replaces the dining table; focus converts the second bedroom to an office with fewer dining chairs.
-5. Drag furniture in Floor plan view, or select a piece to nudge, rotate or remove it. New and reused furniture have separate highlights. In the old-home inventory, only the selected piece lifts and brightens. The extracted-furniture view preserves original colours and materials; green detection tint is limited to the in-room view. Basic footprint checks reject room-boundary, wall and furniture overlaps; door swings and accessibility still require manual review.
-6. Review recommendation reasoning, compare arrangements and export the moving CSV. Prepare editable resale drafts for furniture not included in the new home.
-7. Save an arrangement, return home, and find it in **Past arrangements**. The shop uses independent navigation rather than a misleading progress stepper.
-
-Use the **Restart** control in the interactive demo to return to the opening scan.
-
-## Language and typography
-
-English, Simplified Chinese and Traditional Chinese can be selected in the header. The language preference persists in the browser. Simplified and Traditional Chinese use separate CJK font stacks and localised copy, including Hong Kong terminology. Chinese headings use adjusted weight, line height and letter spacing rather than English editorial typography. The OS supplies CJK fonts; no external font service is required.
-
-## Saved arrangements
-
-Living profiles are stored as an optional versioned field within existing v2 plans. The planner applies confirmed purchase timing, furniture allowance (after any delivery/assembly reserve), second-hand preferences, mounting permissions and keep/sell decisions. Beds, simultaneous workspaces and seating needs influence preset ranking; unmet needs and unverified accessibility are shown explicitly. Hobby areas, pet facilities and styling remain recorded preferences, not a claim that the demo geometry implements them.
-
-Saving opens a naming dialog. Custom names appear in the homepage archive, alongside timestamps; older unnamed saves still open normally.
-
-“Save to this device” means **localStorage in the current browser and origin**, not a downloaded file or cloud backup. The homepage shows up to 20 saved versions, including questionnaire answers and manual furniture placements. Existing v2 saves remain readable.
-
-- Latest arrangement: `renest-spatial-plan-v2`
-- Saved versions: `renest-spatial-history-v1`
-- Current progress: `renest-spatial-session-v2` in sessionStorage
-- Resale drafts and pending posts: `renest-resale-drafts`
-- Language: `renest-language`
-
-Clearing browser data removes these records. Other browsers, devices, Vercel preview URLs and domains have separate storage. CSV lists and PNG views are actual downloads.
-
-Uploaded source images and scan files are not stored in saved arrangements or sent to a server. Only their input method and filename are retained; reselect a file to preview its contents after revisiting.
-
-## Project structure
-
-```text
-app/                  Next.js App Router screens
-components/common/    Header, progress, dialogs, and shared controls
-components/studio/    Current Three.js flow, questionnaire, comparison and resale
-components/home/      Homepage and saved-arrangement archive
-components/locale-provider.tsx Language preference and translation helpers
-components/floor-plan Historical SVG prototype renderer
-components/planning/  Furniture migration experience
-components/scanning/  RoomPlan-style scan sequence
-lib/demo-data.ts      Deterministic rooms, plans, products, and preferences
-lib/geometry.ts       Boundaries, overlap, clearance, area, and scoring helpers
-lib/roomplan.ts       RoomPlan JSON normalization adapter
-lib/studio-data.ts    Current furniture, curated layouts and save parsing
-lib/studio-placement.ts Basic footprint collision validation
-lib/living-brief.ts   Questionnaire defaults and parsing
-lib/translations.ts  Shared English / Simplified / Traditional UI dictionary
-public/models/v2/    Existing room and furniture GLB assets
-v2-home-models/      Procedural model source and references
-public/data/          Sample RoomPlan-compatible JSON
-types/                Spatial and furniture domain types
+```bash
+npm run check
+npm run build
 ```
 
-## Mocked integrations
+`npm run check` generates Next.js route types, runs TypeScript, exercises the existing planning and geometry checks, and validates the delivery files against SHA-256 checksums. It also checks that delivery assets are not ignored and repository filenames use ASCII. These checks do not replace visual browser review or real-world spatial validation.
 
-The catalogue includes clearly labelled second-hand desk and chair demo listings. These can replace compatible new recommendations in the live 3D layout; their models, dimensions, purchase costs and saved placements stay in sync. The final step gives the purchase/resale workspace more width, with furniture cards, a focused post editor, condition-based demo estimates, pickup notes and copy/download actions. Posts still require review and manual publication on the marketplace.
+| Command | Purpose |
+| --- | --- |
+| `npm run typecheck` | Generate route types and check TypeScript. |
+| `npm run check:studio` | Check save compatibility, planning rules, layout geometry and interior joinery. |
+| `npm run check:delivery` | Verify delivery integrity, Git visibility and filename conventions. |
+| `npm run build:refined-models` | Rebuild refined deployment models; requires Blender. |
+| `npm run render:interior` | Render optional interior photographs; requires Blender. |
 
-The 2D-to-3D sequence has explicit play/replay controls. A requested full playback runs for approximately ten seconds and stays on its completed frame until the user continues; it is no longer silently collapsed to a sub-second transition by reduced-motion preferences.
+The former `next lint` command has been removed because it is unavailable in the installed Next.js version. A separate ESLint configuration is not currently included.
 
-- Room scanning is a deterministic browser animation. A sample RoomPlan JSON adapter is included at `lib/roomplan.ts`.
-- Layout ranking uses deterministic local questionnaire/preferences rules and curated presets, not live generative AI.
-- Product prices and resale estimates use demo data. Resale drafts remain in a local pending list; users copy the post and open the marketplace to review and publish themselves. No marketplace post is submitted automatically.
-- No authentication, payment, external API key, or database is required.
+## Repository map
 
-Existing GLB assets work without Blender. Blender is optional for creating or refining new models; procedural model sources are retained. Older flow routes redirect to `/demo`, and `/shop` redirects to the collection.
+```text
+app/                         Routes, layouts, page styles and local fonts
+components/                  Shared UI, homepage and current moving studio
+lib/                         Planning, geometry, persistence and localisation
+types/                       Shared domain types
+public/                      Assets served by the web application
+assets/
+  home-models/               Model sources, manifests and standalone viewer
+  video-production/         Preserved final-film production source snapshot
+deliverables/
+  demo-film/                 Main film, English subtitles and verification
+  presentation-clips/        Five short clips for presentation use
+  manifest.json             Delivery file sizes and SHA-256 checksums
+docs/                        Architecture, scope, design and engineering notes
+  archive/                   Historical proposals and asset planning notes
+scripts/                     Validation, asset generation and Blender tooling
+output/                      Ignored local production workspace and scratch data
+```
+
+The model source and web deployment assets have separate responsibilities. `assets/home-models/` preserves editable source geometry and a standalone viewer; `public/models/v2/` contains the runtime assets, including refined versions. The `v2` path and furniture IDs are retained as compatibility identifiers.
+
+## Data and deployment
+
+User-selected room images and scan files are handled locally by the current application. Saved arrangements store planning data and source filenames, not the uploaded files. Browser storage is scoped to the current device, browser and origin; it is not a cloud backup. See [data handling and limitations](docs/product-scope.md).
+
+The repository is configured as a standard Next.js project and the documented demo address is [renest-hk.vercel.app](https://renest-hk.vercel.app/). For deployment, use the repository root with the Next.js preset and `npm run build`. The delivery media live outside `public/` and are not served as application assets.
+
+## Further reading
+
+- [Delivery package](deliverables/README.md) — film, presentation clips and integrity checks.
+- [Architecture](docs/architecture.md) — module ownership, data flow and asset pipeline.
+- [Product scope](docs/product-scope.md) — implemented behaviour, simulations and roadmap.
+- [Repository audit](docs/repository-audit.md) — naming decisions, removed legacy code and Git ignore policy.
+- [Studio implementation](components/studio/README.md) — rendering and interaction notes.
+- [Model source guide](assets/home-models/README.md) — source geometry, viewer and regeneration.
+- [Third-party notices](docs/third-party-notices.md) — bundled licences.
+
+This repository is a hackathon prototype prepared for technical evaluation. It does not claim a production carrier integration, measured operational savings or an implemented community pilot.

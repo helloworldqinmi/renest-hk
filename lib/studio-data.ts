@@ -1,7 +1,7 @@
 import {stagingArea} from './studio-workspace';
 import {parseHomeInput,type HomeInputChoice} from './home-input';
-import furnitureData from '@/v2-home-models/data/furniture.json';
-import layoutData from '@/v2-home-models/data/layouts.json';
+import furnitureData from '@/assets/home-models/data/furniture.json';
+import layoutData from '@/assets/home-models/data/layouts.json';
 import { findFoldingProduct } from './folding-products';
 import { parseBrief, type LivingBrief } from './living-brief';
 

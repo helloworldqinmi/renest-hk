@@ -1,0 +1,59 @@
+[
+  {
+    "file": "01-furniture-scan.mp4",
+    "src": "v1.8-refined/clips/native-scan.mp4",
+    "start": 0,
+    "length": 21,
+    "speed": 1,
+    "lead": 0,
+    "tail": 1,
+    "duration": 22,
+    "note": "Simulated phone scan through point cloud, mesh and furniture inventory."
+  },
+  {
+    "file": "02-floor-plan-to-3d.mp4",
+    "src": "v1.6-cinematic/raw/native-plan.webm",
+    "start": 1.4,
+    "length": 12,
+    "speed": 1,
+    "lead": 0,
+    "tail": 2,
+    "duration": 14,
+    "note": "Example floor plan rises into walls, doors, windows and a 3D room.",
+    "crop": "1504:846:12:112",
+    "output_scale": "1920:1080"
+  },
+  {
+    "file": "03-layout-comparison.mp4",
+    "src": "v1.4-commercial/clips/layouts.mp4",
+    "start": 0,
+    "length": 7,
+    "speed": 2,
+    "lead": 1,
+    "tail": 1,
+    "duration": 16,
+    "note": "Compare the family, gathering and focus arrangements."
+  },
+  {
+    "file": "04-layout-editing.mp4",
+    "src": "v1.8-refined/clips/diy.mp4",
+    "start": 0,
+    "length": 10,
+    "speed": 1.3,
+    "lead": 1,
+    "tail": 1,
+    "duration": 15,
+    "note": "Select, stage and reposition the sofa, then return to the 3D view."
+  },
+  {
+    "file": "05-folding-furniture.mp4",
+    "src": "v1.4-commercial/clips/shop.mp4",
+    "start": 0,
+    "length": 5.5,
+    "speed": 2,
+    "lead": 0,
+    "tail": 1,
+    "duration": 12,
+    "note": "Fold and unfold the space-saving dining table."
+  }
+]

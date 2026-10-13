@@ -1,0 +1,40 @@
+[
+  {
+    "type": "reuse",
+    "old_start": 0,
+    "old_end": 184,
+    "start": 0,
+    "end": 184,
+    "name": "main"
+  },
+  {
+    "type": "reuse",
+    "old_start": 196,
+    "old_end": 208,
+    "start": 184,
+    "end": 196,
+    "name": "outcome"
+  },
+  {
+    "type": "reuse",
+    "old_start": 184,
+    "old_end": 189,
+    "start": 196,
+    "end": 201,
+    "name": "pilot"
+  },
+  {
+    "type": "render",
+    "start": 201,
+    "end": 211,
+    "name": "trust"
+  },
+  {
+    "type": "reuse",
+    "old_start": 208,
+    "old_end": 220,
+    "start": 211,
+    "end": 223,
+    "name": "closing"
+  }
+]

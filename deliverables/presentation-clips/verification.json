@@ -1,0 +1,64 @@
+[
+  {
+    "file": "01-furniture-scan.mp4",
+    "duration": 22,
+    "frames": 1320,
+    "resolution": "1920x1080",
+    "fps": 60,
+    "codec": "H.264",
+    "audio": false,
+    "subtitle_track": false,
+    "full_decode": "pass",
+    "size_mb": 30.55
+  },
+  {
+    "file": "02-floor-plan-to-3d.mp4",
+    "duration": 14,
+    "frames": 840,
+    "resolution": "1920x1080",
+    "fps": 60,
+    "codec": "H.264",
+    "audio": false,
+    "subtitle_track": false,
+    "full_decode": "pass",
+    "size_mb": 5.1,
+    "crop": "1504x846 at x=12,y=112",
+    "visual_review": "pass"
+  },
+  {
+    "file": "03-layout-comparison.mp4",
+    "duration": 16,
+    "frames": 960,
+    "resolution": "1920x1080",
+    "fps": 60,
+    "codec": "H.264",
+    "audio": false,
+    "subtitle_track": false,
+    "full_decode": "pass",
+    "size_mb": 1.49
+  },
+  {
+    "file": "04-layout-editing.mp4",
+    "duration": 15,
+    "frames": 900,
+    "resolution": "1920x1080",
+    "fps": 60,
+    "codec": "H.264",
+    "audio": false,
+    "subtitle_track": false,
+    "full_decode": "pass",
+    "size_mb": 1.37
+  },
+  {
+    "file": "05-folding-furniture.mp4",
+    "duration": 12,
+    "frames": 720,
+    "resolution": "1920x1080",
+    "fps": 60,
+    "codec": "H.264",
+    "audio": false,
+    "subtitle_track": false,
+    "full_decode": "pass",
+    "size_mb": 0.58
+  }
+]

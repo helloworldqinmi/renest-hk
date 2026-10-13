@@ -9,8 +9,10 @@
     "render:interior": "node scripts/render-interior.cjs",
     "build:scan-model": "bash scripts/build-old-home-scan.sh",
     "start": "next start",
-    "lint": "next lint",
-    "build:refined-models": "node scripts/refine-models.mjs"
+    "build:refined-models": "node scripts/refine-models.mjs",
+    "typecheck": "next typegen && tsc --noEmit",
+    "check:delivery": "node scripts/check-delivery.mjs",
+    "check": "npm run typecheck && npm run check:studio && npm run check:delivery"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.23",
@@ -35,5 +37,8 @@
     "sharp": "^0.35.4",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   }
 }

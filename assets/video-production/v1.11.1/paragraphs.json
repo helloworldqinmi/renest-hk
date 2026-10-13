@@ -1,0 +1,2463 @@
+[
+  {
+    "id": 0,
+    "start": 0.35,
+    "end": 9.173791,
+    "text": "Moving home should be easier, more sustainable, and more affordable. With ReNest, start with what you already own and plan the next chapter before you pack.",
+    "words": [
+      {
+        "text": "Moving",
+        "offset": 1000000,
+        "duration": 3928750
+      },
+      {
+        "text": "home",
+        "offset": 5047500,
+        "duration": 2619160
+      },
+      {
+        "text": "should",
+        "offset": 7785830,
+        "duration": 1666660
+      },
+      {
+        "text": "be",
+        "offset": 9571250,
+        "duration": 1666660
+      },
+      {
+        "text": "easier",
+        "offset": 11714160,
+        "duration": 4404580
+      },
+      {
+        "text": "more",
+        "offset": 18737910,
+        "duration": 2023750
+      },
+      {
+        "text": "sustainable",
+        "offset": 20880830,
+        "duration": 7380830
+      },
+      {
+        "text": "and",
+        "offset": 28500000,
+        "duration": 1785830
+      },
+      {
+        "text": "more",
+        "offset": 31237910,
+        "duration": 1785830
+      },
+      {
+        "text": "affordable",
+        "offset": 33142910,
+        "duration": 6071250
+      },
+      {
+        "text": "With",
+        "offset": 42642910,
+        "duration": 2380830
+      },
+      {
+        "text": "Ree-nest",
+        "offset": 45142910,
+        "duration": 4762080
+      },
+      {
+        "text": "start",
+        "offset": 53476250,
+        "duration": 2619160
+      },
+      {
+        "text": "with",
+        "offset": 56214160,
+        "duration": 1428750
+      },
+      {
+        "text": "what",
+        "offset": 57762080,
+        "duration": 1309580
+      },
+      {
+        "text": "you",
+        "offset": 59190410,
+        "duration": 952500
+      },
+      {
+        "text": "already",
+        "offset": 60262080,
+        "duration": 4047500
+      },
+      {
+        "text": "own",
+        "offset": 64428750,
+        "duration": 2976250
+      },
+      {
+        "text": "and",
+        "offset": 67642910,
+        "duration": 1666660
+      },
+      {
+        "text": "plan",
+        "offset": 69428750,
+        "duration": 2619160
+      },
+      {
+        "text": "the",
+        "offset": 72166660,
+        "duration": 714160
+      },
+      {
+        "text": "next",
+        "offset": 73000000,
+        "duration": 2619160
+      },
+      {
+        "text": "chapter",
+        "offset": 75737910,
+        "duration": 4166660
+      },
+      {
+        "text": "before",
+        "offset": 80023750,
+        "duration": 2976250
+      },
+      {
+        "text": "you",
+        "offset": 83119160,
+        "duration": 833330
+      },
+      {
+        "text": "pack",
+        "offset": 84071250,
+        "duration": 4166660
+      }
+    ]
+  },
+  {
+    "id": 1,
+    "start": 12.3,
+    "end": 25.147624,
+    "text": "In Hong Kong's Northern Metropolis, around half a million additional homes are planned. Behind that scale are individual moves: deciding what fits, what needs replacing, and how to make a smaller space work harder.",
+    "words": [
+      {
+        "text": "In",
+        "offset": 1000000,
+        "duration": 2023750
+      },
+      {
+        "text": "Hong",
+        "offset": 3142910,
+        "duration": 3095410
+      },
+      {
+        "text": "Kong's",
+        "offset": 6357080,
+        "duration": 3452500
+      },
+      {
+        "text": "Northern",
+        "offset": 9928750,
+        "duration": 4523750
+      },
+      {
+        "text": "Metropolis",
+        "offset": 14571250,
+        "duration": 7023750
+      },
+      {
+        "text": "around",
+        "offset": 23976250,
+        "duration": 3214160
+      },
+      {
+        "text": "half",
+        "offset": 27309580,
+        "duration": 2500000
+      },
+      {
+        "text": "a",
+        "offset": 30285830,
+        "duration": 714160
+      },
+      {
+        "text": "million",
+        "offset": 31119160,
+        "duration": 4642910
+      },
+      {
+        "text": "additional",
+        "offset": 35880830,
+        "duration": 4523750
+      },
+      {
+        "text": "homes",
+        "offset": 40523750,
+        "duration": 3690410
+      },
+      {
+        "text": "are",
+        "offset": 44333330,
+        "duration": 1309580
+      },
+      {
+        "text": "planned",
+        "offset": 45762080,
+        "duration": 5476250
+      },
+      {
+        "text": "Behind",
+        "offset": 54666660,
+        "duration": 3928750
+      },
+      {
+        "text": "that",
+        "offset": 58714160,
+        "duration": 1309580
+      },
+      {
+        "text": "scale",
+        "offset": 60142910,
+        "duration": 3928750
+      },
+      {
+        "text": "are",
+        "offset": 64190410,
+        "duration": 1071250
+      },
+      {
+        "text": "individual",
+        "offset": 65619160,
+        "duration": 6071250
+      },
+      {
+        "text": "moves",
+        "offset": 71809580,
+        "duration": 4285830
+      },
+      {
+        "text": "deciding",
+        "offset": 78833330,
+        "duration": 5119160
+      },
+      {
+        "text": "what",
+        "offset": 84071250,
+        "duration": 1547500
+      },
+      {
+        "text": "fits",
+        "offset": 85737910,
+        "duration": 3928750
+      },
+      {
+        "text": "what",
+        "offset": 92523750,
+        "duration": 1666660
+      },
+      {
+        "text": "needs",
+        "offset": 94309580,
+        "duration": 2619160
+      },
+      {
+        "text": "replacing",
+        "offset": 97047500,
+        "duration": 6547500
+      },
+      {
+        "text": "and",
+        "offset": 105619160,
+        "duration": 2142910
+      },
+      {
+        "text": "how",
+        "offset": 108000000,
+        "duration": 1547500
+      },
+      {
+        "text": "to",
+        "offset": 109666660,
+        "duration": 833330
+      },
+      {
+        "text": "make",
+        "offset": 110619160,
+        "duration": 1547500
+      },
+      {
+        "text": "a",
+        "offset": 112285830,
+        "duration": 595410
+      },
+      {
+        "text": "smaller",
+        "offset": 113000000,
+        "duration": 4762080
+      },
+      {
+        "text": "space",
+        "offset": 117880830,
+        "duration": 4166660
+      },
+      {
+        "text": "work",
+        "offset": 122166660,
+        "duration": 1547500
+      },
+      {
+        "text": "harder",
+        "offset": 123833330,
+        "duration": 4642910
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "start": 27.3,
+    "end": 40.909541000000004,
+    "text": "First, scan your old home with a LiDAR-equipped iPhone. Use an existing scanning app to capture the room and furniture as a three-dimensional model. Watch points become a mesh, surfaces appear, and individual pieces are identified.",
+    "words": [
+      {
+        "text": "First",
+        "offset": 1000000,
+        "duration": 5000000
+      },
+      {
+        "text": "scan",
+        "offset": 8500000,
+        "duration": 2500000
+      },
+      {
+        "text": "your",
+        "offset": 11119160,
+        "duration": 1547500
+      },
+      {
+        "text": "old",
+        "offset": 12785830,
+        "duration": 1666660
+      },
+      {
+        "text": "home",
+        "offset": 14571250,
+        "duration": 2262080
+      },
+      {
+        "text": "with",
+        "offset": 16952500,
+        "duration": 1309580
+      },
+      {
+        "text": "a",
+        "offset": 18380830,
+        "duration": 714160
+      },
+      {
+        "text": "lie-dar-equipped",
+        "offset": 19214160,
+        "duration": 7380830
+      },
+      {
+        "text": "iPhone",
+        "offset": 26714160,
+        "duration": 5357080
+      },
+      {
+        "text": "Use",
+        "offset": 35500000,
+        "duration": 2619160
+      },
+      {
+        "text": "an",
+        "offset": 38237910,
+        "duration": 833330
+      },
+      {
+        "text": "existing",
+        "offset": 39190410,
+        "duration": 4762080
+      },
+      {
+        "text": "scanning",
+        "offset": 44071250,
+        "duration": 3571250
+      },
+      {
+        "text": "app",
+        "offset": 47762080,
+        "duration": 2619160
+      },
+      {
+        "text": "to",
+        "offset": 50619160,
+        "duration": 1071250
+      },
+      {
+        "text": "capture",
+        "offset": 51809580,
+        "duration": 3809580
+      },
+      {
+        "text": "the",
+        "offset": 55737910,
+        "duration": 1071250
+      },
+      {
+        "text": "room",
+        "offset": 56928750,
+        "duration": 3452500
+      },
+      {
+        "text": "and",
+        "offset": 61690410,
+        "duration": 1190410
+      },
+      {
+        "text": "furniture",
+        "offset": 63000000,
+        "duration": 6547500
+      },
+      {
+        "text": "as",
+        "offset": 70142910,
+        "duration": 1309580
+      },
+      {
+        "text": "a",
+        "offset": 71571250,
+        "duration": 595410
+      },
+      {
+        "text": "three-dimensional",
+        "offset": 72285830,
+        "duration": 8571250
+      },
+      {
+        "text": "model",
+        "offset": 80976250,
+        "duration": 4285830
+      },
+      {
+        "text": "Watch",
+        "offset": 88714160,
+        "duration": 3452500
+      },
+      {
+        "text": "points",
+        "offset": 92285830,
+        "duration": 3095410
+      },
+      {
+        "text": "become",
+        "offset": 95500000,
+        "duration": 2500000
+      },
+      {
+        "text": "a",
+        "offset": 98119160,
+        "duration": 357080
+      },
+      {
+        "text": "mesh",
+        "offset": 98595410,
+        "duration": 4880830
+      },
+      {
+        "text": "surfaces",
+        "offset": 106571250,
+        "duration": 4285830
+      },
+      {
+        "text": "appear",
+        "offset": 110976250,
+        "duration": 5000000
+      },
+      {
+        "text": "and",
+        "offset": 116690410,
+        "duration": 1309580
+      },
+      {
+        "text": "individual",
+        "offset": 118476250,
+        "duration": 5237910
+      },
+      {
+        "text": "pieces",
+        "offset": 123833330,
+        "duration": 4047500
+      },
+      {
+        "text": "are",
+        "offset": 128000000,
+        "duration": 833330
+      },
+      {
+        "text": "identified",
+        "offset": 128952500,
+        "duration": 7142910
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "start": 45.2,
+    "end": 49.490499,
+    "text": "Second, choose the furniture you want to keep, and confirm its dimensions.",
+    "words": [
+      {
+        "text": "Second",
+        "offset": 1000000,
+        "duration": 5714160
+      },
+      {
+        "text": "choose",
+        "offset": 9928750,
+        "duration": 2737910
+      },
+      {
+        "text": "the",
+        "offset": 12785830,
+        "duration": 952500
+      },
+      {
+        "text": "furniture",
+        "offset": 13857080,
+        "duration": 4523750
+      },
+      {
+        "text": "you",
+        "offset": 18500000,
+        "duration": 833330
+      },
+      {
+        "text": "want",
+        "offset": 19452500,
+        "duration": 1071250
+      },
+      {
+        "text": "to",
+        "offset": 20642910,
+        "duration": 714160
+      },
+      {
+        "text": "keep",
+        "offset": 21476250,
+        "duration": 3690410
+      },
+      {
+        "text": "and",
+        "offset": 26237910,
+        "duration": 2500000
+      },
+      {
+        "text": "confirm",
+        "offset": 29095410,
+        "duration": 4880830
+      },
+      {
+        "text": "its",
+        "offset": 34095410,
+        "duration": 1428750
+      },
+      {
+        "text": "dimensions",
+        "offset": 35642910,
+        "duration": 7262080
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "start": 51.3,
+    "end": 59.290456999999996,
+    "text": "Next, upload the new home's floor plan, or choose a built-in Northern Metropolis example. Preview the space before arranging anything.",
+    "words": [
+      {
+        "text": "Next",
+        "offset": 1000000,
+        "duration": 4880830
+      },
+      {
+        "text": "upload",
+        "offset": 7547500,
+        "duration": 3333330
+      },
+      {
+        "text": "the",
+        "offset": 11000000,
+        "duration": 833330
+      },
+      {
+        "text": "new",
+        "offset": 11952500,
+        "duration": 2023750
+      },
+      {
+        "text": "home's",
+        "offset": 14095410,
+        "duration": 3214160
+      },
+      {
+        "text": "floor",
+        "offset": 17428750,
+        "duration": 2619160
+      },
+      {
+        "text": "plan",
+        "offset": 20166660,
+        "duration": 4047500
+      },
+      {
+        "text": "or",
+        "offset": 27666660,
+        "duration": 2380830
+      },
+      {
+        "text": "choose",
+        "offset": 30166660,
+        "duration": 2262080
+      },
+      {
+        "text": "a",
+        "offset": 32547500,
+        "duration": 714160
+      },
+      {
+        "text": "built-in",
+        "offset": 33380830,
+        "duration": 4285830
+      },
+      {
+        "text": "Northern",
+        "offset": 37785830,
+        "duration": 3928750
+      },
+      {
+        "text": "Metropolis",
+        "offset": 41833330,
+        "duration": 5476250
+      },
+      {
+        "text": "example",
+        "offset": 47428750,
+        "duration": 5833330
+      },
+      {
+        "text": "Preview",
+        "offset": 56690410,
+        "duration": 4166660
+      },
+      {
+        "text": "the",
+        "offset": 60976250,
+        "duration": 952500
+      },
+      {
+        "text": "space",
+        "offset": 62047500,
+        "duration": 4166660
+      },
+      {
+        "text": "before",
+        "offset": 66333330,
+        "duration": 3333330
+      },
+      {
+        "text": "arranging",
+        "offset": 69785830,
+        "duration": 4642910
+      },
+      {
+        "text": "anything",
+        "offset": 74666660,
+        "duration": 5237910
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "start": 59.5,
+    "end": 67.502374,
+    "text": "Watch the floor plan become a three-dimensional space, with walls, doors and windows. Check the room before placing any furniture.",
+    "words": [
+      {
+        "text": "Watch",
+        "offset": 1000000,
+        "duration": 3452500
+      },
+      {
+        "text": "the",
+        "offset": 4571250,
+        "duration": 952500
+      },
+      {
+        "text": "floor",
+        "offset": 5642910,
+        "duration": 3452500
+      },
+      {
+        "text": "plan",
+        "offset": 9214160,
+        "duration": 3095410
+      },
+      {
+        "text": "become",
+        "offset": 12428750,
+        "duration": 2619160
+      },
+      {
+        "text": "a",
+        "offset": 15166660,
+        "duration": 595410
+      },
+      {
+        "text": "three-dimensional",
+        "offset": 15880830,
+        "duration": 8452500
+      },
+      {
+        "text": "space",
+        "offset": 24452500,
+        "duration": 4762080
+      },
+      {
+        "text": "with",
+        "offset": 30880830,
+        "duration": 1666660
+      },
+      {
+        "text": "walls",
+        "offset": 32666660,
+        "duration": 5833330
+      },
+      {
+        "text": "doors",
+        "offset": 41119160,
+        "duration": 4285830
+      },
+      {
+        "text": "and",
+        "offset": 45523750,
+        "duration": 1666660
+      },
+      {
+        "text": "windows",
+        "offset": 47309580,
+        "duration": 6071250
+      },
+      {
+        "text": "Check",
+        "offset": 56809580,
+        "duration": 2500000
+      },
+      {
+        "text": "the",
+        "offset": 59428750,
+        "duration": 833330
+      },
+      {
+        "text": "room",
+        "offset": 60380830,
+        "duration": 2262080
+      },
+      {
+        "text": "before",
+        "offset": 62762080,
+        "duration": 3333330
+      },
+      {
+        "text": "placing",
+        "offset": 66214160,
+        "duration": 5476250
+      },
+      {
+        "text": "any",
+        "offset": 72285830,
+        "duration": 1904580
+      },
+      {
+        "text": "furniture",
+        "offset": 74309580,
+        "duration": 5714160
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "start": 69.3,
+    "end": 85.290458,
+    "text": "Now, plan for the people who will live here. This couple has a three-thousand-dollar budget. They want to keep their sofa, work from home, host friends, and welcome a parent who uses a wheelchair. Add these needs in the questionnaire, with options for pets or instruments too.",
+    "words": [
+      {
+        "text": "Now",
+        "offset": 1000000,
+        "duration": 5476250
+      },
+      {
+        "text": "plan",
+        "offset": 7309580,
+        "duration": 3214160
+      },
+      {
+        "text": "for",
+        "offset": 10642910,
+        "duration": 1190410
+      },
+      {
+        "text": "the",
+        "offset": 11952500,
+        "duration": 952500
+      },
+      {
+        "text": "people",
+        "offset": 13023750,
+        "duration": 3690410
+      },
+      {
+        "text": "who",
+        "offset": 16833330,
+        "duration": 595410
+      },
+      {
+        "text": "will",
+        "offset": 17547500,
+        "duration": 1309580
+      },
+      {
+        "text": "live",
+        "offset": 18976250,
+        "duration": 1904580
+      },
+      {
+        "text": "here",
+        "offset": 21000000,
+        "duration": 3214160
+      },
+      {
+        "text": "This",
+        "offset": 27642910,
+        "duration": 2500000
+      },
+      {
+        "text": "couple",
+        "offset": 30262080,
+        "duration": 3690410
+      },
+      {
+        "text": "has",
+        "offset": 34071250,
+        "duration": 2023750
+      },
+      {
+        "text": "a",
+        "offset": 36214160,
+        "duration": 595410
+      },
+      {
+        "text": "three-thousand-dollar",
+        "offset": 36928750,
+        "duration": 10833330
+      },
+      {
+        "text": "budget",
+        "offset": 47880830,
+        "duration": 4762080
+      },
+      {
+        "text": "They",
+        "offset": 56095410,
+        "duration": 2023750
+      },
+      {
+        "text": "want",
+        "offset": 58237910,
+        "duration": 1547500
+      },
+      {
+        "text": "to",
+        "offset": 59904580,
+        "duration": 595410
+      },
+      {
+        "text": "keep",
+        "offset": 60619160,
+        "duration": 1904580
+      },
+      {
+        "text": "their",
+        "offset": 62642910,
+        "duration": 1547500
+      },
+      {
+        "text": "sofa",
+        "offset": 64309580,
+        "duration": 4880830
+      },
+      {
+        "text": "work",
+        "offset": 73357080,
+        "duration": 1904580
+      },
+      {
+        "text": "from",
+        "offset": 75380830,
+        "duration": 1547500
+      },
+      {
+        "text": "home",
+        "offset": 77047500,
+        "duration": 3928750
+      },
+      {
+        "text": "host",
+        "offset": 84309580,
+        "duration": 2737910
+      },
+      {
+        "text": "friends",
+        "offset": 87166660,
+        "duration": 4166660
+      },
+      {
+        "text": "and",
+        "offset": 92880830,
+        "duration": 2023750
+      },
+      {
+        "text": "welcome",
+        "offset": 95500000,
+        "duration": 3809580
+      },
+      {
+        "text": "a",
+        "offset": 99428750,
+        "duration": 595410
+      },
+      {
+        "text": "parent",
+        "offset": 100142910,
+        "duration": 4404580
+      },
+      {
+        "text": "who",
+        "offset": 104666660,
+        "duration": 1309580
+      },
+      {
+        "text": "uses",
+        "offset": 106095410,
+        "duration": 3452500
+      },
+      {
+        "text": "a",
+        "offset": 109666660,
+        "duration": 595410
+      },
+      {
+        "text": "wheelchair",
+        "offset": 110380830,
+        "duration": 6071250
+      },
+      {
+        "text": "Add",
+        "offset": 119904580,
+        "duration": 2023750
+      },
+      {
+        "text": "these",
+        "offset": 122047500,
+        "duration": 1904580
+      },
+      {
+        "text": "needs",
+        "offset": 124071250,
+        "duration": 2380830
+      },
+      {
+        "text": "in",
+        "offset": 126571250,
+        "duration": 595410
+      },
+      {
+        "text": "the",
+        "offset": 127285830,
+        "duration": 714160
+      },
+      {
+        "text": "questionnaire",
+        "offset": 128119160,
+        "duration": 6428750
+      },
+      {
+        "text": "with",
+        "offset": 134904580,
+        "duration": 1785830
+      },
+      {
+        "text": "options",
+        "offset": 137642910,
+        "duration": 4404580
+      },
+      {
+        "text": "for",
+        "offset": 142166660,
+        "duration": 1309580
+      },
+      {
+        "text": "pets",
+        "offset": 143595410,
+        "duration": 4166660
+      },
+      {
+        "text": "or",
+        "offset": 148237910,
+        "duration": 2142910
+      },
+      {
+        "text": "instruments",
+        "offset": 150500000,
+        "duration": 5595410
+      },
+      {
+        "text": "too",
+        "offset": 156333330,
+        "duration": 3571250
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "start": 89.2,
+    "end": 95.738082,
+    "text": "AI arranges their existing furniture first. The sofa goes against the wall, opening up the centre of the room.",
+    "words": [
+      {
+        "text": "AI",
+        "offset": 1000000,
+        "duration": 4047500
+      },
+      {
+        "text": "arranges",
+        "offset": 5285830,
+        "duration": 4762080
+      },
+      {
+        "text": "their",
+        "offset": 10166660,
+        "duration": 1428750
+      },
+      {
+        "text": "existing",
+        "offset": 11714160,
+        "duration": 4523750
+      },
+      {
+        "text": "furniture",
+        "offset": 16357080,
+        "duration": 4523750
+      },
+      {
+        "text": "first",
+        "offset": 21000000,
+        "duration": 5119160
+      },
+      {
+        "text": "The",
+        "offset": 29547500,
+        "duration": 1666660
+      },
+      {
+        "text": "sofa",
+        "offset": 31333330,
+        "duration": 4404580
+      },
+      {
+        "text": "goes",
+        "offset": 35976250,
+        "duration": 2500000
+      },
+      {
+        "text": "against",
+        "offset": 38595410,
+        "duration": 2976250
+      },
+      {
+        "text": "the",
+        "offset": 41690410,
+        "duration": 833330
+      },
+      {
+        "text": "wall",
+        "offset": 42642910,
+        "duration": 3452500
+      },
+      {
+        "text": "opening",
+        "offset": 50380830,
+        "duration": 3214160
+      },
+      {
+        "text": "up",
+        "offset": 53714160,
+        "duration": 1190410
+      },
+      {
+        "text": "the",
+        "offset": 55023750,
+        "duration": 952500
+      },
+      {
+        "text": "centre",
+        "offset": 56095410,
+        "duration": 3690410
+      },
+      {
+        "text": "of",
+        "offset": 59904580,
+        "duration": 714160
+      },
+      {
+        "text": "the",
+        "offset": 60737910,
+        "duration": 833330
+      },
+      {
+        "text": "room",
+        "offset": 61690410,
+        "duration": 3690410
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "start": 96.8,
+    "end": 99.68570799999999,
+    "text": "Their existing desk anchors a dedicated work corner.",
+    "words": [
+      {
+        "text": "Their",
+        "offset": 1000000,
+        "duration": 2142910
+      },
+      {
+        "text": "existing",
+        "offset": 3262080,
+        "duration": 4880830
+      },
+      {
+        "text": "desk",
+        "offset": 8262080,
+        "duration": 3333330
+      },
+      {
+        "text": "anchors",
+        "offset": 11714160,
+        "duration": 3690410
+      },
+      {
+        "text": "a",
+        "offset": 15642910,
+        "duration": 952500
+      },
+      {
+        "text": "dedicated",
+        "offset": 16714160,
+        "duration": 5595410
+      },
+      {
+        "text": "work",
+        "offset": 22428750,
+        "duration": 1785830
+      },
+      {
+        "text": "corner",
+        "offset": 24333330,
+        "duration": 4523750
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "start": 101.8,
+    "end": 108.326166,
+    "text": "A clear route supports their parent's visit. Review wheelchair clearances and turning space before approving the plan.",
+    "words": [
+      {
+        "text": "A",
+        "offset": 1000000,
+        "duration": 1904580
+      },
+      {
+        "text": "clear",
+        "offset": 3023750,
+        "duration": 3571250
+      },
+      {
+        "text": "route",
+        "offset": 6714160,
+        "duration": 2023750
+      },
+      {
+        "text": "supports",
+        "offset": 8857080,
+        "duration": 4523750
+      },
+      {
+        "text": "their",
+        "offset": 13500000,
+        "duration": 1547500
+      },
+      {
+        "text": "parent's",
+        "offset": 15166660,
+        "duration": 3809580
+      },
+      {
+        "text": "visit",
+        "offset": 19095410,
+        "duration": 4047500
+      },
+      {
+        "text": "Review",
+        "offset": 26571250,
+        "duration": 3809580
+      },
+      {
+        "text": "wheelchair",
+        "offset": 30500000,
+        "duration": 4523750
+      },
+      {
+        "text": "clearances",
+        "offset": 35142910,
+        "duration": 6190410
+      },
+      {
+        "text": "and",
+        "offset": 41452500,
+        "duration": 2023750
+      },
+      {
+        "text": "turning",
+        "offset": 43595410,
+        "duration": 3452500
+      },
+      {
+        "text": "space",
+        "offset": 47166660,
+        "duration": 4523750
+      },
+      {
+        "text": "before",
+        "offset": 51928750,
+        "duration": 3333330
+      },
+      {
+        "text": "approving",
+        "offset": 55380830,
+        "duration": 3928750
+      },
+      {
+        "text": "the",
+        "offset": 59428750,
+        "duration": 833330
+      },
+      {
+        "text": "plan",
+        "offset": 60380830,
+        "duration": 4880830
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "start": 109.2,
+    "end": 113.404791,
+    "text": "What is still missing? A supportive chair and a table that folds away.",
+    "words": [
+      {
+        "text": "What",
+        "offset": 1000000,
+        "duration": 2023750
+      },
+      {
+        "text": "is",
+        "offset": 3142910,
+        "duration": 952500
+      },
+      {
+        "text": "still",
+        "offset": 4214160,
+        "duration": 1904580
+      },
+      {
+        "text": "missing",
+        "offset": 6237910,
+        "duration": 4523750
+      },
+      {
+        "text": "A",
+        "offset": 14190410,
+        "duration": 1666660
+      },
+      {
+        "text": "supportive",
+        "offset": 15976250,
+        "duration": 5237910
+      },
+      {
+        "text": "chair",
+        "offset": 21333330,
+        "duration": 5000000
+      },
+      {
+        "text": "and",
+        "offset": 26690410,
+        "duration": 1071250
+      },
+      {
+        "text": "a",
+        "offset": 27880830,
+        "duration": 595410
+      },
+      {
+        "text": "table",
+        "offset": 28595410,
+        "duration": 3928750
+      },
+      {
+        "text": "that",
+        "offset": 32642910,
+        "duration": 1428750
+      },
+      {
+        "text": "folds",
+        "offset": 34190410,
+        "duration": 3452500
+      },
+      {
+        "text": "away",
+        "offset": 37762080,
+        "duration": 4285830
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "start": 114.2,
+    "end": 122.33333300000001,
+    "text": "Next, compare second-hand and new furniture that fits the remaining space and budget. Example sources include Xianyu and Taobao.",
+    "words": [
+      {
+        "text": "Next",
+        "offset": 1000000,
+        "duration": 4642910
+      },
+      {
+        "text": "compare",
+        "offset": 6237910,
+        "duration": 3928750
+      },
+      {
+        "text": "second-hand",
+        "offset": 10285830,
+        "duration": 7500000
+      },
+      {
+        "text": "and",
+        "offset": 17904580,
+        "duration": 2619160
+      },
+      {
+        "text": "new",
+        "offset": 20642910,
+        "duration": 1428750
+      },
+      {
+        "text": "furniture",
+        "offset": 22190410,
+        "duration": 5119160
+      },
+      {
+        "text": "that",
+        "offset": 27428750,
+        "duration": 2142910
+      },
+      {
+        "text": "fits",
+        "offset": 29690410,
+        "duration": 2619160
+      },
+      {
+        "text": "the",
+        "offset": 32428750,
+        "duration": 833330
+      },
+      {
+        "text": "remaining",
+        "offset": 33380830,
+        "duration": 4880830
+      },
+      {
+        "text": "space",
+        "offset": 38380830,
+        "duration": 4404580
+      },
+      {
+        "text": "and",
+        "offset": 42904580,
+        "duration": 1666660
+      },
+      {
+        "text": "budget",
+        "offset": 44690410,
+        "duration": 4880830
+      },
+      {
+        "text": "Example",
+        "offset": 53000000,
+        "duration": 5357080
+      },
+      {
+        "text": "sources",
+        "offset": 58476250,
+        "duration": 4523750
+      },
+      {
+        "text": "include",
+        "offset": 63119160,
+        "duration": 4285830
+      },
+      {
+        "text": "Xianyu",
+        "offset": 67523750,
+        "duration": 6309580
+      },
+      {
+        "text": "and",
+        "offset": 73952500,
+        "duration": 2262080
+      },
+      {
+        "text": "Taobao",
+        "offset": 76333330,
+        "duration": 5000000
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "start": 124.3,
+    "end": 133.135708,
+    "text": "For second-hand furniture, AI would compare seller distance and delivery fees, alongside size and condition. Check the total delivered cost.",
+    "words": [
+      {
+        "text": "For",
+        "offset": 1000000,
+        "duration": 2142910
+      },
+      {
+        "text": "second-hand",
+        "offset": 3262080,
+        "duration": 5952500
+      },
+      {
+        "text": "furniture",
+        "offset": 9333330,
+        "duration": 5714160
+      },
+      {
+        "text": "AI",
+        "offset": 18857080,
+        "duration": 2619160
+      },
+      {
+        "text": "would",
+        "offset": 21595410,
+        "duration": 1547500
+      },
+      {
+        "text": "compare",
+        "offset": 23262080,
+        "duration": 4166660
+      },
+      {
+        "text": "seller",
+        "offset": 27547500,
+        "duration": 3452500
+      },
+      {
+        "text": "distance",
+        "offset": 31119160,
+        "duration": 5000000
+      },
+      {
+        "text": "and",
+        "offset": 36237910,
+        "duration": 2023750
+      },
+      {
+        "text": "delivery",
+        "offset": 38380830,
+        "duration": 4285830
+      },
+      {
+        "text": "fees",
+        "offset": 42785830,
+        "duration": 3928750
+      },
+      {
+        "text": "alongside",
+        "offset": 50047500,
+        "duration": 6071250
+      },
+      {
+        "text": "size",
+        "offset": 56237910,
+        "duration": 3690410
+      },
+      {
+        "text": "and",
+        "offset": 60047500,
+        "duration": 1666660
+      },
+      {
+        "text": "condition",
+        "offset": 61833330,
+        "duration": 6071250
+      },
+      {
+        "text": "Check",
+        "offset": 71333330,
+        "duration": 2737910
+      },
+      {
+        "text": "the",
+        "offset": 74190410,
+        "duration": 1071250
+      },
+      {
+        "text": "total",
+        "offset": 75380830,
+        "duration": 3928750
+      },
+      {
+        "text": "delivered",
+        "offset": 79428750,
+        "duration": 3928750
+      },
+      {
+        "text": "cost",
+        "offset": 83476250,
+        "duration": 4880830
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "start": 134.2,
+    "end": 136.490457,
+    "text": "Preview the selected table inside the room.",
+    "words": [
+      {
+        "text": "Preview",
+        "offset": 1000000,
+        "duration": 4047500
+      },
+      {
+        "text": "the",
+        "offset": 5166660,
+        "duration": 952500
+      },
+      {
+        "text": "selected",
+        "offset": 6237910,
+        "duration": 4404580
+      },
+      {
+        "text": "table",
+        "offset": 10762080,
+        "duration": 3095410
+      },
+      {
+        "text": "inside",
+        "offset": 13976250,
+        "duration": 4166660
+      },
+      {
+        "text": "the",
+        "offset": 18262080,
+        "duration": 833330
+      },
+      {
+        "text": "room",
+        "offset": 19214160,
+        "duration": 3690410
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "start": 138.2,
+    "end": 141.785708,
+    "text": "Open and fold the table. See how the space changes.",
+    "words": [
+      {
+        "text": "Open",
+        "offset": 1000000,
+        "duration": 4880830
+      },
+      {
+        "text": "and",
+        "offset": 6119160,
+        "duration": 2142910
+      },
+      {
+        "text": "fold",
+        "offset": 8380830,
+        "duration": 2976250
+      },
+      {
+        "text": "the",
+        "offset": 11476250,
+        "duration": 714160
+      },
+      {
+        "text": "table",
+        "offset": 12309580,
+        "duration": 4404580
+      },
+      {
+        "text": "See",
+        "offset": 20142910,
+        "duration": 3452500
+      },
+      {
+        "text": "how",
+        "offset": 23714160,
+        "duration": 1428750
+      },
+      {
+        "text": "the",
+        "offset": 25262080,
+        "duration": 833330
+      },
+      {
+        "text": "space",
+        "offset": 26214160,
+        "duration": 3690410
+      },
+      {
+        "text": "changes",
+        "offset": 30023750,
+        "duration": 5833330
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "start": 142.2,
+    "end": 144.08570699999999,
+    "text": "Then explore the product details.",
+    "words": [
+      {
+        "text": "Then",
+        "offset": 1000000,
+        "duration": 2142910
+      },
+      {
+        "text": "explore",
+        "offset": 3262080,
+        "duration": 4523750
+      },
+      {
+        "text": "the",
+        "offset": 7904580,
+        "duration": 952500
+      },
+      {
+        "text": "product",
+        "offset": 8976250,
+        "duration": 3571250
+      },
+      {
+        "text": "details",
+        "offset": 12666660,
+        "duration": 6190410
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "start": 145.2,
+    "end": 149.752375,
+    "text": "After their selection, AI updates the whole layout and checks the routes again.",
+    "words": [
+      {
+        "text": "After",
+        "offset": 1000000,
+        "duration": 3809580
+      },
+      {
+        "text": "their",
+        "offset": 4928750,
+        "duration": 1547500
+      },
+      {
+        "text": "selection",
+        "offset": 6595410,
+        "duration": 6071250
+      },
+      {
+        "text": "AI",
+        "offset": 16833330,
+        "duration": 2976250
+      },
+      {
+        "text": "updates",
+        "offset": 20047500,
+        "duration": 4047500
+      },
+      {
+        "text": "the",
+        "offset": 24214160,
+        "duration": 1071250
+      },
+      {
+        "text": "whole",
+        "offset": 25404580,
+        "duration": 2737910
+      },
+      {
+        "text": "layout",
+        "offset": 28262080,
+        "duration": 3928750
+      },
+      {
+        "text": "and",
+        "offset": 32547500,
+        "duration": 1785830
+      },
+      {
+        "text": "checks",
+        "offset": 34452500,
+        "duration": 2737910
+      },
+      {
+        "text": "the",
+        "offset": 37309580,
+        "duration": 952500
+      },
+      {
+        "text": "routes",
+        "offset": 38380830,
+        "duration": 2500000
+      },
+      {
+        "text": "again",
+        "offset": 41000000,
+        "duration": 4523750
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "start": 152.3,
+    "end": 155.864249,
+    "text": "Compare arrangements, then choose the one that fits their life.",
+    "words": [
+      {
+        "text": "Compare",
+        "offset": 1000000,
+        "duration": 4285830
+      },
+      {
+        "text": "arrangements",
+        "offset": 5404580,
+        "duration": 6547500
+      },
+      {
+        "text": "then",
+        "offset": 15404580,
+        "duration": 2142910
+      },
+      {
+        "text": "choose",
+        "offset": 17666660,
+        "duration": 2380830
+      },
+      {
+        "text": "the",
+        "offset": 20166660,
+        "duration": 1190410
+      },
+      {
+        "text": "one",
+        "offset": 21476250,
+        "duration": 2857080
+      },
+      {
+        "text": "that",
+        "offset": 24452500,
+        "duration": 2023750
+      },
+      {
+        "text": "fits",
+        "offset": 26595410,
+        "duration": 2619160
+      },
+      {
+        "text": "their",
+        "offset": 29333330,
+        "duration": 1785830
+      },
+      {
+        "text": "life",
+        "offset": 31237910,
+        "duration": 4404580
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "start": 156.2,
+    "end": 161.4905,
+    "text": "You can also adjust the plan yourself: select, drag, reposition, and confirm.",
+    "words": [
+      {
+        "text": "You",
+        "offset": 1000000,
+        "duration": 1785830
+      },
+      {
+        "text": "can",
+        "offset": 2904580,
+        "duration": 1190410
+      },
+      {
+        "text": "also",
+        "offset": 4214160,
+        "duration": 2976250
+      },
+      {
+        "text": "adjust",
+        "offset": 7309580,
+        "duration": 2976250
+      },
+      {
+        "text": "the",
+        "offset": 10404580,
+        "duration": 833330
+      },
+      {
+        "text": "plan",
+        "offset": 11357080,
+        "duration": 2262080
+      },
+      {
+        "text": "yourself",
+        "offset": 13737910,
+        "duration": 4404580
+      },
+      {
+        "text": "select",
+        "offset": 20762080,
+        "duration": 5119160
+      },
+      {
+        "text": "drag",
+        "offset": 28023750,
+        "duration": 4762080
+      },
+      {
+        "text": "reposition",
+        "offset": 36237910,
+        "duration": 7500000
+      },
+      {
+        "text": "and",
+        "offset": 44214160,
+        "duration": 2142910
+      },
+      {
+        "text": "confirm",
+        "offset": 46476250,
+        "duration": 6428750
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "start": 166.2,
+    "end": 168.633333,
+    "text": "Export a moving report for the next steps.",
+    "words": [
+      {
+        "text": "Export",
+        "offset": 1000000,
+        "duration": 4762080
+      },
+      {
+        "text": "a",
+        "offset": 6476250,
+        "duration": 476250
+      },
+      {
+        "text": "moving",
+        "offset": 7071250,
+        "duration": 3571250
+      },
+      {
+        "text": "report",
+        "offset": 10762080,
+        "duration": 4166660
+      },
+      {
+        "text": "for",
+        "offset": 15047500,
+        "duration": 1309580
+      },
+      {
+        "text": "the",
+        "offset": 16476250,
+        "duration": 714160
+      },
+      {
+        "text": "next",
+        "offset": 17309580,
+        "duration": 2380830
+      },
+      {
+        "text": "steps",
+        "offset": 19809580,
+        "duration": 4523750
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "start": 171.2,
+    "end": 176.133333,
+    "text": "For furniture they leave behind, prepare editable resale drafts for another household.",
+    "words": [
+      {
+        "text": "For",
+        "offset": 1000000,
+        "duration": 2142910
+      },
+      {
+        "text": "furniture",
+        "offset": 3262080,
+        "duration": 4523750
+      },
+      {
+        "text": "they",
+        "offset": 7904580,
+        "duration": 1428750
+      },
+      {
+        "text": "leave",
+        "offset": 9452500,
+        "duration": 2737910
+      },
+      {
+        "text": "behind",
+        "offset": 12309580,
+        "duration": 5119160
+      },
+      {
+        "text": "prepare",
+        "offset": 20404580,
+        "duration": 4880830
+      },
+      {
+        "text": "editable",
+        "offset": 25642910,
+        "duration": 3928750
+      },
+      {
+        "text": "resale",
+        "offset": 29690410,
+        "duration": 4523750
+      },
+      {
+        "text": "drafts",
+        "offset": 34333330,
+        "duration": 4166660
+      },
+      {
+        "text": "for",
+        "offset": 38619160,
+        "duration": 1190410
+      },
+      {
+        "text": "another",
+        "offset": 39928750,
+        "duration": 3214160
+      },
+      {
+        "text": "household",
+        "offset": 43262080,
+        "duration": 6071250
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "start": 177.2,
+    "end": 183.559499,
+    "text": "Partner models connect reuse with space-saving furniture. Planned referrals and commissions support the service.",
+    "words": [
+      {
+        "text": "Partner",
+        "offset": 1000000,
+        "duration": 3809580
+      },
+      {
+        "text": "models",
+        "offset": 4928750,
+        "duration": 4166660
+      },
+      {
+        "text": "connect",
+        "offset": 9214160,
+        "duration": 3690410
+      },
+      {
+        "text": "reuse",
+        "offset": 13023750,
+        "duration": 4166660
+      },
+      {
+        "text": "with",
+        "offset": 17309580,
+        "duration": 1666660
+      },
+      {
+        "text": "space-saving",
+        "offset": 19095410,
+        "duration": 7023750
+      },
+      {
+        "text": "furniture",
+        "offset": 26237910,
+        "duration": 5476250
+      },
+      {
+        "text": "Planned",
+        "offset": 35142910,
+        "duration": 3690410
+      },
+      {
+        "text": "referrals",
+        "offset": 38952500,
+        "duration": 5476250
+      },
+      {
+        "text": "and",
+        "offset": 44666660,
+        "duration": 1785830
+      },
+      {
+        "text": "commissions",
+        "offset": 46571250,
+        "duration": 6071250
+      },
+      {
+        "text": "support",
+        "offset": 52762080,
+        "duration": 3690410
+      },
+      {
+        "text": "the",
+        "offset": 56571250,
+        "duration": 714160
+      },
+      {
+        "text": "service",
+        "offset": 57404580,
+        "duration": 6190410
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "start": 184.2,
+    "end": 191.107125,
+    "text": "The sofa stays. The workspace is ready. The table opens for guests, and the purchase plan is within budget.",
+    "words": [
+      {
+        "text": "The",
+        "offset": 1000000,
+        "duration": 1785830
+      },
+      {
+        "text": "sofa",
+        "offset": 2904580,
+        "duration": 3571250
+      },
+      {
+        "text": "stays",
+        "offset": 6595410,
+        "duration": 4880830
+      },
+      {
+        "text": "The",
+        "offset": 14904580,
+        "duration": 1904580
+      },
+      {
+        "text": "workspace",
+        "offset": 16928750,
+        "duration": 6190410
+      },
+      {
+        "text": "is",
+        "offset": 23476250,
+        "duration": 1190410
+      },
+      {
+        "text": "ready",
+        "offset": 24785830,
+        "duration": 4166660
+      },
+      {
+        "text": "The",
+        "offset": 32404580,
+        "duration": 1428750
+      },
+      {
+        "text": "table",
+        "offset": 33952500,
+        "duration": 3452500
+      },
+      {
+        "text": "opens",
+        "offset": 37523750,
+        "duration": 2857080
+      },
+      {
+        "text": "for",
+        "offset": 40500000,
+        "duration": 1190410
+      },
+      {
+        "text": "guests",
+        "offset": 41809580,
+        "duration": 4642910
+      },
+      {
+        "text": "and",
+        "offset": 46690410,
+        "duration": 2380830
+      },
+      {
+        "text": "the",
+        "offset": 49190410,
+        "duration": 952500
+      },
+      {
+        "text": "purchase",
+        "offset": 50262080,
+        "duration": 4285830
+      },
+      {
+        "text": "plan",
+        "offset": 54666660,
+        "duration": 3690410
+      },
+      {
+        "text": "is",
+        "offset": 58833330,
+        "duration": 1547500
+      },
+      {
+        "text": "within",
+        "offset": 60500000,
+        "duration": 3452500
+      },
+      {
+        "text": "budget",
+        "offset": 64071250,
+        "duration": 5000000
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "start": 192.2,
+    "end": 194.44283299999998,
+    "text": "Sixteen of eighteen pieces stay in use.",
+    "words": [
+      {
+        "text": "Sixteen",
+        "offset": 1000000,
+        "duration": 4880830
+      },
+      {
+        "text": "of",
+        "offset": 6000000,
+        "duration": 833330
+      },
+      {
+        "text": "eighteen",
+        "offset": 7190410,
+        "duration": 3809580
+      },
+      {
+        "text": "pieces",
+        "offset": 11119160,
+        "duration": 3928750
+      },
+      {
+        "text": "stay",
+        "offset": 15166660,
+        "duration": 2023750
+      },
+      {
+        "text": "in",
+        "offset": 17309580,
+        "duration": 952500
+      },
+      {
+        "text": "use",
+        "offset": 18380830,
+        "duration": 4047500
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "start": 196.2,
+    "end": 200.6095,
+    "text": "A neighbourhood pilot would test completed plans, seller visits and purchases.",
+    "words": [
+      {
+        "text": "A",
+        "offset": 1000000,
+        "duration": 1309580
+      },
+      {
+        "text": "neighbourhood",
+        "offset": 2428750,
+        "duration": 5237910
+      },
+      {
+        "text": "pilot",
+        "offset": 7785830,
+        "duration": 3928750
+      },
+      {
+        "text": "would",
+        "offset": 11833330,
+        "duration": 1666660
+      },
+      {
+        "text": "test",
+        "offset": 13619160,
+        "duration": 3214160
+      },
+      {
+        "text": "completed",
+        "offset": 16952500,
+        "duration": 4285830
+      },
+      {
+        "text": "plans",
+        "offset": 21357080,
+        "duration": 4523750
+      },
+      {
+        "text": "seller",
+        "offset": 28737910,
+        "duration": 2857080
+      },
+      {
+        "text": "visits",
+        "offset": 31714160,
+        "duration": 3928750
+      },
+      {
+        "text": "and",
+        "offset": 35762080,
+        "duration": 1666660
+      },
+      {
+        "text": "purchases",
+        "offset": 37547500,
+        "duration": 6547500
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "start": 201.2,
+    "end": 208.035708,
+    "text": "Your room files stay on your device. You'd choose whether to share them with AI, and check the furniture details before buying.",
+    "words": [
+      {
+        "text": "Your",
+        "offset": 1000000,
+        "duration": 2500000
+      },
+      {
+        "text": "room",
+        "offset": 3619160,
+        "duration": 1785830
+      },
+      {
+        "text": "files",
+        "offset": 5523750,
+        "duration": 3333330
+      },
+      {
+        "text": "stay",
+        "offset": 8976250,
+        "duration": 2262080
+      },
+      {
+        "text": "on",
+        "offset": 11357080,
+        "duration": 952500
+      },
+      {
+        "text": "your",
+        "offset": 12428750,
+        "duration": 833330
+      },
+      {
+        "text": "device",
+        "offset": 13380830,
+        "duration": 5595410
+      },
+      {
+        "text": "You'd",
+        "offset": 22404580,
+        "duration": 2976250
+      },
+      {
+        "text": "choose",
+        "offset": 25500000,
+        "duration": 2737910
+      },
+      {
+        "text": "whether",
+        "offset": 28357080,
+        "duration": 2500000
+      },
+      {
+        "text": "to",
+        "offset": 30976250,
+        "duration": 714160
+      },
+      {
+        "text": "share",
+        "offset": 31809580,
+        "duration": 2619160
+      },
+      {
+        "text": "them",
+        "offset": 34547500,
+        "duration": 1428750
+      },
+      {
+        "text": "with",
+        "offset": 36095410,
+        "duration": 1547500
+      },
+      {
+        "text": "AI",
+        "offset": 37762080,
+        "duration": 4047500
+      },
+      {
+        "text": "and",
+        "offset": 45262080,
+        "duration": 1904580
+      },
+      {
+        "text": "check",
+        "offset": 47404580,
+        "duration": 2023750
+      },
+      {
+        "text": "the",
+        "offset": 49547500,
+        "duration": 952500
+      },
+      {
+        "text": "furniture",
+        "offset": 50619160,
+        "duration": 4404580
+      },
+      {
+        "text": "details",
+        "offset": 55142910,
+        "duration": 5119160
+      },
+      {
+        "text": "before",
+        "offset": 60380830,
+        "duration": 3452500
+      },
+      {
+        "text": "buying",
+        "offset": 63952500,
+        "duration": 4404580
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "start": 218.0,
+    "end": 222.549999,
+    "text": "ReNest. An easier move. Less waste. More value.",
+    "words": [
+      {
+        "text": "Ree-nest",
+        "offset": 1000000,
+        "duration": 6666660
+      },
+      {
+        "text": "An",
+        "offset": 11095410,
+        "duration": 2023750
+      },
+      {
+        "text": "easier",
+        "offset": 14309580,
+        "duration": 3095410
+      },
+      {
+        "text": "move",
+        "offset": 17523750,
+        "duration": 4642910
+      },
+      {
+        "text": "Less",
+        "offset": 25619160,
+        "duration": 3333330
+      },
+      {
+        "text": "waste",
+        "offset": 29071250,
+        "duration": 4880830
+      },
+      {
+        "text": "More",
+        "offset": 37404580,
+        "duration": 2737910
+      },
+      {
+        "text": "value",
+        "offset": 40262080,
+        "duration": 5237910
+      }
+    ]
+  }
+]

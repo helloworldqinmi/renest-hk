@@ -4,7 +4,7 @@ export type PlanExample={id:string;title:[string,string,string];area:number;widt
 const wall=(x1:number,z1:number,x2:number,z2:number,extra:Partial<PlanWall>={}):PlanWall=>({a:[x1,z1],b:[x2,z2],...extra});
 
 // These 17 wall segments intentionally match architecture(root, false) in
-// v2-home-models/src/generate.mjs. No furniture is part of a blueprint.
+// assets/home-models/src/generate.mjs. No furniture is part of a blueprint.
 export const demoBlueprint:PlanExample={
  id:'northern-demo-a',title:['Familiar two-bedroom','经典两房','經典兩房'],area:45,width:8.4,depth:6.15,enabled:true,
  outline:[[0,0],[3.65,0],[3.65,.48],[8.4,.48],[8.4,6.15],[0,6.15]],
