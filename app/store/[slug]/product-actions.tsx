@@ -8,7 +8,7 @@ import {placementIssue} from '@/lib/studio-placement';
 import {defaultBrief} from '@/lib/living-brief';
 import { useEffect, useState } from "react";
 import { Check, ShoppingBag } from "lucide-react";
-import { Button } from "@/components/common/ui";
+import { Button } from "@/components/common/ui-primitives";
 
 export function ProductActions({ name,slug }: { name: string;slug:string }) {
   const router=useRouter();const {tr,t}=useLocale();const item=studioInventory.find(i=>i.productSlug===slug);

@@ -5,7 +5,7 @@ import type {LivingBrief} from '@/lib/living-brief';
 import {studioLayouts, type Placement, type LayoutId} from '@/lib/studio-data';
 import {MiniPlan} from './layout-tools';
 import {ProfileNotices} from './profile-notices';
-import styles from './decision.module.css';
+import styles from './plan-decision.module.css';
 
 export function PlanComparison({plans, brief, selected, current, recommended, onChoose}: {
   plans:{id:LayoutId;placements:Placement[]}[]; brief:LivingBrief; selected:string[];

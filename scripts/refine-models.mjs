@@ -96,5 +96,5 @@ for (const file of files) {
 }
 // Install only after every generated asset passes the checks above.
 for (const file of files) await copyFile(path.join(staging, 'ready', file), path.join(destination, file));
-await writeFile(path.join(root, 'docs/model-refinement.json'), JSON.stringify(report, null, 2) + '\n');
+await writeFile(path.join(root, 'docs/model-refinement-report.json'), JSON.stringify(report, null, 2) + '\n');
 console.log('Refined assets installed. Furniture metadata, bounds, folding pivots, walls and UVs verified.');

@@ -1,4 +1,4 @@
-/** Deterministic, metre-scale, Y-up scene assets. Run: node assets/home-models/src/generate.mjs */
+/** Deterministic, metre-scale, Y-up scene assets. Run: node assets/home-models/src/generate-home-models.mjs */
 import * as T from 'three';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { GLTFExporter } from 'three/addons/exporters/GLTFExporter.js';

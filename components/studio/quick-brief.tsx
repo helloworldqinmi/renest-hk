@@ -9,7 +9,7 @@ import {planForProfile} from '@/lib/profile-planning';
 import {studioLayouts, studioInventory, type Placement} from '@/lib/studio-data';
 import {MiniPlan} from './layout-tools';
 import {ProfileNotices} from './profile-notices';
-import styles from './decision.module.css';
+import styles from './plan-decision.module.css';
 
 export function QuickBrief({value, selected, onApply, onDetailed, ready = true, refining = false, currentPlacements}: {
   value: LivingBrief; selected: string[]; onApply: (value: LivingBrief) => void;

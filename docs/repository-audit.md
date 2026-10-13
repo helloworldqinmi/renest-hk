@@ -24,6 +24,8 @@ Model imports, source references, refinement scripts and studio checks were upda
 
 ### Naming convention
 
+The subsequent [global naming review](naming-conventions.md) records ten responsibility-based renames and the full conventions for new files. Historical paths in audit tables identify the state at the time of each change.
+
 - Use descriptive English `kebab-case` for new directories, documents and presentation files.
 - Preserve framework conventions such as `page.tsx`, `layout.tsx`, `README.md` and `AGENTS.md`.
 - Retain established Python `snake_case`, licence filenames, stable furniture IDs and public URL paths.

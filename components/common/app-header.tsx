@@ -6,7 +6,7 @@ import { BrandLogo } from "./brand-logo";
 import { usePathname } from "next/navigation";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Modal, cn } from "@/components/common/ui";
+import { Modal, cn } from "@/components/common/ui-primitives";
 
 import {readPlanHistory} from '@/lib/studio-data';
 

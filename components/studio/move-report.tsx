@@ -12,7 +12,7 @@ import {findFoldingProduct} from '@/lib/folding-products';
 import {isStaged} from '@/lib/studio-placement';
 import {MiniPlan} from './layout-tools';
 import {ProfileNotices} from './profile-notices';
-import styles from './decision.module.css';
+import styles from './plan-decision.module.css';
 
 type ReportProps={brief:LivingBrief;placements:Placement[];selected:string[];layout:LayoutId;name:string};
 function ReportContent({brief,placements,selected,layout,name}:ReportProps){

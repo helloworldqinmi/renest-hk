@@ -1,4 +1,4 @@
-import type { FurnitureItem, LayoutPlan, MarketplaceProduct, ScannedRoom } from "@/types";
+import type { FurnitureItem, LayoutPlan, MarketplaceProduct, ScannedRoom } from "@/types/demo-planning";
 
 export const demoScenario = {
   currentHome: { name: "Kowloon", areaSqFt: 380 },

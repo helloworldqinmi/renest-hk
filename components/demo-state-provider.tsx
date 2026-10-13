@@ -2,7 +2,7 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { defaultPreference, furnitureInventory, interpretedConstraints } from "@/lib/demo-data";
-import type { LayoutPlan } from "@/types";
+import type { LayoutPlan } from "@/types/demo-planning";
 
 interface DemoState {
   selectedFurniture: string[];

@@ -18,7 +18,8 @@ Switch between the old home and three new-home arrangements. Drag to orbit, scro
 
 | Path | Responsibility |
 | --- | --- |
-| `src/generate.mjs` | Deterministic geometry, materials, furniture and source layout generation. |
+| `src/generate-home-models.mjs` | Deterministic geometry, materials, furniture and source layout generation. |
+| `model-viewer.js`, `model-viewer.css` | Standalone model viewer behaviour and presentation. |
 | `models/` | Original scenes, architectural shells and individual furniture GLBs. |
 | `data/furniture.json` | Stable identifiers, estimated dimensions, origin and product mapping. |
 | `data/layouts.json` | Source scene placements and retained/added furniture lists. |
@@ -31,7 +32,7 @@ The source scenes contain 18 original furniture groups and four initial addition
 ## Regeneration
 
 ```bash
-node assets/home-models/src/generate.mjs
+node assets/home-models/src/generate-home-models.mjs
 npm run build:refined-models
 ```
 

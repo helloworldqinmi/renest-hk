@@ -1,4 +1,4 @@
-import type { FurnitureCategory, FurnitureItem, ScannedRoom } from "@/types";
+import type { FurnitureCategory, FurnitureItem, ScannedRoom } from "@/types/demo-planning";
 
 type RawRoomPlan = {
   identifier: string;

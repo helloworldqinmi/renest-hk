@@ -115,6 +115,7 @@ The repository is configured as a standard Next.js project and the documented de
 - [Architecture](docs/architecture.md) — module ownership, data flow and asset pipeline.
 - [Product scope](docs/product-scope.md) — implemented behaviour, simulations and roadmap.
 - [Repository audit](docs/repository-audit.md) — naming decisions, removed legacy code and Git ignore policy.
+- [Naming conventions](docs/naming-conventions.md) — file responsibilities, naming rules and compatibility exceptions.
 - [Studio implementation](components/studio/README.md) — rendering and interaction notes.
 - [Model source guide](assets/home-models/README.md) — source geometry, viewer and regeneration.
 - [Third-party notices](docs/third-party-notices.md) — bundled licences.

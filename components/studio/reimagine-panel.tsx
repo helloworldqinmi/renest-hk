@@ -7,7 +7,7 @@ import { ArrowUpRight, Check, Feather, LayoutTemplate, MessageSquare, Sparkles }
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
 import { habits, studioLayouts, type LayoutId } from '@/lib/studio-data';
-import styles from './reimagine.module.css';
+import styles from './reimagine-panel.module.css';
 
 const prompts = [
  { title: 'A home that works with me', label: 'WORK & UNWIND', text: 'We both work from home. Create two workspaces, but keep a comfortable place to switch off.', habits: ['reuse', 'work'], icon: MessageSquare },

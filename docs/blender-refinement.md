@@ -30,7 +30,7 @@ No model downloads or external addons are required.
 4. It validates exported/reloaded models before installing them under
    `public/models/v2/`. Checks cover selectable IDs, dimensions, root transforms,
    wall-cut metadata, fold pivots, AO UVs, bounding boxes and file-size budgets.
-   The run writes the measured sizes to `docs/model-refinement.json`.
+   The run writes the measured sizes to `docs/model-refinement-report.json`.
 
 For iterating on the integration without rebaking, pass `--baked /absolute/path`
 to `node scripts/refine-models.mjs`; that directory must contain the two bed exports. Intermediate files live in the OS temporary directory.
@@ -50,7 +50,7 @@ is rendered before relying on manual shadow updates.
 
 Complete room downloads shrink through geometry deduplication, while individual
 refined furniture assets grow because they contain additional geometry and an
-embedded AO atlas. The actual size comparison is in `model-refinement.json`.
+embedded AO atlas. The actual size comparison is in `model-refinement-report.json`.
 This is a focused refinement of a sofa and two beds, not a complete
 photorealistic remodel. The original estimated footprint metadata is preserved;
 Blender refinement does not make those measurements survey-accurate.

@@ -3,7 +3,7 @@
 import {useEffect,useRef,useState} from 'react';
 import { motion } from 'framer-motion';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
-import {motionEase,motionTiming} from '@/lib/motion';
+import {motionEase,motionTiming} from '@/lib/motion-tokens';
 import {Users,Wallet,Briefcase,Accessibility,SlidersHorizontal,Coffee,PawPrint,KeyRound,Palette,Check,ArrowLeft,ArrowRight,Sparkles,Leaf,House,ChevronRight,Plus,BedDouble,BedSingle,Baby,Moon,Truck,Clock,Recycle,Heart,CircleHelp,UserRound,Archive,Monitor,Utensils,PiggyBank,Move,type LucideIcon} from 'lucide-react';
 import {useLocale} from '@/components/locale-provider';
 import {profileOptions,profileSections,coreSections,newLivingProfile,sectionReady,coreProfileComplete,petSuggestions,type LivingProfile,type ProfileSection,type ProfileStep,type ProfileOption,type LocalCopy} from '@/lib/living-profile';

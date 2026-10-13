@@ -29,7 +29,7 @@ import Link from '@/components/common/motion-link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useReducedMotion } from '@/lib/use-reduced-motion';
-import { motionEase, motionTiming } from '@/lib/motion';
+import { motionEase, motionTiming } from '@/lib/motion-tokens';
 import { Maximize2, Minimize2, FileText, SlidersHorizontal, ArrowLeft, ArrowRight, ArrowUpRight, Bookmark, Box, Check, CheckCheck, ChevronDown, Download, Grid2X2, Hand, LockKeyhole, RotateCw, Undo2, House, Layers3, Leaf, Moon, Pause, Play, RotateCcw, ScanLine, ShoppingBag, Smartphone, Sparkles, Sun, X } from 'lucide-react';
 import { BrandLogo } from '@/components/common/brand-logo';
 import { Modal } from '@/components/common/modal';

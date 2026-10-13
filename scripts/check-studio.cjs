@@ -10,7 +10,7 @@ assert.deepEqual(input.parseHomeInput({method:'floorplan-upload',fileName:'my-pl
 assert.ok(fs.readFileSync(path.join(root,'public/plans/northern-demo-a.png')).equals(fs.readFileSync(path.join(root,'assets/home-models/references/new-home-plan.png'))),'Library item 01 must remain the original demo floor plan');
 const plans=load(path.join(root,'lib/floor-plan-blueprints.ts'));
 assert.equal(plans.floorPlanExamples.filter(p=>p.enabled).length,1);
-const modelSource=fs.readFileSync(path.join(root,'assets/home-models/src/generate.mjs'),'utf8').split('}else{plankFloor(a,0,1.4')[1].split('return a;')[0];
+const modelSource=fs.readFileSync(path.join(root,'assets/home-models/src/generate-home-models.mjs'),'utf8').split('}else{plankFloor(a,0,1.4')[1].split('return a;')[0];
 const walls=[...modelSource.matchAll(/segment\(a,([\d.]+),([\d.]+),([\d.]+),([\d.]+)/g)].map(m=>m.slice(1).map(Number));
 assert.deepEqual(plans.demoBlueprint.walls.map(w=>[...w.a,...w.b]),walls,'Blueprint walls must match the existing 3D home');
 assert.equal(plans.constructionFrame(0).tilt,0);

@@ -7,7 +7,7 @@ import {inspectPlan, planDifference} from '@/lib/plan-insights';
 import type {LivingBrief} from '@/lib/living-brief';
 import {studioInventory, type Placement} from '@/lib/studio-data';
 import {ProfileNotices} from './profile-notices';
-import styles from './decision.module.css';
+import styles from './plan-decision.module.css';
 
 export function PlanDecision({brief, placements, selected, onHighlight, children}: {
   brief: LivingBrief; placements: Placement[]; selected: string[]; onHighlight: (id: string) => void; children?: ReactNode;

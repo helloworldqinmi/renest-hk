@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "./motion.css";
 import { LocaleProvider } from "@/components/locale-provider";
-import { DemoProvider } from "@/components/state-provider";
+import { DemoProvider } from "@/components/demo-state-provider";
 import { AppHeader } from "@/components/common/app-header";
 
 const sans = localFont({ src: "./fonts/geist-sans.woff2", variable: "--font-geist-sans", display: "swap" });

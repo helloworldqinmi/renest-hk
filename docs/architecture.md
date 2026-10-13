@@ -36,7 +36,7 @@ The living profile and manual edits influence shared placements. The 3D view, co
 
 ## Asset pipeline
 
-1. `assets/home-models/src/generate.mjs` defines the original metric geometry and stable furniture identities.
+1. `assets/home-models/src/generate-home-models.mjs` defines the original metric geometry and stable furniture identities.
 2. `assets/home-models/models/` and `data/` preserve source models and manifests. The standalone viewer has its own local Three.js distribution and licence.
 3. `scripts/refine-models.mjs` and `scripts/blender/` refine selected upholstery and validate bounds and metadata before writing runtime models.
 4. `public/models/v2/` provides deployment GLBs; `public/films/interior/` provides optional pre-rendered interior views.
