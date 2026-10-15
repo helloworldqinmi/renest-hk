@@ -1,5 +1,7 @@
 # Presentation clips
 
+These are earlier standalone feature clips. The [final submission deck](../README.md) includes its own five embedded clips.
+
 Use clips 01–04 in sequence; clip 05 is an optional product demonstration. Every clip is H.264 MP4 at **1920 × 1080 / 60 fps**, without audio or added subtitle tracks. The website's own interface text remains visible.
 
 The links below are downloads for local playback or insertion into presentation software. GitHub's file page may not preview the videos; use **Download raw file** if needed. Private-repository downloads require repository access.

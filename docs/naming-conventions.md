@@ -41,7 +41,8 @@ Imports, CSS references, viewer HTML, generation/check scripts and current docum
 - **Public routes:** `/demo`, `/store/[slug]` and the existing redirect routes. Route-directory renames would change bookmarks and links.
 - **Stable model identities:** `F01`–`F18`, `N01`–`N04`, layout keys `a`/`b`/`c` and `public/models/v2/`. These names participate in manifests, dynamic asset lookup and saved-plan compatibility.
 - **Third-party distribution and licence files:** preserve upstream names and attribution.
-- **Delivery revisions:** `v1.11.1` identifies an actual film revision. It is not a temporary working suffix.
+- **Submission filenames:** the final Team 1064 package retains `1064 - Renest.pptx`, `1064 - Renest.mp4` and `1064 - Renest - Project Guide.pdf` to match the submission. These printable-ASCII names intentionally contain spaces.
+- **Delivery revisions:** `v1.11.1` identifies an earlier film revision; the final submission film is v1.13. Revision labels are not temporary working suffixes.
 - **Historical video source:** preserve source-snapshot filenames and dependency references. That directory is a production record, not the current application module structure.
 - **Published photos and render frames:** preserve existing public URLs. Any later reorganisation must update dynamic lookup, render manifests and generation scripts together.
 

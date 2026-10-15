@@ -1,30 +1,23 @@
-# ReNest HK delivery package
+# ReNest HK final presentation package
 
-This directory contains the selected presentation assets for review. File names and delivery documentation are in English. Media are kept outside `public/` so the website does not ship the presentation package as runtime content.
+The final Team 1064 presentation is in **[presentation-redesign/](presentation-redesign/)**. This folder contains the three approved submission files, with their original submission filenames.
 
-## Main film — download for local playback
+| File | Contents |
+| --- | --- |
+| [1064 - Renest.pptx](presentation-redesign/1064%20-%20Renest.pptx?raw=true) | 13-slide pitch deck with five embedded demonstration videos. |
+| [1064 - Renest.mp4](presentation-redesign/1064%20-%20Renest.mp4?raw=true) | Full demonstration with English narration and subtitles. 3 min 29.2 sec, 1920 x 1080, 60 fps. |
+| [1064 - Renest - Project Guide.pdf](presentation-redesign/1064%20-%20Renest%20-%20Project%20Guide.pdf?raw=true) | One-page project guide with team information, review instructions, live-demo and source-code links, and QR codes. |
 
-- [Download MP4 — v1.11.1, 1080p60, 74.1 MiB](demo-film/renest-hk-demo-v1.11.1-1080p60.mp4?raw=true)
-- [Download English subtitles](demo-film/renest-hk-demo-v1.11.1-en.srt?raw=true)
-- [Release notes](demo-film/release-notes.md)
-- [Original production verification](demo-film/verification.json)
+The film is the v1.13 paced export. The presentation and guide were reviewed on 16 October 2026. Start with the deck, watch the full film, then [open the interactive demo](https://renest-hk.vercel.app/) for a hands-on review. Desktop PowerPoint is recommended for embedded video playback. The standalone MP4 can be played separately.
 
-Duration: **3 minutes 43 seconds**. Resolution: **1920 × 1080**, **60 fps**. The film has English narration.
+GitHub may show a file page instead of previewing a large video. Use **Download raw file** or the download links above, then open the file locally. The final package is stored outside `public/` and is not served as website runtime content.
 
-GitHub's file page does not preview this large MP4. Download it and open it in a local media player. If a link opens the file page instead, use **Download raw file** (the download icon beside **Raw**). A local clone also includes the film at the path above. Access to a private repository is required to download its files.
+## Verification
 
-For a browser-based review without downloading media, [open the interactive application](https://renest-hk.vercel.app/).
+Run `npm run check:delivery` from the repository root. [manifest.json](manifest.json) identifies the final package and records file sizes and SHA-256 hashes. [final-verification.json](final-verification.json) preserves the selected film's production checks and the final package review results.
 
-The selected film is the v1.11.1 polished export identified by the existing presentation notes and production checksum. Its bytes are unchanged. Earlier cuts, silent picture masters and intermediate renders remain in the ignored local production workspace; they are not alternative submission files.
+The review included PowerPoint rendering, required cover information, all five embedded video files, full film decoding, PDF layout, hyperlinks and QR codes. The repository check validates the saved bytes and filenames; it does not rerun those visual or playback checks.
 
-## Presentation clips
+## Earlier reference materials
 
-The [five short clips](presentation-clips/README.md) provide separate feature demonstrations for a slide presentation. They have no narration, music or added subtitles. No PowerPoint deck is included in this package.
-
-## Integrity and scope
-
-Run `npm run check:delivery` from the repository root. [manifest.json](manifest.json) records byte counts and SHA-256 hashes. The film's hash is also checked against the preserved production report.
-
-The verification JSON files are historical production evidence. The repository check validates the files and checksums; it does not rerun the original visual, loudness or QR-code review.
-
-The film contains illustrative storytelling, including proposed service and community scenarios. Refer to [product scope](../docs/product-scope.md) for the capabilities implemented by the application.
+The files in [demo-film/](demo-film/release-notes.md) preserve the earlier v1.11.1 film and its production evidence. [presentation-clips/](presentation-clips/README.md) contains earlier standalone feature clips. These are reference materials, not the final submission package. Earlier local deck drafts and editing files remain in the ignored production archive.

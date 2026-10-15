@@ -11,6 +11,8 @@
 # Never place the only copy of an accepted deliverable in /output.
 /.playwright-cli
 /output
+/.tmp
+/tmp
 
 # Python tooling cache
 __pycache__/

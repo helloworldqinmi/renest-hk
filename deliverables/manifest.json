@@ -1,17 +1,41 @@
 {
   "schemaVersion": 1,
   "project": "ReNest HK",
-  "filmVersion": "1.11.1",
+  "filmVersion": "1.13",
   "artifacts": [
     {
-      "path": "deliverables/demo-film/renest-hk-demo-v1.11.1-1080p60.mp4",
+      "path": "deliverables/presentation-redesign/1064 - Renest.pptx",
+      "role": "pitch-deck",
+      "bytes": 28808312,
+      "sha256": "a2529660d60a4a133606e60eed4073cc4662570fc7fd68994f1fb224377e6585"
+    },
+    {
+      "path": "deliverables/presentation-redesign/1064 - Renest.mp4",
       "role": "main-film",
+      "bytes": 60306912,
+      "sha256": "ce519601d2075f211c5b7cf0f84f17e5969f4f433d5f969572ba57ce0b1621f9"
+    },
+    {
+      "path": "deliverables/presentation-redesign/1064 - Renest - Project Guide.pdf",
+      "role": "project-guide",
+      "bytes": 90855,
+      "sha256": "62d3d4d373cb7807a681a6bdefffeee5227948bcf1890e44a32384a12c769e4b"
+    },
+    {
+      "path": "deliverables/final-verification.json",
+      "role": "production-record",
+      "bytes": 1658,
+      "sha256": "024709ba77fe0cea5390393e8acb43fceb6e8e8560ee4e2c382e0fbfa9c1a60a"
+    },
+    {
+      "path": "deliverables/demo-film/renest-hk-demo-v1.11.1-1080p60.mp4",
+      "role": "archived-film",
       "bytes": 77730588,
       "sha256": "01fe75ac8ce2a7c85045ec87a61ad380ecf428937d58e0086ea7ef7e14b639a0"
     },
     {
       "path": "deliverables/demo-film/renest-hk-demo-v1.11.1-en.srt",
-      "role": "subtitles",
+      "role": "archived-subtitles",
       "bytes": 5225,
       "sha256": "e94ebf1a5ae5525c6e266fbc88cd213b6b98b3a846603fa1b0672ea39203b654"
     },
@@ -63,5 +87,7 @@
       "bytes": 1324,
       "sha256": "58aeac539d0b95e0ccc385d2efe80e31369ba89178d006b5cc917915e8e8e7c6"
     }
-  ]
+  ],
+  "finalPackage": "deliverables/presentation-redesign",
+  "mainFilmVerification": "deliverables/final-verification.json"
 }

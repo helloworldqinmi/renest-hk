@@ -28,12 +28,18 @@ for (const artifact of manifest.artifacts) {
 function mediaIn(directory) {
   return readdirSync(path.join(root, directory), { withFileTypes: true }).flatMap(entry => {
     const file = `${directory}/${entry.name}`;
-    return entry.isDirectory() ? mediaIn(file) : /\.(mp4|srt)$/.test(file) ? [file] : [];
+    return entry.isDirectory() ? mediaIn(file) : /\.(mp4|srt|pptx|pdf)$/.test(file) ? [file] : [];
   });
 }
 for (const file of mediaIn('deliverables')) assert.ok(artifactPaths.has(file), `Unregistered delivery media: ${file}`);
-const film = manifest.artifacts.find(artifact => artifact.role === 'main-film');
-assert.ok(film, 'Main film is missing from the manifest');
-const verification = JSON.parse(readFileSync(path.join(root, 'deliverables/demo-film/verification.json'), 'utf8'));
+const films = manifest.artifacts.filter(artifact => artifact.role === 'main-film');
+assert.equal(films.length, 1, 'Manifest must identify exactly one main film');
+const film = films[0];
+assert.ok(artifactPaths.has(manifest.mainFilmVerification), 'Main film verification must be registered');
+const verification = JSON.parse(readFileSync(path.join(root, manifest.mainFilmVerification), 'utf8'));
+assert.ok(typeof manifest.finalPackage === 'string' && manifest.finalPackage.startsWith('deliverables/') && !manifest.finalPackage.includes('..') && !manifest.finalPackage.includes('\\'), 'Invalid final package path');
+const finalArtifacts = manifest.artifacts.filter(artifact => artifact.path.startsWith(`${manifest.finalPackage}/`));
+assert.deepEqual(finalArtifacts.map(artifact => artifact.role).sort(), ['main-film', 'pitch-deck', 'project-guide'], 'Final package must contain the deck, film and guide');
+assert.deepEqual(readdirSync(path.join(root, manifest.finalPackage)).sort(), finalArtifacts.map(artifact => path.basename(artifact.path)).sort(), 'Unexpected or missing final package files');
 assert.equal(film.sha256, verification.sha256, 'Main film differs from the original production verification');
 console.log(`Delivery checks passed: ${manifest.artifacts.length} artifacts, matching SHA-256 checksums, no ignored deliverables, ASCII repository filenames.`);

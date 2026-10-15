@@ -1,0 +1,51 @@
+{
+  "duration_seconds": 209.2,
+  "frames": 12552,
+  "resolution": "1920x1080",
+  "fps": 60,
+  "full_decode": "pass",
+  "voice_segments": 29,
+  "captions": 66,
+  "all_narration_preserved": true,
+  "speech_speed_multiplier": 1.06,
+  "max_silence_speed_multiplier": 2.8,
+  "seconds_removed": 44.80000000000001,
+  "integrated_lufs": -16.36,
+  "true_peak_dbtp": -1.3,
+  "isolated_flash_candidates": [],
+  "qr": "https://renest-hk.vercel.app/",
+  "previous_versions_preserved": true,
+  "sha256": "ce519601d2075f211c5b7cf0f84f17e5969f4f433d5f969572ba57ce0b1621f9",
+  "filmVersion": "1.13",
+  "review_date": "2026-10-16",
+  "package_review": {
+    "slides": 13,
+    "cover_description_words": 19,
+    "embedded_video_count": 5,
+    "embedded_videos_full_decode": "pass",
+    "powerpoint_render_review": "pass",
+    "pdf_pages": 1,
+    "pdf_links_and_qr": "pass",
+    "live_demo_and_source_links": "reachable at review time",
+    "final_files": [
+      {
+        "path": "deliverables/presentation-redesign/1064 - Renest.pptx",
+        "role": "pitch-deck",
+        "bytes": 28808312,
+        "sha256": "a2529660d60a4a133606e60eed4073cc4662570fc7fd68994f1fb224377e6585"
+      },
+      {
+        "path": "deliverables/presentation-redesign/1064 - Renest.mp4",
+        "role": "main-film",
+        "bytes": 60306912,
+        "sha256": "ce519601d2075f211c5b7cf0f84f17e5969f4f433d5f969572ba57ce0b1621f9"
+      },
+      {
+        "path": "deliverables/presentation-redesign/1064 - Renest - Project Guide.pdf",
+        "role": "project-guide",
+        "bytes": 90855,
+        "sha256": "62d3d4d373cb7807a681a6bdefffeee5227948bcf1890e44a32384a12c769e4b"
+      }
+    ]
+  }
+}

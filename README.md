@@ -6,7 +6,7 @@ ReNest HK is a furniture reuse and spatial planning prototype for compact Hong K
 
 The result is an interactive moving plan: compare furnished layouts, adjust individual pieces, review purchasing and reuse decisions, and export a practical handover report.
 
-**[Open the interactive demo](https://renest-hk.vercel.app/)** · **[Technical architecture](docs/architecture.md)** · **[Product scope](docs/product-scope.md)**
+**[Open the interactive demo](https://renest-hk.vercel.app/)** · **[Final presentation package](deliverables/README.md)** · **[Technical architecture](docs/architecture.md)** · **[Product scope](docs/product-scope.md)**
 
 ![ReNest sample apartment and furniture layout](public/models/v2/previews/new-home-a.png)
 
@@ -95,10 +95,12 @@ types/                       Shared domain types
 public/                      Assets served by the web application
 assets/
   home-models/               Model sources, manifests and standalone viewer
-  video-production/         Preserved final-film production source snapshot
+  video-production/         Historical film production source snapshot
 deliverables/
-  demo-film/                 Main film, English subtitles and verification
-  presentation-clips/        Five short clips for presentation use
+  presentation-redesign/     Final Team 1064 PPTX, narrated MP4 and PDF guide
+  demo-film/                 Earlier film, English subtitles and production record
+  presentation-clips/        Earlier standalone feature clips
+  final-verification.json   Final package review and selected film verification
   manifest.json             Delivery file sizes and SHA-256 checksums
 docs/                        Architecture, scope, design and engineering notes
   archive/                   Historical proposals and asset planning notes
@@ -118,7 +120,7 @@ The repository is configured as a standard Next.js project and the documented de
 
 - [Review guide](docs/review-guide.md) — walkthrough, expected results and recovery guidance.
 - [Public review record](docs/public-review.md) — validation evidence and remaining handover items.
-- [Delivery package](deliverables/README.md) — optional downloadable presentation assets and integrity checks.
+- [Final presentation package](deliverables/README.md) — approved submission files, earlier reference assets and integrity checks.
 - [Architecture](docs/architecture.md) — module ownership, data flow and asset pipeline.
 - [Product scope](docs/product-scope.md) — implemented behaviour, simulations and roadmap.
 - [Repository audit](docs/repository-audit.md) — naming decisions, removed legacy code and Git ignore policy.

@@ -1,6 +1,8 @@
-# Demo film v1.11.1
+# Earlier demo film v1.11.1
 
-Selected export: `renest-hk-demo-v1.11.1-1080p60.mp4`.
+This is a historical reference. Use the [final Team 1064 presentation package](../README.md) for submission.
+
+Historical export: `renest-hk-demo-v1.11.1-1080p60.mp4`.
 
 The polished cut is 223 seconds at 1920 × 1080, 60 fps. The original production report records 13,380 frames, 27 narration segments, 63 captions and a successful full decode. The delivery copy retains the original SHA-256 checksum.
 
